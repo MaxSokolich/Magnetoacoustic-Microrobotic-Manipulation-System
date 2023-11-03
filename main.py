@@ -15,7 +15,7 @@ from classes.gui_functions import MainWindow
 
 #need to adjust mask value boxs when the correct radio button is checked.
 #change size velocity blur thing.
-
+#add cell data to excel file
 
 
 
