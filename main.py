@@ -13,9 +13,9 @@ from classes.gui_functions import MainWindow
 # need to find better way of saving global video
 
 
-#need to adjust mask value boxs when the correct radio button is checked.
 #change size velocity blur thing.
-#add cell data to excel file
+# fix bot subtraction from cell mask
+# look into alternative thresholding methods (std or other cv2 flag)
 
 
 

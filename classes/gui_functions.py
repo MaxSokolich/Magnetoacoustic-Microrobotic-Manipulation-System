@@ -96,6 +96,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.currentframe = None
         self.frame_number = 0
         self.robots = []
+        self.cells = []
         self.videopath = 0
         self.cap = None
         self.tracker = None
@@ -179,10 +180,21 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.leftbutton.clicked.connect(self.frameleft)
         self.ui.maskbutton.clicked.connect(self.showmask)
         self.ui.maskinvert_checkBox.toggled.connect(self.invertmaskcommand)
-        self.ui.maskthreshbox.valueChanged.connect(self.get_slider_vals)
-        self.ui.maskdilationbox.valueChanged.connect(self.get_slider_vals)
-        self.ui.maskblurbox.valueChanged.connect(self.get_slider_vals)
-        self.ui.croplengthbox.valueChanged.connect(self.get_slider_vals)
+        
+        self.ui.robotmaskthreshbox.valueChanged.connect(self.get_slider_vals)
+        self.ui.robotmaskdilationbox.valueChanged.connect(self.get_slider_vals)
+        self.ui.robotmaskblurbox.valueChanged.connect(self.get_slider_vals)
+        self.ui.robotcroplengthbox.valueChanged.connect(self.get_slider_vals)
+        self.ui.robotcroplengthbox.valueChanged.connect(self.get_slider_vals)
+        self.ui.robotmaskblocksizebox.valueChanged.connect(self.get_slider_vals)
+
+        self.ui.cellmaskthreshbox.valueChanged.connect(self.get_slider_vals)
+        self.ui.cellmaskdilationbox.valueChanged.connect(self.get_slider_vals)
+        self.ui.cellmaskblurbox.valueChanged.connect(self.get_slider_vals)
+        self.ui.cellcroplengthbox.valueChanged.connect(self.get_slider_vals)
+        self.ui.cellmaskblocksizebox.valueChanged.connect(self.get_slider_vals)
+
+
         self.ui.savedatabutton.clicked.connect(self.savedata)
         self.ui.VideoFeedLabel.installEventFilter(self)
         self.ui.recordbutton.clicked.connect(self.recordfunction_class)
@@ -221,7 +233,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
 
-    def update_actions(self, actions, stopped, robot_list):
+    def update_actions(self, actions, stopped, robot_list, cell_list):
         self.frame_number+=1
         
         #output actions if control status is on
@@ -274,6 +286,22 @@ class MainWindow(QtWidgets.QMainWindow):
                 
                 self.robots.append(currentbot_params)
         
+        #DEFINE CURRENT CELL PARAMS TO A LIST
+        if len(cell_list) > 0:
+            self.cells = []
+            for cell in cell_list:
+                currentcell_params = [cell.frame_list[-1],
+                                     cell.times[-1],
+                                     cell.position_list[-1][0],cell.position_list[-1][1], 
+                                     cell.velocity_list[-1][0], cell.velocity_list[-1][1],cell.velocity_list[-1][2],
+                                     cell.blur_list[-1],
+                                     cell.area_list[-1],
+                                     cell.avg_area,
+                                     cell.cropped_frame[-1][0],cell.cropped_frame[-1][1], cell.cropped_frame[-1][2],cell.cropped_frame[-1][3],
+                                    ]
+                
+                self.cells.append(currentcell_params)
+        
         #DEFINE CURRENT MAGNETIC FIELD OUTPUT TO A LIST 
         self.actions = [self.frame_number, self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, 
                         self.acoustic_frequency, self.sensorBx, self.sensorBy, self.sensorBz] 
@@ -287,6 +315,10 @@ class MainWindow(QtWidgets.QMainWindow):
             self.magnetic_field_sheet.append(self.actions)
             for (sheet, bot) in zip(self.robot_params_sheets,self.robots):
                 sheet.append(bot[:-1])
+            for (sheet, cell) in zip(self.cell_params_sheets,self.cells):
+                sheet.append(cell[:-1])
+
+
 
 
     def start_data_record(self):
@@ -302,9 +334,18 @@ class MainWindow(QtWidgets.QMainWindow):
             robot_sheet = self.output_workbook.create_sheet(title= "Robot {}".format(i+1))
             robot_sheet.append(["Frame","Times","Pos X", "Pos Y", "Vel X", "Vel Y", "Vel Mag", "Blur", "Area", "Avg Area", "Cropped X","Cropped Y","Cropped W","Cropped H","Stuck?","Path X", "Path Y"])
             self.robot_params_sheets.append(robot_sheet)
+        
+        #create sheet for robot data
+        self.cell_params_sheets = []
+        for i in range(len(self.cells)):
+            cell_sheet = self.output_workbook.create_sheet(title= "Cell {}".format(i+1))
+            cell_sheet.append(["Frame","Times","Pos X", "Pos Y", "Vel X", "Vel Y", "Vel Mag", "Blur", "Area", "Avg Area", "Cropped X","Cropped Y","Cropped W","Cropped H"])
+            self.cell_params_sheets.append(cell_sheet)
 
         #tell update_actions function to start appending data to the sheets
         self.save_status = True
+
+
 
     def stop_data_record(self):
         #tell update_actions function to stop appending data to the sheets
@@ -494,17 +535,19 @@ class MainWindow(QtWidgets.QMainWindow):
                     if event.buttons() == QtCore.Qt.LeftButton:
                         newx, newy = self.convert_coords(event.pos())
                         #generate original bounding box
-                        crop_length = self.ui.croplengthbox.value()
+                        
 
-                        x_1 = int(newx - crop_length  / 2)
-                        y_1 = int(newy - crop_length  / 2)
-                        w = crop_length
-                        h = crop_length
+                        
                      
                         #reset algorithm nodes
                         self.tracker.control_robot.reset()
 
                         if self.ui.robotmask_radio.isChecked():
+                            x_1 = int(newx - self.ui.robotcroplengthbox.value()  / 2)
+                            y_1 = int(newy - self.ui.robotcroplengthbox.value()  / 2)
+                            w = self.ui.robotcroplengthbox.value()
+                            h = self.ui.robotcroplengthbox.value()
+
                             robot = Robot()  # create robot instance
                             robot.add_frame(self.frame_number)
                             robot.add_time(0)
@@ -514,10 +557,15 @@ class MainWindow(QtWidgets.QMainWindow):
                             robot.add_area(0)
                             robot.add_blur(0)
                             robot.add_stuck_status(0)
-                            robot.crop_length = crop_length
+                            robot.crop_length = self.ui.robotcroplengthbox.value()
                             self.tracker.robot_list.append(robot) #this has to include tracker.robot_list because I need to add it to that class
                         
                         elif self.ui.cellmask_radio.isChecked():
+                            x_1 = int(newx - self.ui.cellcroplengthbox.value()  / 2)
+                            y_1 = int(newy - self.ui.cellcroplengthbox.value()  / 2)
+                            w = self.ui.cellcroplengthbox.value()
+                            h = self.ui.cellcroplengthbox.value()
+
                             cell = Cell()  # create robot instance
                             cell.add_frame(self.frame_number)
                             cell.add_time(0)
@@ -527,11 +575,11 @@ class MainWindow(QtWidgets.QMainWindow):
                             cell.add_area(0)
                             cell.add_blur(0)
                             cell.add_stuck_status(0)
-                            cell.crop_length = crop_length
+                            cell.crop_length = self.ui.cellcroplengthbox.value()
                             
                             self.tracker.cell_list.append(cell) #this has to include tracker.robot_list because I need to add it to that class
 
-                        print(self.tracker.robot_list, self.tracker.cell_list)
+               
                     
                     
                     if event.buttons() == QtCore.Qt.RightButton: 
@@ -942,10 +990,20 @@ class MainWindow(QtWidgets.QMainWindow):
         magneticfreq = self.ui.magneticfrequencydial.value()
         gamma = self.ui.gammadial.value()
         psi = self.ui.psidial.value()
-        thresh = self.ui.maskthreshbox.value() 
-        dilation = self.ui.maskdilationbox.value() 
-        maskblur = self.ui.maskblurbox.value()
-        crop_length = self.ui.croplengthbox.value()
+        
+        robotthresh = self.ui.robotmaskthreshbox.value() 
+        robotdilation = self.ui.robotmaskdilationbox.value() 
+        robotmaskblur = self.ui.robotmaskblurbox.value()
+        robotcrop_length = self.ui.robotcroplengthbox.value()
+        robotmaskblocksize = self.ui.robotmaskblocksizebox.value()
+
+
+
+        cellthresh = self.ui.cellmaskthreshbox.value() 
+        celldilation = self.ui.cellmaskdilationbox.value() 
+        cellmaskblur = self.ui.cellmaskblurbox.value()
+        cellcrop_length = self.ui.cellcroplengthbox.value()
+        cellmaskblocksize = self.ui.cellmaskblocksizebox.value()
 
         """if self.ui.manualapplybutton.isChecked():
             self.Bx = self.ui.manualfieldBx.value()/100
@@ -957,17 +1015,20 @@ class MainWindow(QtWidgets.QMainWindow):
             self.tracker.memory = memory
             self.tracker.RRTtreesize = RRTtreesize
             self.tracker.arrivalthresh = arrivalthresh
-            self.tracker.crop_length = crop_length
-            if self.ui.robotmask_radio.isChecked():
-                self.tracker.robot_mask_thresh = thresh
-                self.tracker.robot_mask_dilation = dilation
-                self.tracker.robot_mask_blur = maskblur
-                self.tracker.robot_crop_length = crop_length
-            elif self.ui.cellmask_radio.isChecked():
-                self.tracker.cell_mask_thresh = thresh
-                self.tracker.cell_mask_dilation = dilation
-                self.tracker.cell_mask_blur = maskblur
-                self.tracker.cell_crop_length = crop_length
+          
+            self.tracker.robot_mask_thresh = robotthresh
+            self.tracker.robot_mask_dilation = robotdilation
+            self.tracker.robot_mask_blur = robotmaskblur
+            self.tracker.robot_crop_length = robotcrop_length
+            if robotmaskblocksize %2 ==1:
+                self.tracker.robot_mask_blocksize = robotmaskblocksize
+    
+            self.tracker.cell_mask_thresh = cellthresh
+            self.tracker.cell_mask_dilation = celldilation
+            self.tracker.cell_mask_blur = cellmaskblur
+            self.tracker.cell_crop_length = cellcrop_length
+            if cellmaskblocksize %2 ==1:
+                self.tracker.cell_mask_blocksize = cellmaskblocksize
 
         self.ui.gammalabel.setText("Gamma: {}".format(gamma))
         self.ui.psilabel.setText("Psi: {}".format(psi))
