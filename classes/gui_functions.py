@@ -181,18 +181,19 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.maskbutton.clicked.connect(self.showmask)
         self.ui.maskinvert_checkBox.toggled.connect(self.invertmaskcommand)
         
-        self.ui.robotmaskthreshbox.valueChanged.connect(self.get_slider_vals)
+        self.ui.robotmasklowerbox.valueChanged.connect(self.get_slider_vals)
+        self.ui.robotmaskupperbox.valueChanged.connect(self.get_slider_vals)
         self.ui.robotmaskdilationbox.valueChanged.connect(self.get_slider_vals)
         self.ui.robotmaskblurbox.valueChanged.connect(self.get_slider_vals)
         self.ui.robotcroplengthbox.valueChanged.connect(self.get_slider_vals)
-        self.ui.robotcroplengthbox.valueChanged.connect(self.get_slider_vals)
-        self.ui.robotmaskblocksizebox.valueChanged.connect(self.get_slider_vals)
+      
 
-        self.ui.cellmaskthreshbox.valueChanged.connect(self.get_slider_vals)
+        self.ui.cellmasklowerbox.valueChanged.connect(self.get_slider_vals)
+        self.ui.cellmaskupperbox.valueChanged.connect(self.get_slider_vals)
         self.ui.cellmaskdilationbox.valueChanged.connect(self.get_slider_vals)
         self.ui.cellmaskblurbox.valueChanged.connect(self.get_slider_vals)
         self.ui.cellcroplengthbox.valueChanged.connect(self.get_slider_vals)
-        self.ui.cellmaskblocksizebox.valueChanged.connect(self.get_slider_vals)
+        
 
 
         self.ui.savedatabutton.clicked.connect(self.savedata)
@@ -991,44 +992,37 @@ class MainWindow(QtWidgets.QMainWindow):
         gamma = self.ui.gammadial.value()
         psi = self.ui.psidial.value()
         
-        robotthresh = self.ui.robotmaskthreshbox.value() 
+        robotlower = self.ui.robotmasklowerbox.value() 
+        robotupper = self.ui.robotmaskupperbox.value()
         robotdilation = self.ui.robotmaskdilationbox.value() 
         robotmaskblur = self.ui.robotmaskblurbox.value()
         robotcrop_length = self.ui.robotcroplengthbox.value()
-        robotmaskblocksize = self.ui.robotmaskblocksizebox.value()
-
-
-
-        cellthresh = self.ui.cellmaskthreshbox.value() 
+        
+        celllower = self.ui.cellmasklowerbox.value() 
+        cellupper = self.ui.cellmaskupperbox.value()
         celldilation = self.ui.cellmaskdilationbox.value() 
         cellmaskblur = self.ui.cellmaskblurbox.value()
         cellcrop_length = self.ui.cellcroplengthbox.value()
-        cellmaskblocksize = self.ui.cellmaskblocksizebox.value()
-
-        """if self.ui.manualapplybutton.isChecked():
-            self.Bx = self.ui.manualfieldBx.value()/100
-            self.By = self.ui.manualfieldBy.value()/100
-            self.Bz = self.ui.manualfieldBz.value()/100
-            self.apply_actions(True)"""
+        
 
         if self.tracker is not None: 
             self.tracker.memory = memory
             self.tracker.RRTtreesize = RRTtreesize
             self.tracker.arrivalthresh = arrivalthresh
           
-            self.tracker.robot_mask_thresh = robotthresh
+            self.tracker.robot_mask_lower = robotlower
+            self.tracker.robot_mask_upper = robotupper
             self.tracker.robot_mask_dilation = robotdilation
             self.tracker.robot_mask_blur = robotmaskblur
             self.tracker.robot_crop_length = robotcrop_length
-            if robotmaskblocksize %2 ==1:
-                self.tracker.robot_mask_blocksize = robotmaskblocksize
+            
     
-            self.tracker.cell_mask_thresh = cellthresh
+            self.tracker.cell_mask_lower = celllower
+            self.tracker.cell_mask_upper = cellupper
             self.tracker.cell_mask_dilation = celldilation
             self.tracker.cell_mask_blur = cellmaskblur
             self.tracker.cell_crop_length = cellcrop_length
-            if cellmaskblocksize %2 ==1:
-                self.tracker.cell_mask_blocksize = cellmaskblocksize
+            
 
         self.ui.gammalabel.setText("Gamma: {}".format(gamma))
         self.ui.psilabel.setText("Psi: {}".format(psi))

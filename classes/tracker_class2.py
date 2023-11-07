@@ -41,20 +41,20 @@ class VideoThread(QThread):
         self.autoacousticstatus = False
         
         #robot mask attributes
-        self.robot_mask_thresh = 128
+        self.robot_mask_lower = 0
+        self.robot_mask_upper = 128
         self.robot_mask_dilation = 0  
         self.robot_mask_blur = 0
         self.robot_crop_length = 40
-        self.robot_mask_blocksize = 11
         self.robot_mask_flag = True
         self.robot_list = []
 
         #cell mask attributes
-        self.cell_mask_thresh = 128
+        self.cell_mask_lower = 0
+        self.cell_mask_upper = 128
         self.cell_mask_dilation = 0
         self.cell_mask_blur = 0
         self.cell_crop_length = 40
-        self.cell_mask_blocksize = 11
         self.cell_mask_flag = False
         self.cell_list = []
 
@@ -91,69 +91,61 @@ class VideoThread(QThread):
 
  
     
-
     def find_robot_mask(self,frame):
         """
         finds a mask of a given image based on a threshold value in black and white for ROBOTS
         """
-
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-         #threshold the mask
         if self.robot_mask_blur > 0:
             frame = cv2.blur(frame, (self.robot_mask_blur,self.robot_mask_blur))
 
+        #threshold the mask
         #_, robot_mask = cv2.threshold(frame, robot_mask_thresh, 255, cv2.THRESH_BINARY)
-        robot_mask = cv2.adaptiveThreshold(frame, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, self.robot_mask_blocksize, self.robot_mask_thresh)
+        #robot_mask = cv2.adaptiveThreshold(frame, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, self.robot_mask_blocksize, self.robot_mask_thresh)
+        robot_mask = cv2.inRange(frame, self.robot_mask_lower, self.robot_mask_upper)
         
         if self.maskinvert:
             robot_mask = cv2.bitwise_not(robot_mask)
 
         #subtract cell from robot mask
-        try:
-            for cell in self.cell_list:    
-                x,y,w,h = cell.cropped_frame[-1]
-                blank = np.zeros((w, h), dtype=np.uint8) 
-                robot_mask[y:y+w , x:x+h] = blank 
-        except Exception:
-            pass
         
+        for cell in self.cell_list:    
+            x,y,w,h = cell.cropped_frame[-1]
+            blank = np.zeros((w, h), dtype=np.uint8) 
+            robot_mask[y:y+w , x:x+h] = blank 
+        #except Exception:
+        #    pass
+
         robot_mask = cv2.dilate(robot_mask, None, iterations=self.robot_mask_dilation)
 
         return robot_mask
-    
-
     
     def find_cell_mask(self,frame):
         """
         finds a mask of a given image based on a threshold value in black and white FOR CELL
         """
-        cell_mask_thresh= int(self.cell_mask_thresh)
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            
-        
         if self.cell_mask_blur > 0:
             frame = cv2.blur(frame, (self.cell_mask_blur,self.cell_mask_blur))
-
-
+            
         #threshold the mask
         #_, cell_mask = cv2.threshold(frame, cell_mask_thresh, 255, cv2.THRESH_BINARY)
-        cell_mask = cv2.adaptiveThreshold(frame, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, self.cell_mask_blocksize, self.cell_mask_thresh)
-        
+        #cell_mask = cv2.adaptiveThreshold(frame, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, self.cell_mask_blocksize, self.cell_mask_thresh)
+        cell_mask = cv2.inRange(frame, self.cell_mask_lower, self.cell_mask_upper)
         
         if self.maskinvert:
             cell_mask = cv2.bitwise_not(cell_mask)
 
         #sibtract robot from cell mask 
+    
         for bot in self.robot_list:    
             x,y,w,h = bot.cropped_frame[-1]
             blank = np.zeros((w, h), dtype=np.uint8) 
             cell_mask[y:y+w , x:x+h] = blank 
-
+        #except Exception:
+        #    pass
         
         cell_mask = cv2.dilate(cell_mask, None, iterations=self.cell_mask_dilation)
-
-
 
         return cell_mask
 
@@ -283,10 +275,6 @@ class VideoThread(QThread):
                 croppedframe = frame[y1 : y1 + h, x1 : x1 + w]
                 croppedmask = cellmask[y1 : y1 + h, x1 : x1 + w]
 
-          
-               
-            
-              
                 #label the mask
                 label_im, nb_labels = ndimage.label(croppedmask) 
                 sizes = ndimage.sum(croppedmask, label_im, range(nb_labels + 1)) 
@@ -341,8 +329,6 @@ class VideoThread(QThread):
                     cell.add_area(area)
                     cell.add_blur(blur)
                     cell.set_avg_area(np.mean(cell.area_list))
-
-                    
                 
                     #stuck condition
                     if len(cell.position_list) > self.memory and velocity[2] < 20 and self.parent.freq > 0:
@@ -361,7 +347,6 @@ class VideoThread(QThread):
 
         else:
             croppedmask = np.zeros((310, 310, 3), dtype=np.uint8)
-        
 
         return croppedmask
     

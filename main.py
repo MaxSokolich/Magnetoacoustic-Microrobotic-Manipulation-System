@@ -15,7 +15,7 @@ from classes.gui_functions import MainWindow
 
 #change size velocity blur thing.
 # fix bot subtraction from cell mask
-# look into alternative thresholding methods (std or other cv2 flag)
+# try in range upper and lower bounds
 
 
 

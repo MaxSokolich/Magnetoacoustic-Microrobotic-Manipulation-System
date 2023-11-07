@@ -598,7 +598,7 @@ QPushButton {
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <widget class="QSpinBox" name="robotmaskthreshbox">
+     <widget class="QSpinBox" name="robotmasklowerbox">
       <property name="geometry">
        <rect>
         <x>110</x>
@@ -624,7 +624,7 @@ QPushButton {
        <number>1</number>
       </property>
       <property name="value">
-       <number>128</number>
+       <number>0</number>
       </property>
      </widget>
      <widget class="QLabel" name="maskthreshlabel">
@@ -643,7 +643,7 @@ QPushButton {
        </size>
       </property>
       <property name="text">
-       <string>Thresh</string>
+       <string>Lower Thresh</string>
       </property>
      </widget>
      <widget class="QSpinBox" name="robotmaskdilationbox">
@@ -881,7 +881,7 @@ QPushButton {
        <number>0</number>
       </property>
      </widget>
-     <widget class="QSpinBox" name="cellmaskthreshbox">
+     <widget class="QSpinBox" name="cellmasklowerbox">
       <property name="geometry">
        <rect>
         <x>220</x>
@@ -907,7 +907,7 @@ QPushButton {
        <number>1</number>
       </property>
       <property name="value">
-       <number>128</number>
+       <number>0</number>
       </property>
      </widget>
      <widget class="QSpinBox" name="cellmaskdilationbox">
@@ -990,7 +990,7 @@ QPushButton {
      <widget class="QLabel" name="label_10">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>95</x>
         <y>50</y>
         <width>2</width>
         <height>231</height>
@@ -1035,7 +1035,7 @@ QPushButton {
        <string>TextLabel</string>
       </property>
      </widget>
-     <widget class="QSpinBox" name="robotmaskblocksizebox">
+     <widget class="QSpinBox" name="robotmaskupperbox">
       <property name="geometry">
        <rect>
         <x>110</x>
@@ -1055,19 +1055,19 @@ QPushButton {
        <string notr="true"/>
       </property>
       <property name="minimum">
-       <number>3</number>
+       <number>0</number>
       </property>
       <property name="maximum">
-       <number>300</number>
+       <number>255</number>
       </property>
       <property name="singleStep">
        <number>1</number>
       </property>
       <property name="value">
-       <number>11</number>
+       <number>128</number>
       </property>
      </widget>
-     <widget class="QSpinBox" name="cellmaskblocksizebox">
+     <widget class="QSpinBox" name="cellmaskupperbox">
       <property name="geometry">
        <rect>
         <x>220</x>
@@ -1087,16 +1087,16 @@ QPushButton {
        <string notr="true"/>
       </property>
       <property name="minimum">
-       <number>3</number>
+       <number>0</number>
       </property>
       <property name="maximum">
-       <number>300</number>
+       <number>255</number>
       </property>
       <property name="singleStep">
        <number>1</number>
       </property>
       <property name="value">
-       <number>11</number>
+       <number>128</number>
       </property>
      </widget>
      <widget class="QLabel" name="maskthreshlabel_2">
@@ -1115,7 +1115,7 @@ QPushButton {
        </size>
       </property>
       <property name="text">
-       <string>Block Size</string>
+       <string>Upper Thresh</string>
       </property>
      </widget>
     </widget>
