@@ -39,9 +39,9 @@ try:
             self.i2c = busio.I2C(board.SCL, board.SDA)
             self.ads = ADS.ADS1115(self.i2c)
             
-            self.senseBx = AnalogIn(self.ads, ADS.P0)
-            self.senseBy = AnalogIn(self.ads, ADS.P1)  
-            self.senseBz = AnalogIn(self.ads, ADS.P3)  #good
+            self.senseBx = AnalogIn(self.ads, ADS.P3)
+            self.senseBy = AnalogIn(self.ads, ADS.P2)  
+            self.senseBz = AnalogIn(self.ads, ADS.P1)  
 
 
             self.run_flag = True
@@ -61,7 +61,7 @@ try:
             pos_max = -float(100000000)
             return [neg_max, pos_max]
         
-        def readFIELD(self, channel,bound):
+        def readFIELD(self, channel,bound,mapping):
             """
             reads hall effect sensor field data given an analog obejct
             Args:
@@ -77,7 +77,7 @@ try:
             elif VAL > bound[1]:
                 bound[1] = VAL
                
-            m = interp1d([bound[0],bound[1]],[-80,80])
+            m = interp1d([bound[0],bound[1]],[mapping[0], mapping[1]])
             mapped_field = int(m(VAL))
             return mapped_field
         
@@ -87,12 +87,24 @@ try:
             By_bounds = self.createBounds() #create bounds for positive X EM sensor
             Bz_bounds = self.createBounds() #create bounds for negative Y EM sensor
             
+            #Bx_bounds = [12385,26550]
+            #By_bounds = [13400,25850]
+            #Bz_bounds = [18850,21100]
+            #Bz_bounds = [16385,23850]
+
+            mappingx = [100,-100]
+            mappingy = [-100,100]
+            mappingz = [-100,100]
+
             while self.run_flag:
+
                 
-                bx = self.readFIELD(self.senseBx, Bx_bounds)/10
-                by = self.readFIELD(self.senseBy, By_bounds)/10
-                bz = self.readFIELD(self.senseBz, Bz_bounds)/10
-                
+                bx = self.readFIELD(self.senseBx, Bx_bounds,mappingx)/10
+                by = self.readFIELD(self.senseBy, By_bounds,mappingy)/10
+                bz = self.readFIELD(self.senseBz, Bz_bounds,mappingz)/10
+                #print("\nBx:",self.senseBx.value)
+                #print("By:",self.senseBy.value)
+                #print("Bz:",self.senseBz.value)
                
                 
                
