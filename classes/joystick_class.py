@@ -38,6 +38,7 @@ class Mac_Controller:
                 if event.axis == 1:  #LY
                     ly = -self.deadzone(event.value)
                     self.By = round(ly,3)
+                   
                 
                     
                 if event.axis == 0: #LX
@@ -296,6 +297,7 @@ class Linux_Controller:
                 if event.axis == 1:  #LY
                     ly = self.deadzone(event.value)
                     self.By = -round(ly,3)
+                   
                     
                 if event.axis == 0: #LX
                     lx = self.deadzone(event.value)

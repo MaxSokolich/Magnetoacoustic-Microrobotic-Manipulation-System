@@ -597,8 +597,10 @@ class MainWindow(QtWidgets.QMainWindow):
                 
                     if event.buttons() == QtCore.Qt.MiddleButton: 
                         del self.tracker.robot_list[:]
+                        del self.tracker.cell_list[:]
                         del self.magnetic_field_list[:]
                         del self.robots[:]
+                        del self.cells[:]
                         self.apply_actions(False)
                        
                     
