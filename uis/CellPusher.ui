@@ -1568,7 +1568,7 @@ color: rgb(0,255,0);</string>
      <widget class="QLabel" name="led">
       <property name="geometry">
        <rect>
-        <x>370</x>
+        <x>320</x>
         <y>160</y>
         <width>31</width>
         <height>31</height>
@@ -1591,7 +1591,7 @@ color: rgb(0,255,0);</string>
      <widget class="QRadioButton" name="swimradio">
       <property name="geometry">
        <rect>
-        <x>170</x>
+        <x>150</x>
         <y>90</y>
         <width>91</width>
         <height>20</height>
@@ -1648,7 +1648,7 @@ color: rgb(0,255,0);</string>
      <widget class="QRadioButton" name="rollradio">
       <property name="geometry">
        <rect>
-        <x>50</x>
+        <x>20</x>
         <y>90</y>
         <width>81</width>
         <height>21</height>
@@ -1671,7 +1671,7 @@ color: rgb(0,255,0);</string>
      <widget class="QPushButton" name="joystickbutton">
       <property name="geometry">
        <rect>
-        <x>250</x>
+        <x>180</x>
         <y>10</y>
         <width>141</width>
         <height>71</height>
@@ -1721,7 +1721,7 @@ color: rgb(0,255,0);</string>
      <widget class="QPushButton" name="controlbutton">
       <property name="geometry">
        <rect>
-        <x>50</x>
+        <x>20</x>
         <y>10</y>
         <width>141</width>
         <height>71</height>
@@ -1801,9 +1801,9 @@ color: rgb(0,255,0);</string>
      <widget class="QLabel" name="acousticfreqlabel">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>60</x>
         <y>130</y>
-        <width>311</width>
+        <width>201</width>
         <height>21</height>
        </rect>
       </property>
@@ -1817,7 +1817,7 @@ color: rgb(0,255,0);</string>
      <widget class="QPushButton" name="autoacousticbutton">
       <property name="geometry">
        <rect>
-        <x>250</x>
+        <x>230</x>
         <y>160</y>
         <width>71</width>
         <height>31</height>
@@ -1856,6 +1856,19 @@ color: rgb(0,255,0);</string>
       </property>
       <property name="checkable">
        <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="gradient_status_checkbox">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>30</y>
+        <width>85</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Gradient</string>
       </property>
      </widget>
     </widget>

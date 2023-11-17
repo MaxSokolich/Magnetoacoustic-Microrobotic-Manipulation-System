@@ -109,9 +109,10 @@ class MainWindow(QtWidgets.QMainWindow):
         
         self.drawing = False
         self.acoustic_frequency = 0
+        self.gradient_status = 0
         self.magnetic_field_list = []
         
-        self.actions = [0,0,0,0,0,0,0,0,0,0,0,0]
+        self.actions = [0,0,0,0,0,0,0,0,0,0,0,0,0]
         self.Bx, self.By, self.Bz = 0,0,0
         self.Mx, self.My, self.Mz = 0,0,0
         self.alpha, self.gamma, self.psi, self.freq = 0,0,0,0
@@ -180,7 +181,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.leftbutton.clicked.connect(self.frameleft)
         self.ui.maskbutton.clicked.connect(self.showmask)
         self.ui.maskinvert_checkBox.toggled.connect(self.invertmaskcommand)
-        
+    
         self.ui.robotmasklowerbox.valueChanged.connect(self.get_slider_vals)
         self.ui.robotmaskupperbox.valueChanged.connect(self.get_slider_vals)
         self.ui.robotmaskdilationbox.valueChanged.connect(self.get_slider_vals)
@@ -195,7 +196,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.cellcroplengthbox.valueChanged.connect(self.get_slider_vals)
         
 
-
+        self.ui.gradient_status_checkbox.toggled.connect(self.gradientcommand)
         self.ui.savedatabutton.clicked.connect(self.savedata)
         self.ui.VideoFeedLabel.installEventFilter(self)
         self.ui.recordbutton.clicked.connect(self.recordfunction_class)
@@ -232,7 +233,8 @@ class MainWindow(QtWidgets.QMainWindow):
         #self.showFullScreen()
 
 
-
+    def gradientcommand(self):
+        self.gradient_status = int(self.ui.gradient_status_checkbox.isChecked())
 
     def update_actions(self, actions, stopped, robot_list, cell_list):
         self.frame_number+=1
@@ -304,11 +306,12 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.cells.append(currentcell_params)
         
         #DEFINE CURRENT MAGNETIC FIELD OUTPUT TO A LIST 
-        self.actions = [self.frame_number, self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, 
+        self.actions = [self.frame_number, self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.gradient_status,
                         self.acoustic_frequency, self.sensorBx, self.sensorBy, self.sensorBz] 
         
         self.magnetic_field_list.append(self.actions)
         self.apply_actions(True)
+        
 
 
         #IF SAVE STATUS THEN CONTINOUSLY SAVE THE CURRENT ROBOT PARAMS AND MAGNETIC FIELD PARAMS TO AN EXCEL ROWS
@@ -327,7 +330,7 @@ class MainWindow(QtWidgets.QMainWindow):
             
         #create sheet for magneti field actions
         self.magnetic_field_sheet = self.output_workbook.create_sheet(title="Magnetic Field Actions")#self.output_workbook.active
-        self.magnetic_field_sheet.append(["Frame","Bx", "By", "Bz", "Alpha", "Gamma", "Rolling Frequency", "Psi", "Acoustic Frequency","Sensor Bx", "Sensor By", "Sensor Bz"])
+        self.magnetic_field_sheet.append(["Frame","Bx", "By", "Bz", "Alpha", "Gamma", "Rolling Frequency", "Psi", "Gradient?", "Acoustic Frequency","Sensor Bx", "Sensor By", "Sensor Bz"])
 
         #create sheet for robot data
         self.robot_params_sheets = []
@@ -409,7 +412,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.simulator.omega = 2 * np.pi * self.simulator.freq
 
          #send arduino commands
-        self.arduino.send(self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.acoustic_frequency)
+        self.arduino.send(self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.gradient_status, self.acoustic_frequency)
     
 
 

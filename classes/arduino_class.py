@@ -41,7 +41,7 @@ class ArduinoHandler:
         else:
             self.printer(f"Connection already initialized at port {self.port}, new port {port} ignored")
 
-    def send(self, Bx, By, Bz, alpha, gamma, freq, psi, acoustic_freq) -> None:
+    def send(self, Bx, By, Bz, alpha, gamma, freq, psi, gradient_status, acoustic_freq) -> None:
         """
         sends action commands to arduino
 
@@ -55,11 +55,11 @@ class ArduinoHandler:
         By = round(By,3)
         Bz = round(Bz,3)
 
-        data = [float(Bx), float(By), float(Bz), float(alpha), float(gamma), float(freq),float(psi), float(acoustic_freq)]
+        data = [float(Bx), float(By), float(Bz), float(alpha), float(gamma), float(freq),float(psi), float(gradient_status), float(acoustic_freq)]
         if self.conn is None:
             #self.printer("Connection not initialized..."+ str(data))  
             #self.printer("No Connection:  "+ "Bx: {},    By: {},    Bz: {},    alpha: {},    gamma: {},    freq: {},    psi: {}".format(Bx,By,Bz,alpha,gamma,freq,psi)) 
-            self.printer("No Connection:  "+ "[Bx, By, Bz, alpha, gamma, freq, psi, acoustic_freq] = "+str(data)) 
+            self.printer("No Connection:  "+ "[Bx, By, Bz, alpha, gamma, freq, psi, gradient, acoustic_freq] = "+str(data)) 
             #pass
         else:
             #Bx = round(Bx,3)
@@ -67,7 +67,7 @@ class ArduinoHandler:
             self.conn.send(message)
             #self.printer("Data sent:"+ str(data))
             #self.printer("Data sent:  "+ "Bx: {},    By: {},    Bz: {},    alpha: {},    gamma: {},    freq: {},    psi: {}".format(Bx,By,Bz,alpha,gamma,freq,psi))
-            self.printer("Data Sent:  "+ "[Bx, By, Bz, alpha, gamma, freq, psi, acoustic_freq] = "+str(data)) 
+            self.printer("Data Sent:  "+ "[Bx, By, Bz, alpha, gamma, freq, psi, gradient, acoustic_freq] = "+str(data)) 
     
     
     def close(self) -> None:
@@ -82,7 +82,7 @@ class ArduinoHandler:
         if self.conn is not None:
          
             self.printer(f"Closing connection at port {self.port}")
-            self.send(0,0,0,0,0,0,0,0)
+            self.send(0,0,0,0,0,0,0,0,0)
             self.conn.close()
    
             

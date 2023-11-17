@@ -680,7 +680,7 @@ class Ui_MainWindow(object):
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
         self.led = QtWidgets.QLabel(self.frame)
-        self.led.setGeometry(QtCore.QRect(370, 160, 31, 31))
+        self.led.setGeometry(QtCore.QRect(320, 160, 31, 31))
         self.led.setStyleSheet("\n"
 "                background-color: rgb(255, 0, 0);\n"
 "                border-style: outset;\n"
@@ -692,7 +692,7 @@ class Ui_MainWindow(object):
         self.led.setText("")
         self.led.setObjectName("led")
         self.swimradio = QtWidgets.QRadioButton(self.frame)
-        self.swimradio.setGeometry(QtCore.QRect(170, 90, 91, 20))
+        self.swimradio.setGeometry(QtCore.QRect(150, 90, 91, 20))
         self.swimradio.setObjectName("swimradio")
         self.applyacousticbutton = QtWidgets.QPushButton(self.frame)
         self.applyacousticbutton.setGeometry(QtCore.QRect(150, 160, 71, 31))
@@ -725,7 +725,7 @@ class Ui_MainWindow(object):
         self.applyacousticbutton.setCheckable(True)
         self.applyacousticbutton.setObjectName("applyacousticbutton")
         self.rollradio = QtWidgets.QRadioButton(self.frame)
-        self.rollradio.setGeometry(QtCore.QRect(50, 90, 81, 21))
+        self.rollradio.setGeometry(QtCore.QRect(20, 90, 81, 21))
         font = QtGui.QFont()
         font.setPointSize(12)
         font.setBold(False)
@@ -734,7 +734,7 @@ class Ui_MainWindow(object):
         self.rollradio.setChecked(True)
         self.rollradio.setObjectName("rollradio")
         self.joystickbutton = QtWidgets.QPushButton(self.frame)
-        self.joystickbutton.setGeometry(QtCore.QRect(250, 10, 141, 71))
+        self.joystickbutton.setGeometry(QtCore.QRect(180, 10, 141, 71))
         self.joystickbutton.setStyleSheet("QPushButton {\n"
 "                color: rgb(0, 0, 0);\n"
 "                background-color: rgb(0, 255, 255);\n"
@@ -770,7 +770,7 @@ class Ui_MainWindow(object):
         self.joystickbutton.setCheckable(True)
         self.joystickbutton.setObjectName("joystickbutton")
         self.controlbutton = QtWidgets.QPushButton(self.frame)
-        self.controlbutton.setGeometry(QtCore.QRect(50, 10, 141, 71))
+        self.controlbutton.setGeometry(QtCore.QRect(20, 10, 141, 71))
         self.controlbutton.setStyleSheet("QPushButton {\n"
 "                color: rgb(255, 255, 255);\n"
 "                background-color: rgb(0, 0, 255);\n"
@@ -813,11 +813,11 @@ class Ui_MainWindow(object):
         self.acousticfreq_spinBox.setProperty("value", 1000000)
         self.acousticfreq_spinBox.setObjectName("acousticfreq_spinBox")
         self.acousticfreqlabel = QtWidgets.QLabel(self.frame)
-        self.acousticfreqlabel.setGeometry(QtCore.QRect(110, 130, 311, 21))
+        self.acousticfreqlabel.setGeometry(QtCore.QRect(60, 130, 201, 21))
         self.acousticfreqlabel.setStyleSheet("")
         self.acousticfreqlabel.setObjectName("acousticfreqlabel")
         self.autoacousticbutton = QtWidgets.QPushButton(self.frame)
-        self.autoacousticbutton.setGeometry(QtCore.QRect(250, 160, 71, 31))
+        self.autoacousticbutton.setGeometry(QtCore.QRect(230, 160, 71, 31))
         self.autoacousticbutton.setStyleSheet("QPushButton {\n"
 "                color: rgb(255, 255, 255);\n"
 "                background-color: rgb(0, 0, 0);\n"
@@ -846,6 +846,9 @@ class Ui_MainWindow(object):
 "}")
         self.autoacousticbutton.setCheckable(True)
         self.autoacousticbutton.setObjectName("autoacousticbutton")
+        self.gradient_status_checkbox = QtWidgets.QCheckBox(self.frame)
+        self.gradient_status_checkbox.setGeometry(QtCore.QRect(330, 30, 85, 31))
+        self.gradient_status_checkbox.setObjectName("gradient_status_checkbox")
         self.controlparamsframe = QtWidgets.QFrame(self.dockWidgetContents_4)
         self.controlparamsframe.setGeometry(QtCore.QRect(10, 398, 431, 71))
         self.controlparamsframe.setStyleSheet(" color: rgb(0, 0, 0);\n"
@@ -1393,6 +1396,7 @@ class Ui_MainWindow(object):
         self.orientradio.setText(_translate("MainWindow", "Orient"))
         self.acousticfreqlabel.setText(_translate("MainWindow", "Acoustic Frequency"))
         self.autoacousticbutton.setText(_translate("MainWindow", "Auto"))
+        self.gradient_status_checkbox.setText(_translate("MainWindow", "Gradient"))
         self.memorylabel.setText(_translate("MainWindow", "Memory"))
         self.RRTtreesizelabel.setText(_translate("MainWindow", "Tree Size"))
         self.arrivalthreshlabel.setText(_translate("MainWindow", "Arrive Thresh"))

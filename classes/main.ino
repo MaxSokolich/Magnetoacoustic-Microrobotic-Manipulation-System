@@ -10,7 +10,7 @@
 #include <AD9850.h>
 #include "SerialTransfer.h"
 SerialTransfer myTransfer;
-float action[8]; //an array to store incoming data from python
+float action[9]; //an array to store incoming data from python
 
 #define PI 3.1415926535897932384626433832795
 
@@ -22,9 +22,13 @@ float alpha;
 float gamma;
 float rolling_frequency;
 float psi;
+float gradient_status;
 float acoustic_frequency;
 
+
 int phase = 0; 
+
+
 
 //other field vals
 float Bx_roll;
@@ -317,19 +321,12 @@ void set6(float DC6){
 
 void loop()
 {
-
-
-  
-  
- 
-
     if  (myTransfer.available()){ // THIS IF STATEMENT MIGHT MESS UP EVERYTHING BELOW
       
               uint16_t message = 0;
               message = myTransfer.rxObj(action,message);               
     }
 
-   
    
    //NEW LOGIC
    Bx_uniform = action[0];
@@ -339,7 +336,9 @@ void loop()
    gamma = action[4];
    rolling_frequency = action[5]; 
    psi = action[6]; 
-   acoustic_frequency = action[7];
+   gradient_status = action[7];
+   acoustic_frequency = action[8];
+   
 
    if (acoustic_frequency != 0){
       DDS.setfreq(acoustic_frequency, phase);
@@ -393,7 +392,6 @@ void loop()
    Bz = (Bz_uniform + Bz_roll); //// (1+cc); 
     
 
-   
    // condition to prevent divide by zero error when total Bx, By, Bz are off aka zeroed
    if (Bx == 0 and By == 0 and Bz ==0){
         Bx_final = 0;
@@ -412,15 +410,45 @@ void loop()
    }
    
 
-   set1(By_final);
-   set2(Bx_final);
-   set3(-By_final);
-   set4(-Bx_final);
-   set5(Bz_final);
-   set6(-Bz_final);
+  // if gradient status = 1: output the the corresponding gradient field
+   if (gradient_status != 0){
+      //y gradient
+      if (By_final > 0){
+        set1(By_final)
+      }
+      
+      else if (By_final < 0){
+        set3(By_final)
+      }
 
-   
-   
-     
+      //x gradient
+      if (Bx_final > 0){
+        set2(Bx_final)
+      }
+      
+      else if (Bx_final < 0){
+        set4(Bx_final)
+      }
+
+      //z gradient
+      if (Bz_final > 0){
+        set5(Bz_final)
+      }
+      
+      else if (Bz_final < 0){
+        set6(Bz_final)
+      }
+   }
+
+   // if gradient status = 0: output the correspending uniform field
+   else {
+      set1(By_final);
+      set2(Bx_final);
+      set3(-By_final);
+      set4(-Bx_final);
+      set5(Bz_final);
+      set6(-Bz_final);
+   }
+
     }
   
