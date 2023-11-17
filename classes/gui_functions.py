@@ -28,7 +28,7 @@ try:
 except Exception:
     pass
 
-from classes.tracker_class2 import VideoThread
+from classes.tracker_class import VideoThread
 from classes.gui_widgets import Ui_MainWindow
 
 from classes.robot_class import Robot
