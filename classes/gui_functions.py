@@ -1036,9 +1036,20 @@ class MainWindow(QtWidgets.QMainWindow):
          
         
     def resetparams(self):
-        self.ui.maskthreshbox.setValue(128)
-        self.ui.maskdilationbox.setValue(0)
-        self.ui.croplengthbox.setValue(40)
+        self.ui.robotmasklowerbox.setValue(0)
+        self.ui.robotmaskupperbox.setValue(128)
+        self.ui.robotmaskdilationbox.setValue(0)
+        self.ui.robotmaskblurbox.setValue(0)
+        self.ui.robotcroplengthbox.setValue(40)
+
+        self.ui.cellmasklowerbox.setValue(0)
+        self.ui.cellmaskupperbox.setValue(128)
+        self.ui.cellmaskdilationbox.setValue(0)
+        self.ui.cellmaskblurbox.setValue(0)
+        self.ui.cellcroplengthbox.setValue(40)
+        
+
+    
         self.ui.memorybox.setValue(15)
         self.ui.RRTtreesizebox.setValue(25)
         self.ui.arrivalthreshbox.setValue(15)
@@ -1048,7 +1059,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.acousticfreq_spinBox.setValue(1000000)
         self.ui.objectivebox.setValue(10)
         self.ui.exposurebox.setValue(5000)
-        self.ui.maskblurbox.setValue(0)
+        
 
     def resizeEvent(self, event):
         windowsize = event.size()
