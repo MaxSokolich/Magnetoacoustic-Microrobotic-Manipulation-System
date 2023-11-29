@@ -416,27 +416,36 @@ void loop()
       if (By_final > 0){
         set1(By_final);
       }
-      
       else if (By_final < 0){
         set3(By_final);
+      }
+      else{ //if By==0
+        set1(0);
+        set3(0);
       }
 
       //x gradient
       if (Bx_final > 0){
         set2(Bx_final);
       }
-      
       else if (Bx_final < 0){
         set4(Bx_final);
+      }
+      else{ //if Bx==0
+        set2(0);
+        set4(0);
       }
 
       //z gradient
       if (Bz_final > 0){
         set5(Bz_final);
       }
-      
       else if (Bz_final < 0){
         set6(Bz_final);
+      }
+      else{ //if Bz==0
+        set5(0);
+        set6(0);
       }
    }
 
