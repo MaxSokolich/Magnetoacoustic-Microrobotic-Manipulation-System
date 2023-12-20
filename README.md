@@ -26,6 +26,8 @@ sections (Mechanical, Electrical, and Software)
 # Example Control Algorithm:
 <img width="699" alt="Screenshot 2023-12-20 at 2 14 26 PM" src="https://github.com/MaxSokolich/Magnetoacoustic-Microrobotic-Manipulation-System/assets/50302377/0eedb007-9db3-4152-8e76-12740618e227">
 
+# System
+![Magscope3](https://github.com/MaxSokolich/Magnetoacoustic-Microrobotic-Manipulation-System/assets/50302377/47acefef-ff34-453b-8c01-d566658f7852)
 
 
 # Instructions for initial installation of system components on Nvidia Jetson AGX Orin:
