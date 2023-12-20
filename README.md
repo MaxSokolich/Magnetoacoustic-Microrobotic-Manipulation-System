@@ -1,4 +1,4 @@
-# MR_CellPusher
+# Magscope Final
 The Magscope is a magnetic and acoustic field generator with real time micro-scale optical
 feedback. The system can also be thought of as a micro-robotic, micro scale manipulation platform
 with close loop control capabilities. Its intention is to be a user friendly, portable, micro-robotic
@@ -55,6 +55,6 @@ pyuic5 uis/CellPusher.ui -o gui_widgets.py
 
 ![Magscope2](https://github.com/MaxSokolich/Magnetoacoustic-Microrobotic-Manipulation-System/assets/50302377/c7e8fff9-ff27-48e0-8b8f-d49c7494f22c)
 
-# Example Control Algorithm:
 
+# Example Control Algorithm:
 <img width="699" alt="Screenshot 2023-12-20 at 2 14 26 PM" src="https://github.com/MaxSokolich/Magnetoacoustic-Microrobotic-Manipulation-System/assets/50302377/0eedb007-9db3-4152-8e76-12740618e227">
