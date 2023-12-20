@@ -50,8 +50,11 @@ pyuic5 uis/CellPusher.ui -o gui_widgets.py
 
 11) optional: install arduino using jetsonhacks github and upload main.ino from src/arduino
 
+
 ![MagScope1](https://github.com/MaxSokolich/Magnetoacoustic-Microrobotic-Manipulation-System/assets/50302377/6825d8a5-047d-43c4-af69-0d4fb00fc2c7)
 
 ![Magscope2](https://github.com/MaxSokolich/Magnetoacoustic-Microrobotic-Manipulation-System/assets/50302377/c7e8fff9-ff27-48e0-8b8f-d49c7494f22c)
+
+# Example Control Algorithm:
 
 <img width="699" alt="Screenshot 2023-12-20 at 2 14 26 PM" src="https://github.com/MaxSokolich/Magnetoacoustic-Microrobotic-Manipulation-System/assets/50302377/0eedb007-9db3-4152-8e76-12740618e227">
