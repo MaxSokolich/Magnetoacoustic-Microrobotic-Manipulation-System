@@ -50,6 +50,7 @@ pyuic5 uis/CellPusher.ui -o gui_widgets.py
 
 11) optional: install arduino using jetsonhacks github and upload main.ino from src/arduino
 
+# CAD System Overview
 
 ![MagScope1](https://github.com/MaxSokolich/Magnetoacoustic-Microrobotic-Manipulation-System/assets/50302377/6825d8a5-047d-43c4-af69-0d4fb00fc2c7)
 
