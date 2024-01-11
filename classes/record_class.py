@@ -53,7 +53,7 @@ class RecordThread(QThread):
                         
             #frame = cv2.resize(frame, (self.width,self.height), interpolation = cv2.INTER_AREA)
             self.result.write(self.parent.currentframe)
-            time.sleep(1/self.videofps)
+            #time.sleep(.1)
 
            
                 

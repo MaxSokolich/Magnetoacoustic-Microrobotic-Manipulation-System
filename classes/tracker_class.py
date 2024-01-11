@@ -137,13 +137,13 @@ class VideoThread(QThread):
             cell_mask = cv2.bitwise_not(cell_mask)
 
         #sibtract robot from cell mask 
-    
-        for bot in self.robot_list:    
-            x,y,w,h = bot.cropped_frame[-1]
-            blank = np.zeros((w, h), dtype=np.uint8) 
-            cell_mask[y:y+w , x:x+h] = blank 
-        #except Exception:
-        #    pass
+        try:
+            for bot in self.robot_list:    
+                x,y,w,h = bot.cropped_frame[-1]
+                blank = np.zeros((w, h), dtype=np.uint8) 
+                cell_mask[y:y+w , x:x+h] = blank 
+        except Exception:
+            pass
         
         cell_mask = cv2.dilate(cell_mask, None, iterations=self.cell_mask_dilation)
 
