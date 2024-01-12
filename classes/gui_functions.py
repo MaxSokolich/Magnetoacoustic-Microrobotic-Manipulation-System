@@ -359,11 +359,13 @@ class MainWindow(QtWidgets.QMainWindow):
         #add trajectory to file after the fact
         if self.output_workbook is not None:
             if len((self.robot_params_sheets)) > 0:
-                for i in range(len((self.robot_params_sheets))):
-                    for idx,(x,y) in enumerate(self.robots[i][-1]):
-                        self.robot_params_sheets[i].cell(row=idx+2, column=16).value = x
-                        self.robot_params_sheets[i].cell(row=idx+2, column=17).value = y
-
+                try:
+                    for i in range(len((self.robot_params_sheets))):
+                        for idx,(x,y) in enumerate(self.robots[i][-1]):
+                            self.robot_params_sheets[i].cell(row=idx+2, column=16).value = x
+                            self.robot_params_sheets[i].cell(row=idx+2, column=17).value = y
+                except Exception:
+                    pass
             #save and close workbook
             self.output_workbook.remove(self.output_workbook["Sheet"])
             self.output_workbook.save(file_path)
