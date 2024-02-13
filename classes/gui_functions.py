@@ -66,7 +66,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.displayheightratio = 0.79
         self.framesliderheightratio = 0.031
         self.textheightratio = .129
-        #self.tabheightratio = 0.925
+        self.tabheightratio = 0.925
         
         self.aspectratio = 1041/801
         self.resize_widgets()
@@ -74,20 +74,20 @@ class MainWindow(QtWidgets.QMainWindow):
     
       
         #create folder in homerdiractory of user
-        if "Windows" in platform.platform():
+        """if "Windows" in platform.platform():
             home_dir = expanduser("D:")
             new_dir_name = "Tracking Data"
             desktop_path = os.path.join(home_dir, "Microrobots")
             self.new_dir_path = os.path.join(desktop_path, new_dir_name)
             if not os.path.exists(self.new_dir_path):
-                os.makedirs(self.new_dir_path)
-        else:
-            home_dir = expanduser("~")
-            new_dir_name = "Tracking Data"
-            desktop_path = os.path.join(home_dir, "Desktop")
-            self.new_dir_path = os.path.join(desktop_path, new_dir_name)
-            if not os.path.exists(self.new_dir_path):
-                os.makedirs(self.new_dir_path)
+                os.makedirs(self.new_dir_path)"""
+        #else:
+        home_dir = expanduser("~")
+        new_dir_name = "Tracking Data"
+        desktop_path = os.path.join(home_dir, "Desktop")
+        self.new_dir_path = os.path.join(desktop_path, new_dir_name)
+        if not os.path.exists(self.new_dir_path):
+            os.makedirs(self.new_dir_path)
 
 
 
@@ -1070,10 +1070,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.resize_widgets()
  
     def resize_widgets(self):
-        self.display_height = self.window_height*self.displayheightratio #keep this fixed, changed the width dpending on the aspect ratio
-        self.framesliderheight = self.window_height*self.framesliderheightratio
-        self.textheight = self.window_height*self.textheightratio
-        #self.tabheight = self.window_height*self.tabheightratio
+        self.display_height = int(self.window_height*self.displayheightratio) #keep this fixed, changed the width dpending on the aspect ratio
+        self.framesliderheight = int(self.window_height*self.framesliderheightratio)
+        self.textheight = int(self.window_height*self.textheightratio)
+        self.tabheight = self.window_height*self.tabheightratio
 
         self.display_width = int(self.display_height * self.aspectratio)
 
