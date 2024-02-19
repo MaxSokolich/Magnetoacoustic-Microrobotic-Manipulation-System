@@ -1,7 +1,5 @@
 # Magnetoacoustic Microrobotic Manipulation System
-This system is a magnetic and acoustic field generator with real time micro-scale optical
-feedback. The system can also be thought of as a micro-robotic, micro scale manipulation platform
-with close loop control capabilities. Its intention is to be a user friendly, portable, micro-robotic
+This system is a magnetic and acoustic microrobotic manipulation device. Its intention is to be a user friendly, portable, micro-robotic
 experimentation platform. It contains an embedded computer, a microscope, power supplies, power
 amplifiers, and control circuitry necessary for micro robotic research and experimentation. Custom
 control software is written in Python and C++ for handling live image feed from a camera, tracking
