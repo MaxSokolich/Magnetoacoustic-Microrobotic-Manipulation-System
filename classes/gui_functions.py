@@ -74,13 +74,13 @@ class MainWindow(QtWidgets.QMainWindow):
     
       
         #create folder in homerdiractory of user
-        """if "Windows" in platform.platform():
+        if "Windows" in platform.platform():
             home_dir = expanduser("D:")
             new_dir_name = "Tracking Data"
             desktop_path = os.path.join(home_dir, "Microrobots")
             self.new_dir_path = os.path.join(desktop_path, new_dir_name)
             if not os.path.exists(self.new_dir_path):
-                os.makedirs(self.new_dir_path)"""
+                os.makedirs(self.new_dir_path)
         #else:
         home_dir = expanduser("~")
         new_dir_name = "Tracking Data"
