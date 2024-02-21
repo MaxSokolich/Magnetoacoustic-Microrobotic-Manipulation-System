@@ -81,13 +81,13 @@ class MainWindow(QtWidgets.QMainWindow):
             self.new_dir_path = os.path.join(desktop_path, new_dir_name)
             if not os.path.exists(self.new_dir_path):
                 os.makedirs(self.new_dir_path)
-        #else:
-        home_dir = expanduser("~")
-        new_dir_name = "Tracking Data"
-        desktop_path = os.path.join(home_dir, "Desktop")
-        self.new_dir_path = os.path.join(desktop_path, new_dir_name)
-        if not os.path.exists(self.new_dir_path):
-            os.makedirs(self.new_dir_path)
+        else:
+            home_dir = expanduser("~")
+            new_dir_name = "Tracking Data"
+            desktop_path = os.path.join(home_dir, "Desktop")
+            self.new_dir_path = os.path.join(desktop_path, new_dir_name)
+            if not os.path.exists(self.new_dir_path):
+                os.makedirs(self.new_dir_path)
 
 
 
@@ -166,7 +166,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.tbprint("Connected to: "+str(self.joystick.get_name()))
         
         
-
+        self.setFile()
      
 
         #tracker tab functions
@@ -641,15 +641,27 @@ class MainWindow(QtWidgets.QMainWindow):
             self.projection.roll = self.ui.rollradio.isChecked()
             frame, self.projection.draw_sideview(frame,self.Bx,self.By,self.Bz,self.alpha,self.gamma,self.video_width,self.video_height)
             frame, self.projection.draw_topview(frame,self.Bx,self.By,self.Bz,self.alpha,self.gamma,self.video_width,self.video_height)
+            
+            rotatingfield = "alpha: {:.0f}, gamma: {:.0f}, psi: {:.0f}, freq: {:.0f}".format(np.degrees(self.alpha), np.degrees(self.gamma), np.degrees(self.psi), self.freq)
+            cv2.putText(frame, rotatingfield,
+                (int(self.video_width / 1.5),int(self.video_height / 20)),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                fontScale=1, 
+                thickness=4,
+                color = (255, 255, 255),
+            )
         
-        freq = f'{self.acoustic_frequency:,} Hz'
-        cv2.putText(frame,freq,
+        acousticfreq = f'{self.acoustic_frequency:,} Hz'
+        cv2.putText(frame, acousticfreq,
             (int(self.video_width / 8),int(self.video_height / 14)),
             cv2.FONT_HERSHEY_SIMPLEX,
             fontScale=1, 
             thickness=4,
             color = (255, 255, 255),
         )
+
+        
+        
         frame = self.handle_zoom(frame)
     
         self.currentframe = frame
@@ -747,6 +759,7 @@ class MainWindow(QtWidgets.QMainWindow):
             try:
                 self.cap  = EasyPySpin.VideoCapture(0)
                 self.cap.set(cv2.CAP_PROP_AUTO_WB, True)
+                #self.cap.set(cv2.CAP_PROP_FPS, 30)
             except Exception:
                 self.cap  = cv2.VideoCapture(0) 
                 self.tbprint("No EasyPySpin Camera Available")

@@ -396,6 +396,8 @@ class VideoThread(QThread):
                     thickness=4,
                     color = (255, 255, 255))
         
+        
+        
         cv2.putText(display_frame,"100 um",
             (int(self.width / 80),int(self.height / 30)),
             cv2.FONT_HERSHEY_SIMPLEX,

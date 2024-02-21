@@ -21,7 +21,6 @@ class AxisProjection:
             z = rho * np.cos(phi)
             return x, y, z
 
-
         scaleline = 1
         #projection from rotating field
         if [Bx, By, Bz] != [0,0,0]:
@@ -59,6 +58,7 @@ class AxisProjection:
         cv2.arrowedLine(window, origin, vec2, (255, 255, 255), thickness=4)  # Draw second vector (white)
 
         title_loc = (int(w//2+offsetx), int(h//2+offsety*(9.5/10)))
+        
         # Add labels to each axis
     
         cv2.putText(window, 'X', x_axis, cv2.FONT_HERSHEY_SIMPLEX,fontScale=.75, thickness=2, color = (0, 0, 255))
@@ -66,6 +66,7 @@ class AxisProjection:
         cv2.putText(window, 'Z', z_axis, cv2.FONT_HERSHEY_SIMPLEX,fontScale=.75, thickness=2, color = (255, 0, 0))
         cv2.putText(window, 'B', vec2, cv2.FONT_HERSHEY_SIMPLEX,fontScale=.75, thickness=2, color = (255, 255, 255))
         cv2.putText(window, title, title_loc, cv2.FONT_HERSHEY_SIMPLEX,fontScale=.75, thickness=2, color = (0, 255, 255))
+        
 
         return window
 
@@ -76,7 +77,7 @@ class AxisProjection:
         window = self.projection(window,Bx,By,Bz,alpha,gamma,pitch,yaw,roll,window_width, window_height, offsetx,offsety, title)
         return window
     
-    def draw_sideview(self, window, Bx,By,Bz,alpha, gamma, window_width, window_height):
+    def draw_sideview(self, window, Bx,By,Bz,alpha, gamma,window_width, window_height):
         #side view 
         title = "side"
         pitch,yaw,roll = 90,0,0
