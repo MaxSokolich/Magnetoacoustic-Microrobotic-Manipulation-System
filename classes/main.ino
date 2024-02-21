@@ -406,6 +406,10 @@ void loop()
        Bx_final = magnitude * (Bx / sqrt(Bx*Bx + By*By + Bz*Bz));
        By_final = magnitude * (By / sqrt(Bx*Bx + By*By + Bz*Bz));
        Bz_final = magnitude * (Bz / sqrt(Bx*Bx + By*By + Bz*Bz));
+
+       Bx_final = Bx_final;
+       By_final = By_final * .75;
+       Bz_final = Bz_final * .5;
        
    }
    

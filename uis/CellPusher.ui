@@ -1963,10 +1963,10 @@ color: rgb(0,255,0);</string>
        <number>1</number>
       </property>
       <property name="maximum">
-       <number>100</number>
+       <number>400</number>
       </property>
       <property name="value">
-       <number>10</number>
+       <number>100</number>
       </property>
      </widget>
      <widget class="QSpinBox" name="memorybox">
@@ -2073,327 +2073,6 @@ font-size: 14pt; font: Arial;</string>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <widget class="QToolButton" name="plusZbutton">
-      <property name="geometry">
-       <rect>
-        <x>110</x>
-        <y>80</y>
-        <width>41</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QToolButton {
-                color: rgb(255, 255, 255);
-                background-color: rgb(0, 0, 0);
-                border-style: outset;
-                border-width: px;
-                border-radius: 10px;
-                border: 2px solid rgb(0, 0, 0);
-                font: bold 16px;
-                min-width: 1em;
-                padding: 1px;
-            }
-            QToolButton:hover {
-                background-color: rgb(100, 100, 100);
-                color: rgb(255, 255, 255);
-                border: 2px solid rgb(0, 255, 0);
-            }
-            QToolButton:checked {
-                background-color: rgb(100, 100, 100);
-                border: 2px solid rgb(255, 0, 0);
-                border-style: inset;
-                padding-left: 5px;
-                padding-top: 5px;
-            }</string>
-      </property>
-      <property name="text">
-       <string>+Z</string>
-      </property>
-      <property name="checkable">
-       <bool>true</bool>
-      </property>
-      <property name="autoRepeat">
-       <bool>false</bool>
-      </property>
-      <property name="autoRepeatInterval">
-       <number>1</number>
-      </property>
-      <property name="arrowType">
-       <enum>Qt::NoArrow</enum>
-      </property>
-     </widget>
-     <widget class="QToolButton" name="upfieldbutton">
-      <property name="geometry">
-       <rect>
-        <x>35</x>
-        <y>80</y>
-        <width>41</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QToolButton {
-                color: rgb(255, 255, 255);
-                background-color: rgb(0, 0, 0);
-                border-style: outset;
-                border-width: px;
-                border-radius: 10px;
-                border: 2px solid rgb(0, 0, 0);
-                font: bold 16px;
-                min-width: 1em;
-                padding: 1px;
-            }
-		   
-            QToolButton:hover {
-                background-color: rgb(100, 100, 100);
-                color: rgb(255, 255, 255);
-                border: 2px solid rgb(0, 255, 0);
-            }
-
-            QToolButton:checked {
-                background-color: rgb(100, 100, 100);
-                border: 2px solid rgb(255, 0, 0);
-                border-style: inset;
-                padding-left: 5px;
-                padding-top: 5px;
-            }</string>
-      </property>
-      <property name="text">
-       <string>...</string>
-      </property>
-      <property name="checkable">
-       <bool>true</bool>
-      </property>
-      <property name="checked">
-       <bool>false</bool>
-      </property>
-      <property name="autoRepeat">
-       <bool>false</bool>
-      </property>
-      <property name="autoRepeatInterval">
-       <number>1</number>
-      </property>
-      <property name="arrowType">
-       <enum>Qt::UpArrow</enum>
-      </property>
-     </widget>
-     <widget class="QToolButton" name="rightfieldbutton">
-      <property name="geometry">
-       <rect>
-        <x>60</x>
-        <y>105</y>
-        <width>41</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QToolButton {
-                color: rgb(255, 255, 255);
-                background-color: rgb(0, 0, 0);
-                border-style: outset;
-                border-width: px;
-                border-radius: 10px;
-                border: 2px solid rgb(0, 0, 0);
-                font: bold 16px;
-                min-width: 1em;
-                padding: 1px;
-            }
-            QToolButton:hover {
-                background-color: rgb(100, 100, 100);
-                color: rgb(255, 255, 255);
-                border: 2px solid rgb(0, 255, 0);
-            }
-            QToolButton:checked {
-                background-color: rgb(100, 100, 100);
-                border: 2px solid rgb(255, 0, 0);
-                border-style: inset;
-                padding-left: 5px;
-                padding-top: 5px;
-            }</string>
-      </property>
-      <property name="text">
-       <string>...</string>
-      </property>
-      <property name="checkable">
-       <bool>true</bool>
-      </property>
-      <property name="autoRepeat">
-       <bool>false</bool>
-      </property>
-      <property name="autoRepeatInterval">
-       <number>1</number>
-      </property>
-      <property name="arrowType">
-       <enum>Qt::RightArrow</enum>
-      </property>
-     </widget>
-     <widget class="QToolButton" name="leftfieldbutton">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>105</y>
-        <width>41</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QToolButton {
-                color: rgb(255, 255, 255);
-                background-color: rgb(0, 0, 0);
-                border-style: outset;
-                border-width: px;
-                border-radius: 10px;
-                border: 2px solid rgb(0, 0, 0);
-                font: bold 16px;
-                min-width: 1em;
-                padding: 1px;
-            }
-            QToolButton:hover {
-                background-color: rgb(100, 100, 100);
-                color: rgb(255, 255, 255);
-                border: 2px solid rgb(0, 255, 0);
-            }
-            QToolButton:checked {
-                background-color: rgb(100, 100, 100);
-                border: 2px solid rgb(255, 0, 0);
-                border-style: inset;
-                padding-left: 5px;
-                padding-top: 5px;
-            }</string>
-      </property>
-      <property name="text">
-       <string>...</string>
-      </property>
-      <property name="checkable">
-       <bool>true</bool>
-      </property>
-      <property name="autoRepeat">
-       <bool>false</bool>
-      </property>
-      <property name="autoRepeatInterval">
-       <number>1</number>
-      </property>
-      <property name="arrowType">
-       <enum>Qt::LeftArrow</enum>
-      </property>
-     </widget>
-     <widget class="QToolButton" name="minusZbutton">
-      <property name="geometry">
-       <rect>
-        <x>110</x>
-        <y>130</y>
-        <width>41</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QToolButton {
-                color: rgb(255, 255, 255);
-                background-color: rgb(0, 0, 0);
-                border-style: outset;
-                border-width: px;
-                border-radius: 10px;
-                border: 2px solid rgb(0, 0, 0);
-                font: bold 16px;
-                min-width: 1em;
-                padding: 1px;
-            }
-            QToolButton:hover {
-                background-color: rgb(100, 100, 100);
-                color: rgb(255, 255, 255);
-                border: 2px solid rgb(0, 255, 0);
-            }
-            QToolButton:checked {
-                background-color: rgb(100, 100, 100);
-                border: 2px solid rgb(255, 0, 0);
-                border-style: inset;
-                padding-left: 5px;
-                padding-top: 5px;
-            }</string>
-      </property>
-      <property name="text">
-       <string>-Z</string>
-      </property>
-      <property name="checkable">
-       <bool>true</bool>
-      </property>
-      <property name="autoRepeat">
-       <bool>false</bool>
-      </property>
-      <property name="autoRepeatInterval">
-       <number>1</number>
-      </property>
-      <property name="arrowType">
-       <enum>Qt::NoArrow</enum>
-      </property>
-     </widget>
-     <widget class="QToolButton" name="downfieldbutton">
-      <property name="geometry">
-       <rect>
-        <x>35</x>
-        <y>130</y>
-        <width>41</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QToolButton {
-                color: rgb(255, 255, 255);
-                background-color: rgb(0, 0, 0);
-                border-style: outset;
-                border-width: px;
-                border-radius: 10px;
-                border: 2px solid rgb(0, 0, 0);
-                font: bold 16px;
-                min-width: 1em;
-                padding: 1px;
-            }
-            QToolButton:hover {
-                background-color: rgb(100, 100, 100);
-                color: rgb(255, 255, 255);
-                border: 2px solid rgb(0, 255, 0);
-            }
-            QToolButton:checked {
-                background-color: rgb(100, 100, 100);
-                border: 2px solid rgb(255, 0, 0);
-                border-style: inset;
-                padding-left: 5px;
-                padding-top: 5px;
-            }</string>
-      </property>
-      <property name="text">
-       <string>...</string>
-      </property>
-      <property name="checkable">
-       <bool>true</bool>
-      </property>
-      <property name="autoRepeat">
-       <bool>false</bool>
-      </property>
-      <property name="autoRepeatInterval">
-       <number>1</number>
-      </property>
-      <property name="arrowType">
-       <enum>Qt::DownArrow</enum>
-      </property>
-     </widget>
-     <widget class="QLabel" name="quickfieldlabel">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>5</y>
-        <width>221</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <property name="text">
-       <string>Field Magnitude</string>
-      </property>
-     </widget>
      <widget class="QLabel" name="bxlabel">
       <property name="geometry">
        <rect>
@@ -2431,49 +2110,6 @@ font-size: 14pt; font: Arial;</string>
       </property>
       <property name="text">
        <string>By: 0</string>
-      </property>
-     </widget>
-     <widget class="QSlider" name="fieldmagnitudeSlider">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>40</y>
-        <width>101</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <property name="maximum">
-       <number>100</number>
-      </property>
-      <property name="value">
-       <number>100</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="tickPosition">
-       <enum>QSlider::TicksAbove</enum>
-      </property>
-     </widget>
-     <widget class="QLabel" name="magnitudelabel">
-      <property name="geometry">
-       <rect>
-        <x>120</x>
-        <y>40</y>
-        <width>51</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(0,0,0);
-background-color: rgb(255,255,255); border:2px solid rgb(0, 0, 0); 
-font-size: 17pt; font: Arial;</string>
-      </property>
-      <property name="text">
-       <string>100</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_2">
@@ -2531,7 +2167,7 @@ font-size: 17pt; font: Arial;</string>
      <widget class="QLabel" name="label_6">
       <property name="geometry">
        <rect>
-        <x>210</x>
+        <x>50</x>
         <y>10</y>
         <width>131</width>
         <height>21</height>
@@ -2544,7 +2180,7 @@ font-size: 17pt; font: Arial;</string>
      <widget class="QSpinBox" name="manualfieldBx">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>35</x>
         <y>40</y>
         <width>71</width>
         <height>25</height>
@@ -2563,7 +2199,7 @@ font-size: 17pt; font: Arial;</string>
      <widget class="QSpinBox" name="manualfieldBy">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>35</x>
         <y>70</y>
         <width>71</width>
         <height>25</height>
@@ -2585,7 +2221,7 @@ font-size: 17pt; font: Arial;</string>
      <widget class="QSpinBox" name="manualfieldBz">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>35</x>
         <y>100</y>
         <width>71</width>
         <height>25</height>
@@ -2598,7 +2234,7 @@ font-size: 17pt; font: Arial;</string>
        <number>100</number>
       </property>
       <property name="value">
-       <number>50</number>
+       <number>0</number>
       </property>
       <property name="displayIntegerBase">
        <number>10</number>
@@ -2607,10 +2243,10 @@ font-size: 17pt; font: Arial;</string>
      <widget class="QPushButton" name="manualapplybutton">
       <property name="geometry">
        <rect>
-        <x>210</x>
-        <y>130</y>
+        <x>220</x>
+        <y>60</y>
         <width>71</width>
-        <height>25</height>
+        <height>41</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -2651,7 +2287,7 @@ font-size: 17pt; font: Arial;</string>
      <widget class="QLabel" name="label_7">
       <property name="geometry">
        <rect>
-        <x>205</x>
+        <x>10</x>
         <y>40</y>
         <width>21</width>
         <height>21</height>
@@ -2664,7 +2300,7 @@ font-size: 17pt; font: Arial;</string>
      <widget class="QLabel" name="label_8">
       <property name="geometry">
        <rect>
-        <x>205</x>
+        <x>10</x>
         <y>70</y>
         <width>21</width>
         <height>21</height>
@@ -2677,7 +2313,7 @@ font-size: 17pt; font: Arial;</string>
      <widget class="QLabel" name="label_9">
       <property name="geometry">
        <rect>
-        <x>205</x>
+        <x>10</x>
         <y>100</y>
         <width>21</width>
         <height>21</height>
@@ -2687,18 +2323,47 @@ font-size: 17pt; font: Arial;</string>
        <string>Bz:</string>
       </property>
      </widget>
+     <widget class="QDial" name="alphadial">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>40</y>
+        <width>71</width>
+        <height>71</height>
+       </rect>
+      </property>
+      <property name="minimum">
+       <number>0</number>
+      </property>
+      <property name="maximum">
+       <number>360</number>
+      </property>
+      <property name="value">
+       <number>90</number>
+      </property>
+      <property name="notchesVisible">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QSpinBox" name="alphaspinBox">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>120</y>
+        <width>71</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>360</number>
+      </property>
+      <property name="value">
+       <number>90</number>
+      </property>
+     </widget>
      <zorder>bzlabel</zorder>
      <zorder>bxlabel</zorder>
-     <zorder>plusZbutton</zorder>
-     <zorder>upfieldbutton</zorder>
-     <zorder>rightfieldbutton</zorder>
-     <zorder>leftfieldbutton</zorder>
-     <zorder>minusZbutton</zorder>
-     <zorder>downfieldbutton</zorder>
-     <zorder>quickfieldlabel</zorder>
      <zorder>bylabel</zorder>
-     <zorder>fieldmagnitudeSlider</zorder>
-     <zorder>magnitudelabel</zorder>
      <zorder>label_2</zorder>
      <zorder>label_3</zorder>
      <zorder>label_4</zorder>
@@ -2711,6 +2376,8 @@ font-size: 17pt; font: Arial;</string>
      <zorder>label_7</zorder>
      <zorder>label_8</zorder>
      <zorder>label_9</zorder>
+     <zorder>alphadial</zorder>
+     <zorder>alphaspinBox</zorder>
     </widget>
     <widget class="QFrame" name="frame_4">
      <property name="geometry">
@@ -2838,9 +2505,9 @@ QDial::handle {
      <widget class="QLabel" name="gammalabel">
       <property name="geometry">
        <rect>
-        <x>160</x>
+        <x>180</x>
         <y>115</y>
-        <width>141</width>
+        <width>121</width>
         <height>20</height>
        </rect>
       </property>

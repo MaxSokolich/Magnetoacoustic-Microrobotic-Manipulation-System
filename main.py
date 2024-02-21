@@ -10,13 +10,6 @@ from classes.gui_functions import MainWindow
 # add joystick when camera is off. see above
 # calibrate x and y z coils by adding a calbration value
 # add a track all feature
-# need to find better way of saving global video
-
-
-#change size velocity blur thing.
-# fix bot subtraction from cell mask
-# try in range upper and lower bounds
-
 
 
 

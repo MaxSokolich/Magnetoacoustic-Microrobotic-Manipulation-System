@@ -66,7 +66,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.displayheightratio = 0.79
         self.framesliderheightratio = 0.031
         self.textheightratio = .129
-        #self.tabheightratio = 0.925
+        self.tabheightratio = 0.925
         
         self.aspectratio = 1041/801
         self.resize_widgets()
@@ -166,7 +166,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.tbprint("Connected to: "+str(self.joystick.get_name()))
         
         
-
+        self.setFile()
      
 
         #tracker tab functions
@@ -209,20 +209,17 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.psidial.valueChanged.connect(self.get_slider_vals)
         self.ui.applyacousticbutton.clicked.connect(self.apply_acoustic)
         self.ui.acousticfreq_spinBox.valueChanged.connect(self.get_acoustic_frequency)
+
+        self.ui.alphaspinBox.valueChanged.connect(self.spinbox_alphachanged)
+        self.ui.alphadial.valueChanged.connect(self.dial_alphachanged)
+        
         self.ui.resetdefaultbutton.clicked.connect(self.resetparams)
         self.ui.simulationbutton.clicked.connect(self.toggle_simulation)
         self.ui.orientradio.toggled.connect(self.checkorient)
         self.ui.objectivebox.valueChanged.connect(self.get_objective)
         self.ui.exposurebox.valueChanged.connect(self.get_exposure)
         self.ui.joystickbutton.clicked.connect(self.toggle_joystick_status)
-        self.ui.leftfieldbutton.clicked.connect(self.get_field_magnitude)
-        self.ui.rightfieldbutton.clicked.connect(self.get_field_magnitude)
-        self.ui.upfieldbutton.clicked.connect(self.get_field_magnitude)
-        self.ui.downfieldbutton.clicked.connect(self.get_field_magnitude)
-        self.ui.plusZbutton.clicked.connect(self.get_field_magnitude)
-        self.ui.minusZbutton.clicked.connect(self.get_field_magnitude)
         self.ui.autoacousticbutton.clicked.connect(self.toggle_autoacoustic)
-        self.ui.fieldmagnitudeSlider.valueChanged.connect(self.get_field_magnitude)
         self.ui.manualapplybutton.clicked.connect(self.get_manual_bfieldbuttons)
         self.ui.manualfieldBx.valueChanged.connect(self.get_slider_vals)
         self.ui.manualfieldBy.valueChanged.connect(self.get_slider_vals)
@@ -232,6 +229,11 @@ class MainWindow(QtWidgets.QMainWindow):
         #self.ui.robotmask_radio.
         #self.showFullScreen()
 
+    def spinbox_alphachanged(self):
+        self.ui.alphadial.setValue(self.ui.alphaspinBox.value())
+    
+    def dial_alphachanged(self):
+        self.ui.alphaspinBox.setValue(self.ui.alphadial.value())
 
     def gradientcommand(self):
         self.gradient_status = int(self.ui.gradient_status_checkbox.isChecked())
@@ -268,8 +270,18 @@ class MainWindow(QtWidgets.QMainWindow):
             self.psi = np.radians(self.ui.psidial.value())
         
         elif self.manual_status == True:
-            pass
+            self.Bx = self.ui.manualfieldBx.value()/100
+            self.By = self.ui.manualfieldBy.value()/100
+            self.Bz = self.ui.manualfieldBz.value()/100
+            
+            self.freq = self.ui.magneticfrequencydial.value()
+            self.gamma = np.radians(self.ui.gammadial.value())
+            self.psi = np.radians(self.ui.psidial.value())
+
+            self.alpha = np.radians(self.ui.alphadial.value())
+            
         
+
     
         #DEFINE CURRENT ROBOT PARAMS TO A LIST
         if len(robot_list) > 0:
@@ -324,7 +336,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
 
-
     def start_data_record(self):
         self.output_workbook = openpyxl.Workbook()
             
@@ -359,11 +370,13 @@ class MainWindow(QtWidgets.QMainWindow):
         #add trajectory to file after the fact
         if self.output_workbook is not None:
             if len((self.robot_params_sheets)) > 0:
-                for i in range(len((self.robot_params_sheets))):
-                    for idx,(x,y) in enumerate(self.robots[i][-1]):
-                        self.robot_params_sheets[i].cell(row=idx+2, column=16).value = x
-                        self.robot_params_sheets[i].cell(row=idx+2, column=17).value = y
-
+                try:
+                    for i in range(len((self.robot_params_sheets))):
+                        for idx,(x,y) in enumerate(self.robots[i][-1]):
+                            self.robot_params_sheets[i].cell(row=idx+2, column=16).value = x
+                            self.robot_params_sheets[i].cell(row=idx+2, column=17).value = y
+                except Exception:
+                    pass
             #save and close workbook
             self.output_workbook.remove(self.output_workbook["Sheet"])
             self.output_workbook.save(file_path)
@@ -635,19 +648,31 @@ class MainWindow(QtWidgets.QMainWindow):
     def update_image(self, frame):
         """Updates the image_label with a new opencv image"""
         #display projection
-        if self.control_status == True or self.joystick_status == True:
+        if self.control_status == True or self.joystick_status == True or self.manual_status == True:
             self.projection.roll = self.ui.rollradio.isChecked()
             frame, self.projection.draw_sideview(frame,self.Bx,self.By,self.Bz,self.alpha,self.gamma,self.video_width,self.video_height)
             frame, self.projection.draw_topview(frame,self.Bx,self.By,self.Bz,self.alpha,self.gamma,self.video_width,self.video_height)
+            
+            rotatingfield = "alpha: {:.0f}, gamma: {:.0f}, psi: {:.0f}, freq: {:.0f}".format(np.degrees(self.alpha)+90, np.degrees(self.gamma), np.degrees(self.psi), self.freq) #adding 90 to alpha for display purposes only
+            cv2.putText(frame, rotatingfield,
+                (int(self.video_width / 1.5),int(self.video_height / 20)),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                fontScale=1, 
+                thickness=4,
+                color = (255, 255, 255),
+            )
         
-        freq = f'{self.acoustic_frequency:,} Hz'
-        cv2.putText(frame,freq,
+        acousticfreq = f'{self.acoustic_frequency:,} Hz'
+        cv2.putText(frame, acousticfreq,
             (int(self.video_width / 8),int(self.video_height / 14)),
             cv2.FONT_HERSHEY_SIMPLEX,
             fontScale=1, 
             thickness=4,
             color = (255, 255, 255),
         )
+
+        
+        
         frame = self.handle_zoom(frame)
     
         self.currentframe = frame
@@ -745,6 +770,7 @@ class MainWindow(QtWidgets.QMainWindow):
             try:
                 self.cap  = EasyPySpin.VideoCapture(0)
                 self.cap.set(cv2.CAP_PROP_AUTO_WB, True)
+                #self.cap.set(cv2.CAP_PROP_FPS, 30)
             except Exception:
                 self.cap  = cv2.VideoCapture(0) 
                 self.tbprint("No EasyPySpin Camera Available")
@@ -950,43 +976,13 @@ class MainWindow(QtWidgets.QMainWindow):
     
     def get_manual_bfieldbuttons(self):
         if self.ui.manualapplybutton.isChecked():
-            self.Bx = self.ui.manualfieldBx.value()/100
-            self.By = self.ui.manualfieldBy.value()/100
-            self.Bz = self.ui.manualfieldBz.value()/100
-            self.ui.manualapplybutton.setText("Stop")
             self.manual_status = True
+            self.ui.manualapplybutton.setText("Stop")
         else:
             self.ui.manualapplybutton.setText("Apply")
             self.apply_actions(False)
     
-    def get_field_magnitude(self):
-        self.field_magnitude = self.ui.fieldmagnitudeSlider.value()
-        self.ui.magnitudelabel.setText("{}".format(self.field_magnitude))
-        self.manual_status = True
-        if self.ui.leftfieldbutton.isChecked():
-            #self.ui.rightfieldbutton.setChecked(False)
-            self.Bx = -(self.field_magnitude/100)
 
-        elif self.ui.rightfieldbutton.isChecked():
-            #self.ui.leftfieldbutton.setChecked(False)
-            self.Bx = (self.field_magnitude/100)
-
-        elif self.ui.upfieldbutton.isChecked():
-            #self.ui.downfieldbutton.setChecked(False)
-            self.By = (self.field_magnitude/100)
-
-        elif self.ui.downfieldbutton.isChecked():
-            #self.ui.upfieldbutton.setChecked(False)
-            self.By = -(self.field_magnitude/100)
-        
-        elif self.ui.plusZbutton.isChecked():
-            self.Bz = (self.field_magnitude/100)
-
-        elif self.ui.minusZbutton.isChecked():
-            self.Bz = -(self.field_magnitude/100)
-         
-        else:
-            self.apply_actions(False)
 
        
     def get_slider_vals(self):
@@ -996,6 +992,7 @@ class MainWindow(QtWidgets.QMainWindow):
         magneticfreq = self.ui.magneticfrequencydial.value()
         gamma = self.ui.gammadial.value()
         psi = self.ui.psidial.value()
+        #alpha = self.ui.alphaspinBox.value()
         
         robotlower = self.ui.robotmasklowerbox.value() 
         robotupper = self.ui.robotmaskupperbox.value()
@@ -1052,7 +1049,7 @@ class MainWindow(QtWidgets.QMainWindow):
     
         self.ui.memorybox.setValue(15)
         self.ui.RRTtreesizebox.setValue(25)
-        self.ui.arrivalthreshbox.setValue(15)
+        self.ui.arrivalthreshbox.setValue(100)
         self.ui.gammadial.setSliderPosition(90)
         self.ui.psidial.setSliderPosition(90)
         self.ui.magneticfrequencydial.setSliderPosition(10)
@@ -1068,10 +1065,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.resize_widgets()
  
     def resize_widgets(self):
-        self.display_height = self.window_height*self.displayheightratio #keep this fixed, changed the width dpending on the aspect ratio
-        self.framesliderheight = self.window_height*self.framesliderheightratio
-        self.textheight = self.window_height*self.textheightratio
-        #self.tabheight = self.window_height*self.tabheightratio
+        self.display_height = int(self.window_height*self.displayheightratio) #keep this fixed, changed the width dpending on the aspect ratio
+        self.framesliderheight = int(self.window_height*self.framesliderheightratio)
+        self.textheight = int(self.window_height*self.textheightratio)
+        self.tabheight = self.window_height*self.tabheightratio
 
         self.display_width = int(self.display_height * self.aspectratio)
 

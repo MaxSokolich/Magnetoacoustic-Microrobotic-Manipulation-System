@@ -875,8 +875,8 @@ class Ui_MainWindow(object):
         self.arrivalthreshbox = QtWidgets.QSpinBox(self.controlparamsframe)
         self.arrivalthreshbox.setGeometry(QtCore.QRect(290, 10, 81, 35))
         self.arrivalthreshbox.setMinimum(1)
-        self.arrivalthreshbox.setMaximum(100)
-        self.arrivalthreshbox.setProperty("value", 10)
+        self.arrivalthreshbox.setMaximum(400)
+        self.arrivalthreshbox.setProperty("value", 100)
         self.arrivalthreshbox.setObjectName("arrivalthreshbox")
         self.memorybox = QtWidgets.QSpinBox(self.controlparamsframe)
         self.memorybox.setGeometry(QtCore.QRect(10, 10, 71, 35))
@@ -931,193 +931,6 @@ class Ui_MainWindow(object):
         self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_2.setObjectName("frame_2")
-        self.plusZbutton = QtWidgets.QToolButton(self.frame_2)
-        self.plusZbutton.setGeometry(QtCore.QRect(110, 80, 41, 21))
-        self.plusZbutton.setStyleSheet("QToolButton {\n"
-"                color: rgb(255, 255, 255);\n"
-"                background-color: rgb(0, 0, 0);\n"
-"                border-style: outset;\n"
-"                border-width: px;\n"
-"                border-radius: 10px;\n"
-"                border: 2px solid rgb(0, 0, 0);\n"
-"                font: bold 16px;\n"
-"                min-width: 1em;\n"
-"                padding: 1px;\n"
-"            }\n"
-"            QToolButton:hover {\n"
-"                background-color: rgb(100, 100, 100);\n"
-"                color: rgb(255, 255, 255);\n"
-"                border: 2px solid rgb(0, 255, 0);\n"
-"            }\n"
-"            QToolButton:checked {\n"
-"                background-color: rgb(100, 100, 100);\n"
-"                border: 2px solid rgb(255, 0, 0);\n"
-"                border-style: inset;\n"
-"                padding-left: 5px;\n"
-"                padding-top: 5px;\n"
-"            }")
-        self.plusZbutton.setCheckable(True)
-        self.plusZbutton.setAutoRepeat(False)
-        self.plusZbutton.setAutoRepeatInterval(1)
-        self.plusZbutton.setArrowType(QtCore.Qt.NoArrow)
-        self.plusZbutton.setObjectName("plusZbutton")
-        self.upfieldbutton = QtWidgets.QToolButton(self.frame_2)
-        self.upfieldbutton.setGeometry(QtCore.QRect(35, 80, 41, 21))
-        self.upfieldbutton.setStyleSheet("QToolButton {\n"
-"                color: rgb(255, 255, 255);\n"
-"                background-color: rgb(0, 0, 0);\n"
-"                border-style: outset;\n"
-"                border-width: px;\n"
-"                border-radius: 10px;\n"
-"                border: 2px solid rgb(0, 0, 0);\n"
-"                font: bold 16px;\n"
-"                min-width: 1em;\n"
-"                padding: 1px;\n"
-"            }\n"
-"           \n"
-"            QToolButton:hover {\n"
-"                background-color: rgb(100, 100, 100);\n"
-"                color: rgb(255, 255, 255);\n"
-"                border: 2px solid rgb(0, 255, 0);\n"
-"            }\n"
-"\n"
-"            QToolButton:checked {\n"
-"                background-color: rgb(100, 100, 100);\n"
-"                border: 2px solid rgb(255, 0, 0);\n"
-"                border-style: inset;\n"
-"                padding-left: 5px;\n"
-"                padding-top: 5px;\n"
-"            }")
-        self.upfieldbutton.setCheckable(True)
-        self.upfieldbutton.setChecked(False)
-        self.upfieldbutton.setAutoRepeat(False)
-        self.upfieldbutton.setAutoRepeatInterval(1)
-        self.upfieldbutton.setArrowType(QtCore.Qt.UpArrow)
-        self.upfieldbutton.setObjectName("upfieldbutton")
-        self.rightfieldbutton = QtWidgets.QToolButton(self.frame_2)
-        self.rightfieldbutton.setGeometry(QtCore.QRect(60, 105, 41, 21))
-        self.rightfieldbutton.setStyleSheet("QToolButton {\n"
-"                color: rgb(255, 255, 255);\n"
-"                background-color: rgb(0, 0, 0);\n"
-"                border-style: outset;\n"
-"                border-width: px;\n"
-"                border-radius: 10px;\n"
-"                border: 2px solid rgb(0, 0, 0);\n"
-"                font: bold 16px;\n"
-"                min-width: 1em;\n"
-"                padding: 1px;\n"
-"            }\n"
-"            QToolButton:hover {\n"
-"                background-color: rgb(100, 100, 100);\n"
-"                color: rgb(255, 255, 255);\n"
-"                border: 2px solid rgb(0, 255, 0);\n"
-"            }\n"
-"            QToolButton:checked {\n"
-"                background-color: rgb(100, 100, 100);\n"
-"                border: 2px solid rgb(255, 0, 0);\n"
-"                border-style: inset;\n"
-"                padding-left: 5px;\n"
-"                padding-top: 5px;\n"
-"            }")
-        self.rightfieldbutton.setCheckable(True)
-        self.rightfieldbutton.setAutoRepeat(False)
-        self.rightfieldbutton.setAutoRepeatInterval(1)
-        self.rightfieldbutton.setArrowType(QtCore.Qt.RightArrow)
-        self.rightfieldbutton.setObjectName("rightfieldbutton")
-        self.leftfieldbutton = QtWidgets.QToolButton(self.frame_2)
-        self.leftfieldbutton.setGeometry(QtCore.QRect(10, 105, 41, 21))
-        self.leftfieldbutton.setStyleSheet("QToolButton {\n"
-"                color: rgb(255, 255, 255);\n"
-"                background-color: rgb(0, 0, 0);\n"
-"                border-style: outset;\n"
-"                border-width: px;\n"
-"                border-radius: 10px;\n"
-"                border: 2px solid rgb(0, 0, 0);\n"
-"                font: bold 16px;\n"
-"                min-width: 1em;\n"
-"                padding: 1px;\n"
-"            }\n"
-"            QToolButton:hover {\n"
-"                background-color: rgb(100, 100, 100);\n"
-"                color: rgb(255, 255, 255);\n"
-"                border: 2px solid rgb(0, 255, 0);\n"
-"            }\n"
-"            QToolButton:checked {\n"
-"                background-color: rgb(100, 100, 100);\n"
-"                border: 2px solid rgb(255, 0, 0);\n"
-"                border-style: inset;\n"
-"                padding-left: 5px;\n"
-"                padding-top: 5px;\n"
-"            }")
-        self.leftfieldbutton.setCheckable(True)
-        self.leftfieldbutton.setAutoRepeat(False)
-        self.leftfieldbutton.setAutoRepeatInterval(1)
-        self.leftfieldbutton.setArrowType(QtCore.Qt.LeftArrow)
-        self.leftfieldbutton.setObjectName("leftfieldbutton")
-        self.minusZbutton = QtWidgets.QToolButton(self.frame_2)
-        self.minusZbutton.setGeometry(QtCore.QRect(110, 130, 41, 21))
-        self.minusZbutton.setStyleSheet("QToolButton {\n"
-"                color: rgb(255, 255, 255);\n"
-"                background-color: rgb(0, 0, 0);\n"
-"                border-style: outset;\n"
-"                border-width: px;\n"
-"                border-radius: 10px;\n"
-"                border: 2px solid rgb(0, 0, 0);\n"
-"                font: bold 16px;\n"
-"                min-width: 1em;\n"
-"                padding: 1px;\n"
-"            }\n"
-"            QToolButton:hover {\n"
-"                background-color: rgb(100, 100, 100);\n"
-"                color: rgb(255, 255, 255);\n"
-"                border: 2px solid rgb(0, 255, 0);\n"
-"            }\n"
-"            QToolButton:checked {\n"
-"                background-color: rgb(100, 100, 100);\n"
-"                border: 2px solid rgb(255, 0, 0);\n"
-"                border-style: inset;\n"
-"                padding-left: 5px;\n"
-"                padding-top: 5px;\n"
-"            }")
-        self.minusZbutton.setCheckable(True)
-        self.minusZbutton.setAutoRepeat(False)
-        self.minusZbutton.setAutoRepeatInterval(1)
-        self.minusZbutton.setArrowType(QtCore.Qt.NoArrow)
-        self.minusZbutton.setObjectName("minusZbutton")
-        self.downfieldbutton = QtWidgets.QToolButton(self.frame_2)
-        self.downfieldbutton.setGeometry(QtCore.QRect(35, 130, 41, 21))
-        self.downfieldbutton.setStyleSheet("QToolButton {\n"
-"                color: rgb(255, 255, 255);\n"
-"                background-color: rgb(0, 0, 0);\n"
-"                border-style: outset;\n"
-"                border-width: px;\n"
-"                border-radius: 10px;\n"
-"                border: 2px solid rgb(0, 0, 0);\n"
-"                font: bold 16px;\n"
-"                min-width: 1em;\n"
-"                padding: 1px;\n"
-"            }\n"
-"            QToolButton:hover {\n"
-"                background-color: rgb(100, 100, 100);\n"
-"                color: rgb(255, 255, 255);\n"
-"                border: 2px solid rgb(0, 255, 0);\n"
-"            }\n"
-"            QToolButton:checked {\n"
-"                background-color: rgb(100, 100, 100);\n"
-"                border: 2px solid rgb(255, 0, 0);\n"
-"                border-style: inset;\n"
-"                padding-left: 5px;\n"
-"                padding-top: 5px;\n"
-"            }")
-        self.downfieldbutton.setCheckable(True)
-        self.downfieldbutton.setAutoRepeat(False)
-        self.downfieldbutton.setAutoRepeatInterval(1)
-        self.downfieldbutton.setArrowType(QtCore.Qt.DownArrow)
-        self.downfieldbutton.setObjectName("downfieldbutton")
-        self.quickfieldlabel = QtWidgets.QLabel(self.frame_2)
-        self.quickfieldlabel.setGeometry(QtCore.QRect(10, 5, 221, 31))
-        self.quickfieldlabel.setStyleSheet("")
-        self.quickfieldlabel.setObjectName("quickfieldlabel")
         self.bxlabel = QtWidgets.QLabel(self.frame_2)
         self.bxlabel.setGeometry(QtCore.QRect(330, 40, 61, 21))
         self.bxlabel.setObjectName("bxlabel")
@@ -1127,20 +940,6 @@ class Ui_MainWindow(object):
         self.bylabel = QtWidgets.QLabel(self.frame_2)
         self.bylabel.setGeometry(QtCore.QRect(330, 70, 61, 21))
         self.bylabel.setObjectName("bylabel")
-        self.fieldmagnitudeSlider = QtWidgets.QSlider(self.frame_2)
-        self.fieldmagnitudeSlider.setGeometry(QtCore.QRect(10, 40, 101, 31))
-        self.fieldmagnitudeSlider.setStyleSheet("")
-        self.fieldmagnitudeSlider.setMaximum(100)
-        self.fieldmagnitudeSlider.setProperty("value", 100)
-        self.fieldmagnitudeSlider.setOrientation(QtCore.Qt.Horizontal)
-        self.fieldmagnitudeSlider.setTickPosition(QtWidgets.QSlider.TicksAbove)
-        self.fieldmagnitudeSlider.setObjectName("fieldmagnitudeSlider")
-        self.magnitudelabel = QtWidgets.QLabel(self.frame_2)
-        self.magnitudelabel.setGeometry(QtCore.QRect(120, 40, 51, 31))
-        self.magnitudelabel.setStyleSheet("color: rgb(0,0,0);\n"
-"background-color: rgb(255,255,255); border:2px solid rgb(0, 0, 0); \n"
-"font-size: 17pt; font: Arial;")
-        self.magnitudelabel.setObjectName("magnitudelabel")
         self.label_2 = QtWidgets.QLabel(self.frame_2)
         self.label_2.setGeometry(QtCore.QRect(390, 40, 31, 21))
         self.label_2.setObjectName("label_2")
@@ -1154,30 +953,30 @@ class Ui_MainWindow(object):
         self.label_5.setGeometry(QtCore.QRect(340, 10, 61, 21))
         self.label_5.setObjectName("label_5")
         self.label_6 = QtWidgets.QLabel(self.frame_2)
-        self.label_6.setGeometry(QtCore.QRect(210, 10, 131, 21))
+        self.label_6.setGeometry(QtCore.QRect(50, 10, 131, 21))
         self.label_6.setObjectName("label_6")
         self.manualfieldBx = QtWidgets.QSpinBox(self.frame_2)
-        self.manualfieldBx.setGeometry(QtCore.QRect(230, 40, 71, 25))
+        self.manualfieldBx.setGeometry(QtCore.QRect(35, 40, 71, 25))
         self.manualfieldBx.setMinimum(-100)
         self.manualfieldBx.setMaximum(100)
         self.manualfieldBx.setProperty("value", 0)
         self.manualfieldBx.setObjectName("manualfieldBx")
         self.manualfieldBy = QtWidgets.QSpinBox(self.frame_2)
-        self.manualfieldBy.setGeometry(QtCore.QRect(230, 70, 71, 25))
+        self.manualfieldBy.setGeometry(QtCore.QRect(35, 70, 71, 25))
         self.manualfieldBy.setMinimum(-100)
         self.manualfieldBy.setMaximum(100)
         self.manualfieldBy.setProperty("value", 0)
         self.manualfieldBy.setDisplayIntegerBase(10)
         self.manualfieldBy.setObjectName("manualfieldBy")
         self.manualfieldBz = QtWidgets.QSpinBox(self.frame_2)
-        self.manualfieldBz.setGeometry(QtCore.QRect(230, 100, 71, 25))
+        self.manualfieldBz.setGeometry(QtCore.QRect(35, 100, 71, 25))
         self.manualfieldBz.setMinimum(-100)
         self.manualfieldBz.setMaximum(100)
-        self.manualfieldBz.setProperty("value", 50)
+        self.manualfieldBz.setProperty("value", 0)
         self.manualfieldBz.setDisplayIntegerBase(10)
         self.manualfieldBz.setObjectName("manualfieldBz")
         self.manualapplybutton = QtWidgets.QPushButton(self.frame_2)
-        self.manualapplybutton.setGeometry(QtCore.QRect(210, 130, 71, 25))
+        self.manualapplybutton.setGeometry(QtCore.QRect(220, 60, 71, 41))
         self.manualapplybutton.setStyleSheet("QPushButton {\n"
 "                color: rgb(255, 255, 255);\n"
 "                background-color: rgb(0, 0, 0);\n"
@@ -1207,26 +1006,29 @@ class Ui_MainWindow(object):
         self.manualapplybutton.setCheckable(True)
         self.manualapplybutton.setObjectName("manualapplybutton")
         self.label_7 = QtWidgets.QLabel(self.frame_2)
-        self.label_7.setGeometry(QtCore.QRect(205, 40, 21, 21))
+        self.label_7.setGeometry(QtCore.QRect(10, 40, 21, 21))
         self.label_7.setObjectName("label_7")
         self.label_8 = QtWidgets.QLabel(self.frame_2)
-        self.label_8.setGeometry(QtCore.QRect(205, 70, 21, 21))
+        self.label_8.setGeometry(QtCore.QRect(10, 70, 21, 21))
         self.label_8.setObjectName("label_8")
         self.label_9 = QtWidgets.QLabel(self.frame_2)
-        self.label_9.setGeometry(QtCore.QRect(205, 100, 21, 21))
+        self.label_9.setGeometry(QtCore.QRect(10, 100, 21, 21))
         self.label_9.setObjectName("label_9")
+        self.alphadial = QtWidgets.QDial(self.frame_2)
+        self.alphadial.setGeometry(QtCore.QRect(130, 40, 71, 71))
+        self.alphadial.setMinimum(0)
+        self.alphadial.setMaximum(360)
+        self.alphadial.setProperty("value", 90)
+        self.alphadial.setNotchesVisible(True)
+        self.alphadial.setObjectName("alphadial")
+        self.alphaspinBox = QtWidgets.QSpinBox(self.frame_2)
+        self.alphaspinBox.setGeometry(QtCore.QRect(130, 120, 71, 22))
+        self.alphaspinBox.setMaximum(360)
+        self.alphaspinBox.setProperty("value", 90)
+        self.alphaspinBox.setObjectName("alphaspinBox")
         self.bzlabel.raise_()
         self.bxlabel.raise_()
-        self.plusZbutton.raise_()
-        self.upfieldbutton.raise_()
-        self.rightfieldbutton.raise_()
-        self.leftfieldbutton.raise_()
-        self.minusZbutton.raise_()
-        self.downfieldbutton.raise_()
-        self.quickfieldlabel.raise_()
         self.bylabel.raise_()
-        self.fieldmagnitudeSlider.raise_()
-        self.magnitudelabel.raise_()
         self.label_2.raise_()
         self.label_3.raise_()
         self.label_4.raise_()
@@ -1239,6 +1041,8 @@ class Ui_MainWindow(object):
         self.label_7.raise_()
         self.label_8.raise_()
         self.label_9.raise_()
+        self.alphadial.raise_()
+        self.alphaspinBox.raise_()
         self.frame_4 = QtWidgets.QFrame(self.dockWidgetContents_4)
         self.frame_4.setGeometry(QtCore.QRect(10, 475, 431, 141))
         self.frame_4.setStyleSheet(" color: rgb(0, 0, 0);\n"
@@ -1303,7 +1107,7 @@ class Ui_MainWindow(object):
         self.psidial.setNotchesVisible(True)
         self.psidial.setObjectName("psidial")
         self.gammalabel = QtWidgets.QLabel(self.frame_4)
-        self.gammalabel.setGeometry(QtCore.QRect(160, 115, 141, 20))
+        self.gammalabel.setGeometry(QtCore.QRect(180, 115, 121, 20))
         self.gammalabel.setObjectName("gammalabel")
         self.rollingfrequencylabel = QtWidgets.QLabel(self.frame_4)
         self.rollingfrequencylabel.setGeometry(QtCore.QRect(320, 115, 101, 21))
@@ -1401,17 +1205,9 @@ class Ui_MainWindow(object):
         self.RRTtreesizelabel.setText(_translate("MainWindow", "Tree Size"))
         self.arrivalthreshlabel.setText(_translate("MainWindow", "Arrive Thresh"))
         self.simulationbutton.setText(_translate("MainWindow", "Simulation On"))
-        self.plusZbutton.setText(_translate("MainWindow", "+Z"))
-        self.upfieldbutton.setText(_translate("MainWindow", "..."))
-        self.rightfieldbutton.setText(_translate("MainWindow", "..."))
-        self.leftfieldbutton.setText(_translate("MainWindow", "..."))
-        self.minusZbutton.setText(_translate("MainWindow", "-Z"))
-        self.downfieldbutton.setText(_translate("MainWindow", "..."))
-        self.quickfieldlabel.setText(_translate("MainWindow", "Field Magnitude"))
         self.bxlabel.setText(_translate("MainWindow", "Bx: 0"))
         self.bzlabel.setText(_translate("MainWindow", "Bz: 0"))
         self.bylabel.setText(_translate("MainWindow", "By: 0"))
-        self.magnitudelabel.setText(_translate("MainWindow", "100"))
         self.label_2.setText(_translate("MainWindow", "mT"))
         self.label_3.setText(_translate("MainWindow", "mT"))
         self.label_4.setText(_translate("MainWindow", "mT"))

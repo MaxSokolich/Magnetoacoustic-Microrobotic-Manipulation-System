@@ -16,7 +16,7 @@ class algorithm:
         self.stopped = False
         self.actions = [0,0,0,0,0,0,0,0]
 
-        self.B_vec = np.array([1,0])
+        self.B_vec = np.array([0,1])
         self.T_R = 1
         self.theta_maps = np.array([])#added this so that we store the mapped angles
         self.theta = 0
@@ -188,12 +188,67 @@ class algorithm:
         self.B_vec = np.dot(self.T_R, direction_vec)
 
         #OUTPUT SIGNAL      
+                
+        print("\ntheta",np.degrees(self.theta))
+            
+        print(self.B_vec)
+        print("velbot",vel_bot)
+
         
         Bx = self.B_vec[0] / np.sqrt(self.B_vec[0] ** 2 + self.B_vec[1] ** 2)
         By = self.B_vec[1] / np.sqrt(self.B_vec[0] ** 2 + self.B_vec[1] ** 2)
         Bz = 0
         alpha = np.arctan2(By, Bx)
 
+        return Bx,By,Bz,alpha
+    
+
+    def orient2(self, bot, direction_vec):
+        if len(bot.velocity_list) >= 0:
+            
+            #find the velocity avearge over the last memory number of frames to mitigate noise: 
+            vx = bot.velocity_list[-1][0]
+            vy = bot.velocity_list[-1][1]
+            
+            vel_bot = np.array([vx, vy])  # current velocity of self propelled robot
+            #vd = np.linalg.norm(vel_bot)
+            #bd = np.linalg.norm(self.B_vec)
+            vnorm = np.sqrt(vx**2+vy**2)
+            bnorm = np.sqrt(self.B_vec[0]**2+self.B_vec[1]**2)
+            vdotb = vx * self.B_vec[0]+vy*self.B_vec[1]
+             
+            self.theta =  np.arccos(vdotb / (vnorm*bnorm))
+
+            #self.theta = math.atan2(vy- self.B_vec[1],  vx - self.B_vec[0])
+            #self.theta = np.arctan2(np.cross(vel_bot, self.B_vec), np.dot(vel_bot, self.B_vec))
+
+
+            print("\ntheta",np.degrees(self.theta))
+            
+            target_vec = direction_vec
+            xfield_new = (target_vec[0]*np.cos(self.theta)-target_vec[1]*np.sin(self.theta))/np.sqrt(target_vec[0]**2+target_vec[1]**2)
+            yfield_new = (target_vec[0]*np.sin(self.theta)+target_vec[1]*np.cos(self.theta))/np.sqrt(target_vec[0]**2+target_vec[1]**2)
+            print("velbot",vel_bot)
+            print("field", [xfield_new, yfield_new])
+            #if vd != 0 and bd != 0:
+                #costheta = np.dot(vel_bot, self.B_vec) / (vd * bd)
+                #sintheta = (vel_bot[0] * self.B_vec[1] - vel_bot[1] * self.B_vec[0]) / (vd * bd)
+                #self.theta =  np.arctan2(sintheta, costheta)   
+                
+            #self.T_R = np.array([[np.cos(self.theta), -np.sin(self.theta)], [np.sin(self.theta), np.cos(self.theta)]])
+                
+                #self.T_R = np.array([[costhetaNew, -sinthetaNew], [sinthetaNew, costhetaNew]])
+            
+        self.B_vec = np.array([xfield_new, yfield_new])
+
+        #OUTPUT SIGNAL      
+        
+        Bx = self.B_vec[0] / np.sqrt(self.B_vec[0] ** 2 + self.B_vec[1] ** 2)
+        By = self.B_vec[1] / np.sqrt(self.B_vec[0] ** 2 + self.B_vec[1] ** 2)
+        Bz = 0
+        alpha = np.arctan2(By, Bx)
+
+        print("B", [Bx, By])
         return Bx,By,Bz,alpha
 
 
