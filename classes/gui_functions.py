@@ -67,6 +67,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.framesliderheightratio = 0.031
         self.textheightratio = .129
         self.tabheightratio = 0.925
+        self.tabheightratio = 0.925
         
         self.aspectratio = 1041/801
         self.resize_widgets()
@@ -166,6 +167,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.tbprint("Connected to: "+str(self.joystick.get_name()))
         
         
+        self.setFile()
         self.setFile()
      
 
@@ -370,6 +372,13 @@ class MainWindow(QtWidgets.QMainWindow):
         #add trajectory to file after the fact
         if self.output_workbook is not None:
             if len((self.robot_params_sheets)) > 0:
+                try:
+                    for i in range(len((self.robot_params_sheets))):
+                        for idx,(x,y) in enumerate(self.robots[i][-1]):
+                            self.robot_params_sheets[i].cell(row=idx+2, column=16).value = x
+                            self.robot_params_sheets[i].cell(row=idx+2, column=17).value = y
+                except Exception:
+                    pass
                 try:
                     for i in range(len((self.robot_params_sheets))):
                         for idx,(x,y) in enumerate(self.robots[i][-1]):
@@ -673,6 +682,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
         
         
+
+        
+        
         frame = self.handle_zoom(frame)
     
         self.currentframe = frame
@@ -770,6 +782,7 @@ class MainWindow(QtWidgets.QMainWindow):
             try:
                 self.cap  = EasyPySpin.VideoCapture(0)
                 self.cap.set(cv2.CAP_PROP_AUTO_WB, True)
+                #self.cap.set(cv2.CAP_PROP_FPS, 30)
                 #self.cap.set(cv2.CAP_PROP_FPS, 30)
             except Exception:
                 self.cap  = cv2.VideoCapture(0) 
@@ -1065,6 +1078,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.resize_widgets()
  
     def resize_widgets(self):
+        self.display_height = int(self.window_height*self.displayheightratio) #keep this fixed, changed the width dpending on the aspect ratio
+        self.framesliderheight = int(self.window_height*self.framesliderheightratio)
+        self.textheight = int(self.window_height*self.textheightratio)
+        self.tabheight = self.window_height*self.tabheightratio
         self.display_height = int(self.window_height*self.displayheightratio) #keep this fixed, changed the width dpending on the aspect ratio
         self.framesliderheight = int(self.window_height*self.framesliderheightratio)
         self.textheight = int(self.window_height*self.textheightratio)
