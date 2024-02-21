@@ -108,13 +108,14 @@ class VideoThread(QThread):
             robot_mask = cv2.bitwise_not(robot_mask)
 
         #subtract cell from robot mask
-        
-        for cell in self.cell_list:    
-            x,y,w,h = cell.cropped_frame[-1]
-            blank = np.zeros((w, h), dtype=np.uint8) 
-            robot_mask[y:y+w , x:x+h] = blank 
-        #except Exception:
-        #    pass
+        try:
+            for cell in self.cell_list:    
+                x,y,w,h = cell.cropped_frame[-1]
+                blank = np.zeros((w, h), dtype=np.uint8) 
+                robot_mask[y:y+w , x:x+h] = blank 
+        except Exception:
+            pass
+     
 
         robot_mask = cv2.dilate(robot_mask, None, iterations=self.robot_mask_dilation)
 
@@ -360,25 +361,29 @@ class VideoThread(QThread):
         
         display_frame = frame.copy()
         if len(self.robot_list) > 0:
-            for botnum in range(len(self.robot_list)):
+            color = plt.cm.rainbow(np.linspace(1, 0.2, len(self.robot_list))) * 255
+    
+            for (botnum,botcolor) in zip(range(len(self.robot_list)), color):
+               
                 bot  = self.robot_list[botnum]
                 x1, y1, w, h = bot.cropped_frame[-1]
 
-                cv2.rectangle(display_frame, (x1, y1), (x1 + w, y1 + h), (255,0,0), 4)
+                cv2.rectangle(display_frame, (x1, y1), (x1 + w, y1 + h), botcolor, 4)
                 cv2.putText(display_frame,str(botnum+1),(x1 + w,y1 + h),cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, thickness=4,color = (255, 255, 255))
                 
                 pts = np.array(bot.position_list, np.int32)
-                cv2.polylines(display_frame, [pts], False, (255,0,0), 4)
+                cv2.polylines(display_frame, [pts], False, botcolor, 4)
 
                 targets = bot.trajectory
                 if len(targets) > 0:
                     pts = np.array(bot.trajectory, np.int32)
                     cv2.polylines(display_frame, [pts], False, (0, 0, 255), 4)
                     tar = targets[-1]
-                    cv2.circle(display_frame,(int(tar[0]), int(tar[1])),6,(0,0,255), -1,)
+                    cv2.circle(display_frame,(int(tar[0]), int(tar[1])),6,(0,0,0), -1,)
         
         if len(self.cell_list) > 0:
-            for cellnum in range(len(self.cell_list)):
+            color = plt.cm.rainbow(np.linspace(0.5, 0, len(self.cell_list))) *0
+            for (cellnum,cellcolor) in zip(range(len(self.cell_list)),color):
                 cell  = self.cell_list[cellnum]
                 x1, y1, w, h = cell.cropped_frame[-1]
 
@@ -386,7 +391,7 @@ class VideoThread(QThread):
                 cv2.putText(display_frame,str(cellnum+1),(x1 + w, y1 + h),cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, thickness=4,color = (255, 255, 255))
                 
                 pts = np.array(cell.position_list, np.int32)
-                cv2.polylines(display_frame, [pts], False, (0,255,0), 4)
+                cv2.polylines(display_frame, [pts], False, cellcolor, 4)
 
         
         cv2.putText(display_frame,"fps:"+str(int(self.fps.get_fps())),

@@ -1219,7 +1219,7 @@ color: rgb(0,255,0);</string>
        <number>0</number>
       </property>
       <property name="smallDecimalPoint">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="digitCount">
        <number>3</number>
@@ -1228,7 +1228,7 @@ color: rgb(0,255,0);</string>
        <enum>QLCDNumber::Dec</enum>
       </property>
       <property name="segmentStyle">
-       <enum>QLCDNumber::Flat</enum>
+       <enum>QLCDNumber::Outline</enum>
       </property>
       <property name="value" stdset="0">
        <double>137.000000000000000</double>
@@ -1301,7 +1301,7 @@ color: rgb(0,255,0);</string>
        <enum>QLCDNumber::Dec</enum>
       </property>
       <property name="segmentStyle">
-       <enum>QLCDNumber::Flat</enum>
+       <enum>QLCDNumber::Outline</enum>
       </property>
       <property name="value" stdset="0">
        <double>20.000000000000000</double>
@@ -1327,16 +1327,16 @@ color: rgb(0,255,0);</string>
        <number>0</number>
       </property>
       <property name="smallDecimalPoint">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="digitCount">
-       <number>4</number>
+       <number>3</number>
       </property>
       <property name="mode">
        <enum>QLCDNumber::Dec</enum>
       </property>
       <property name="segmentStyle">
-       <enum>QLCDNumber::Flat</enum>
+       <enum>QLCDNumber::Outline</enum>
       </property>
       <property name="value" stdset="0">
        <double>17.100000000000001</double>
@@ -2057,7 +2057,7 @@ color: rgb(0,255,0);</string>
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>228</y>
+       <y>230</y>
        <width>431</width>
        <height>161</height>
       </rect>
@@ -2076,8 +2076,8 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QLabel" name="bxlabel">
       <property name="geometry">
        <rect>
-        <x>330</x>
-        <y>40</y>
+        <x>300</x>
+        <y>50</y>
         <width>61</width>
         <height>21</height>
        </rect>
@@ -2089,8 +2089,8 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QLabel" name="bzlabel">
       <property name="geometry">
        <rect>
-        <x>330</x>
-        <y>100</y>
+        <x>300</x>
+        <y>110</y>
         <width>61</width>
         <height>21</height>
        </rect>
@@ -2102,8 +2102,8 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QLabel" name="bylabel">
       <property name="geometry">
        <rect>
-        <x>330</x>
-        <y>70</y>
+        <x>300</x>
+        <y>80</y>
         <width>61</width>
         <height>21</height>
        </rect>
@@ -2115,8 +2115,8 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QLabel" name="label_2">
       <property name="geometry">
        <rect>
-        <x>390</x>
-        <y>40</y>
+        <x>360</x>
+        <y>50</y>
         <width>31</width>
         <height>21</height>
        </rect>
@@ -2128,8 +2128,8 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QLabel" name="label_3">
       <property name="geometry">
        <rect>
-        <x>390</x>
-        <y>70</y>
+        <x>360</x>
+        <y>80</y>
         <width>31</width>
         <height>21</height>
        </rect>
@@ -2141,8 +2141,8 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QLabel" name="label_4">
       <property name="geometry">
        <rect>
-        <x>390</x>
-        <y>100</y>
+        <x>360</x>
+        <y>110</y>
         <width>31</width>
         <height>21</height>
        </rect>
@@ -2154,8 +2154,8 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QLabel" name="label_5">
       <property name="geometry">
        <rect>
-        <x>340</x>
-        <y>10</y>
+        <x>310</x>
+        <y>20</y>
         <width>61</width>
         <height>21</height>
        </rect>
@@ -2167,7 +2167,7 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QLabel" name="label_6">
       <property name="geometry">
        <rect>
-        <x>50</x>
+        <x>30</x>
         <y>10</y>
         <width>131</width>
         <height>21</height>
@@ -2243,10 +2243,10 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QPushButton" name="manualapplybutton">
       <property name="geometry">
        <rect>
-        <x>220</x>
-        <y>60</y>
-        <width>71</width>
-        <height>41</height>
+        <x>40</x>
+        <y>130</y>
+        <width>191</width>
+        <height>21</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -2326,10 +2326,10 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QDial" name="alphadial">
       <property name="geometry">
        <rect>
-        <x>130</x>
-        <y>40</y>
-        <width>71</width>
-        <height>71</height>
+        <x>140</x>
+        <y>10</y>
+        <width>81</width>
+        <height>81</height>
        </rect>
       </property>
       <property name="minimum">
@@ -2348,9 +2348,9 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QSpinBox" name="alphaspinBox">
       <property name="geometry">
        <rect>
-        <x>130</x>
-        <y>120</y>
-        <width>71</width>
+        <x>180</x>
+        <y>100</y>
+        <width>61</width>
         <height>22</height>
        </rect>
       </property>
@@ -2359,6 +2359,19 @@ font-size: 14pt; font: Arial;</string>
       </property>
       <property name="value">
        <number>90</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="manualalphalabel">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>100</y>
+        <width>41</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Alpha:</string>
       </property>
      </widget>
      <zorder>bzlabel</zorder>
@@ -2378,6 +2391,7 @@ font-size: 14pt; font: Arial;</string>
      <zorder>label_9</zorder>
      <zorder>alphadial</zorder>
      <zorder>alphaspinBox</zorder>
+     <zorder>manualalphalabel</zorder>
     </widget>
     <widget class="QFrame" name="frame_4">
      <property name="geometry">
