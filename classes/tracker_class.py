@@ -347,6 +347,9 @@ class VideoThread(QThread):
                     #this will toggle between the cropped frame display being the masked version and the original
                     if self.croppedmask_flag == False:
                         croppedmask = croppedframe
+                else:
+                    if len(self.cell_list) > 0:
+                        del self.cell_list[j]
                   
                 
             #adjust most recent bot crop_length 
