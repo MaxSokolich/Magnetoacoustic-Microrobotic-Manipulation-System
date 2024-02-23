@@ -32,7 +32,7 @@ class ArduinoHandler:
                 self.conn = txfer.SerialTransfer(port)
                 self.port = port
                 self.conn.open()
-                #time.sleep(5)
+                time.sleep(1)
                 self.printer(f"Arduino Connection initialized using port {port}")
             except InvalidSerialPort:
                 self.printer("Could not connect to arduino, disabling")
@@ -88,16 +88,23 @@ class ArduinoHandler:
             
 
 
-"""if __name__ == "__main__":
-    PORT = "/dev/ttyACM0"
-    arduino = MyArduino()
-    arduino.connect(PORT)
+if __name__ == "__main__":
 
-    arduino.send(0,0,0,3.1,90,10)
+    def tbprint(text):
+        #print to textbox
+        print(text)
+
+
+    PORT = "/dev/cu.usbmodem11301"
+    arduino = ArduinoHandler(tbprint)
+    arduino.connect(PORT)
+    time.sleep(1)
+
+    arduino.send(1,0,0,0,0,0,0,0,0)
     print("sending")
     time.sleep(5)
-    arduino.send(0,0,0,0,0,0)
+    arduino.send(0,0,0,0,0,0,0,0,0)
     print("zeroing")
-    arduino.close()"""
+    arduino.close()
     
     
