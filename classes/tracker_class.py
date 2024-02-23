@@ -159,8 +159,8 @@ class VideoThread(QThread):
             cropped_mask: to visualize tracking parameters
         """
         if len(self.robot_list) > 0:
-            for bot in self.robot_list: #for each bot with a position botx, boty, find the cropped frame around the bot
-                
+            for i in range(len(self.robot_list)): #for each bot with a position botx, boty, find the cropped frame around the bot
+                bot = self.robot_list[i]
                 #current cropped frame dim
                 x1, y1, w, h = bot.cropped_frame[-1]
                 x1 = max(min(x1, self.width), 0)
@@ -238,16 +238,21 @@ class VideoThread(QThread):
                     if self.croppedmask_flag == False:
                         croppedmask = croppedframe
 
-        
-            
+                else:
+                    if len(self.robot_list) > 0:
+                        del self.robot_list[i]
+                   
         
             #also crop a second frame at a fixed wdith and heihgt for recording the most recent robots suroundings
-            x1_record = int(bot.position_list[-1][0] - self.crop_length_record/2)
-            y1_record = int(bot.position_list[-1][1] - self.crop_length_record/2)
-            recorded_cropped_frame = frame[y1_record : y1_record + self.crop_length_record, x1_record : x1_record + self.crop_length_record]
-            
-            #adjust most recent bot crop_length 
-            bot.crop_length = self.robot_crop_length
+            if len(self.robot_list)>0:
+                x1_record = int(bot.position_list[-1][0] - self.crop_length_record/2)
+                y1_record = int(bot.position_list[-1][1] - self.crop_length_record/2)
+                recorded_cropped_frame = frame[y1_record : y1_record + self.crop_length_record, x1_record : x1_record + self.crop_length_record]
+                
+                #adjust most recent bot crop_length 
+                bot.crop_length = self.robot_crop_length
+            else:
+                recorded_cropped_frame = np.zeros((self.crop_length_record, self.crop_length_record, 3), dtype=np.uint8) 
 
         else:
             recorded_cropped_frame = np.zeros((self.crop_length_record, self.crop_length_record, 3), dtype=np.uint8) 
@@ -265,8 +270,8 @@ class VideoThread(QThread):
             cropped_mask: to visualize tracking parameters
         """
         if len(self.cell_list) > 0:
-            for cell in self.cell_list: #for each bot with a position botx, boty, find the cropped frame around the bot
-                
+            for j in range(len(self.cell_list)): #for each bot with a position botx, boty, find the cropped frame around the bot
+                cell = self.cell_list[j]
                 #current cropped frame dim
                 x1, y1, w, h = cell.cropped_frame[-1]
                 x1 = max(min(x1, self.width), 0)
@@ -289,6 +294,7 @@ class VideoThread(QThread):
                         if cv2.contourArea(contour) > cv2.contourArea(max_cnt): 
                             max_cnt = contour
                     area = cv2.contourArea(max_cnt)* (1/self.pix2metric**2)
+                
                     
                     #find the center of mass from the mask
                     szsorted=np.argsort(sizes)
@@ -341,7 +347,10 @@ class VideoThread(QThread):
                     #this will toggle between the cropped frame display being the masked version and the original
                     if self.croppedmask_flag == False:
                         croppedmask = croppedframe
-                    
+                else:
+                    if len(self.cell_list) > 0:
+                        del self.cell_list[j]
+                  
                 
             #adjust most recent bot crop_length 
             cell.crop_length = self.cell_crop_length
