@@ -20,7 +20,7 @@ class RecordThread(QThread):
         self.cap = self.parent.cap
         self.width = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         self.height = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-        self.videofps = 45#int(self.cap.get(cv2.CAP_PROP_FPS))
+        self.videofps = int(self.cap.get(cv2.CAP_PROP_FPS))
        
       
         file_path  = os.path.join(self.parent.new_dir_path, date+".mp4")
