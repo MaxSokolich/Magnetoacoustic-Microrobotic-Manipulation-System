@@ -160,88 +160,92 @@ class VideoThread(QThread):
         """
         if len(self.robot_list) > 0:
             for i in range(len(self.robot_list)): #for each bot with a position botx, boty, find the cropped frame around the bot
-                bot = self.robot_list[i]
-                #current cropped frame dim
-                x1, y1, w, h = bot.cropped_frame[-1]
-                x1 = max(min(x1, self.width), 0)
-                y1 = max(min(y1, self.height), 0)
+                try:
+                    bot = self.robot_list[i]
+                    #current cropped frame dim
+                    x1, y1, w, h = bot.cropped_frame[-1]
+                    x1 = max(min(x1, self.width), 0)
+                    y1 = max(min(y1, self.height), 0)
 
-                #crop the frame and mask
-                croppedframe = frame[y1 : y1 + h, x1 : x1 + w]
-                croppedmask  = robotmask[y1 : y1 + h, x1 : x1 + w]
-            
-              
-                #label the mask
-                label_im, nb_labels = ndimage.label(croppedmask) 
-                sizes = ndimage.sum(croppedmask, label_im, range(nb_labels + 1)) 
-                num_bots=np.sum(sizes>50)
+                    #crop the frame and mask
+                    croppedframe = frame[y1 : y1 + h, x1 : x1 + w]
+                    croppedmask  = robotmask[y1 : y1 + h, x1 : x1 + w]
                 
-                if num_bots>0:
-                    #find contours from the mask
-                    contours, _ = cv2.findContours(croppedmask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-                    max_cnt = contours[0]
-                    for contour in contours:
-                        if cv2.contourArea(contour) > cv2.contourArea(max_cnt): 
-                            max_cnt = contour
-                    area = cv2.contourArea(max_cnt)* (1/self.pix2metric**2)
+                
+                    #label the mask
+                    label_im, nb_labels = ndimage.label(croppedmask) 
+                    sizes = ndimage.sum(croppedmask, label_im, range(nb_labels + 1)) 
+                    num_bots=np.sum(sizes>50)
                     
-                    #find the center of mass from the mask
-                    szsorted=np.argsort(sizes)
-                    [ycord,xcord]=ndimage.center_of_mass(croppedmask,labels=label_im,index = szsorted[-(1)])
-                    ndimage.binary_dilation
-                    
-                    #derive the global current location
-                    current_pos = [xcord + x1,   ycord + y1] #xcord ycord are relative to the cropped frame. need to convert to the overall frame dim
+                    if num_bots>0:
+                        #find contours from the mask
+                        contours, _ = cv2.findContours(croppedmask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+                        max_cnt = contours[0]
+                        for contour in contours:
+                            if cv2.contourArea(contour) > cv2.contourArea(max_cnt): 
+                                max_cnt = contour
+                        area = cv2.contourArea(max_cnt)* (1/self.pix2metric**2)
+                        
+                        #find the center of mass from the mask
+                        szsorted=np.argsort(sizes)
+                        [ycord,xcord]=ndimage.center_of_mass(croppedmask,labels=label_im,index = szsorted[-(1)])
+                        ndimage.binary_dilation
+                        
+                        #derive the global current location
+                        current_pos = [xcord + x1,   ycord + y1] #xcord ycord are relative to the cropped frame. need to convert to the overall frame dim
 
-                    #generate new cropped frame based on the new robots position
-                    x1_new = int(current_pos[0] - bot.crop_length/2)
-                    y1_new = int(current_pos[1] - bot.crop_length/2)
-                    w_new = int(bot.crop_length)
-                    h_new = int(bot.crop_length)
-                    new_crop = [int(x1_new), int(y1_new), int(w_new), int(h_new)]
+                        #generate new cropped frame based on the new robots position
+                        x1_new = int(current_pos[0] - bot.crop_length/2)
+                        y1_new = int(current_pos[1] - bot.crop_length/2)
+                        w_new = int(bot.crop_length)
+                        h_new = int(bot.crop_length)
+                        new_crop = [int(x1_new), int(y1_new), int(w_new), int(h_new)]
 
 
-                    #find velocity:
-                    if len(bot.position_list) > self.memory:
-                        vx = (current_pos[0] - bot.position_list[-self.memory][0]) * (self.fps.get_fps()/self.memory) / self.pix2metric
-                        vy = (current_pos[1] - bot.position_list[-self.memory][1]) * (self.fps.get_fps()/self.memory) / self.pix2metric
-                        magnitude = np.sqrt(vx**2 + vy**2)
+                        #find velocity:
+                        if len(bot.position_list) > self.memory:
+                            vx = (current_pos[0] - bot.position_list[-self.memory][0]) * (self.fps.get_fps()/self.memory) / self.pix2metric
+                            vy = (current_pos[1] - bot.position_list[-self.memory][1]) * (self.fps.get_fps()/self.memory) / self.pix2metric
+                            magnitude = np.sqrt(vx**2 + vy**2)
 
-                        velocity = [vx,vy,magnitude]
+                            velocity = [vx,vy,magnitude]
+
+                        else:
+                            velocity = [0,0,0]
+
+                
+                        #find blur of original crop
+                        blur = cv2.Laplacian(croppedframe, cv2.CV_64F).var()
+                        
+                        #store the data in the instance of RobotClasss
+                        bot.add_frame(self.framenum)
+                        bot.add_time(1/self.fps.get_fps()) #original in ms
+                        bot.add_position([current_pos[0], current_pos[1]])
+                        bot.add_velocity(velocity)
+                        bot.add_crop(new_crop)
+                        bot.add_area(area)
+                        bot.add_blur(blur)
+                        bot.set_avg_area(np.mean(bot.area_list))
+
+
+                        #stuck condition
+                        if len(bot.position_list) > self.memory and velocity[2] < 20 and self.parent.freq > 0:
+                            stuck_status = 1
+                        else:
+                            stuck_status = 0
+                        bot.add_stuck_status(stuck_status)
+
+                        #this will toggle between the cropped frame display being the masked version and the original
+                        if self.croppedmask_flag == False:
+                            croppedmask = croppedframe
 
                     else:
-                        velocity = [0,0,0]
-
-            
-                    #find blur of original crop
-                    blur = cv2.Laplacian(croppedframe, cv2.CV_64F).var()
-                    
-                    #store the data in the instance of RobotClasss
-                    bot.add_frame(self.framenum)
-                    bot.add_time(1/self.fps.get_fps()) #original in ms
-                    bot.add_position([current_pos[0], current_pos[1]])
-                    bot.add_velocity(velocity)
-                    bot.add_crop(new_crop)
-                    bot.add_area(area)
-                    bot.add_blur(blur)
-                    bot.set_avg_area(np.mean(bot.area_list))
-
-
-                    #stuck condition
-                    if len(bot.position_list) > self.memory and velocity[2] < 20 and self.parent.freq > 0:
-                        stuck_status = 1
-                    else:
-                        stuck_status = 0
-                    bot.add_stuck_status(stuck_status)
-
-                    #this will toggle between the cropped frame display being the masked version and the original
-                    if self.croppedmask_flag == False:
-                        croppedmask = croppedframe
-
-                else:
-                    if len(self.robot_list) > 0:
-                        del self.robot_list[i]
-                   
+                        if len(self.robot_list) > 0:
+                            del self.robot_list[i]
+                
+                except Exception:
+                    pass
+                       
         
             #also crop a second frame at a fixed wdith and heihgt for recording the most recent robots suroundings
             if len(self.robot_list)>0:
