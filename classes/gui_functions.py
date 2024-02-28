@@ -264,12 +264,23 @@ class MainWindow(QtWidgets.QMainWindow):
             
         #if joystick is on use the joystick though
         elif self.joystick_status == True:
-            self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, _ = self.controller_actions.run(self.joystick)
+            type, self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, _ = self.controller_actions.run(self.joystick)
             
-            if self.freq !=0:
+            if type == 1:
+                self.gamma = np.radians(180)
                 self.freq = self.ui.magneticfrequencydial.value()
-            self.gamma = np.radians(self.ui.gammadial.value())
-            self.psi = np.radians(self.ui.psidial.value())
+            
+            elif type == 2:
+                self.gamma = np.radians(0)
+                self.freq = self.ui.magneticfrequencydial.value()
+            
+            else:
+                self.gamma = np.radians(self.ui.gammadial.value())
+                self.psi = np.radians(self.ui.psidial.value())
+            
+                if self.freq != 0:
+                    self.freq = self.ui.magneticfrequencydial.value()
+        
         
         elif self.manual_status == True:
             self.Bx = self.ui.manualfieldBx.value()/100

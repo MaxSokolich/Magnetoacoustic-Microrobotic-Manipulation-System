@@ -5,7 +5,7 @@ import numpy as np
 from scipy import interpolate
 
 
-class Mac_Controller:
+class Mac_Controller: #mac
     """
     handles joystick inputs and outputs to main program
     """
@@ -15,6 +15,7 @@ class Mac_Controller:
         self.Mx, self.My, self.Mz = 0,0,0
         self.alpha, self.gamma, self.freq, self.psi = 0,0,0,0
         self.acoustic_frequency = 0
+        self.typ = 0
 
 
     def deadzone(self, value):
@@ -83,16 +84,16 @@ class Mac_Controller:
             elif event.type == pygame.JOYBUTTONDOWN:
                 # Joystick button press event
                 button = event.button
-                if button == 1: #circle
-                    #print("Controller Disconnected")
-                    #return True
-                    pass
-                if button == 0: #X
-                    self.acoustic_frequency = 1
-                if button == 2: #square
-                    pass
                 if button == 3: #triangle
                     pass
+                if button == 2: #square
+                    self.typ = 1 #spin clockwise
+                    self.freq = 1
+                if button == 1: #circle
+                    self.typ = 2 #spin counter clockwise
+                    self.freq = 1
+                if button == 0: #X
+                    self.acoustic_frequency = 1
                 if button == 10: #rb
                     self.Bz = 1
                 if button == 9: #lb
@@ -107,6 +108,7 @@ class Mac_Controller:
             
             #zero condition
             else:
+                self.typ = 0
                 self.Bx = 0
                 self.By = 0
                 self.Bz = 0
@@ -118,14 +120,15 @@ class Mac_Controller:
                 self.freq = 0
                 self.acoustic_frequency = 0
         
-        self.actions = [self.Bx, 
-                self.By,
-                self.Bz,
-                self.alpha,
-                self.gamma,
-                self.freq,
-                self.psi,
-                self.acoustic_frequency]
+        self.actions = [self.typ, 
+                        self.Bx, 
+                        self.By,
+                        self.Bz,
+                        self.alpha,
+                        self.gamma,
+                        self.freq,
+                        self.psi,
+                        self.acoustic_frequency]
 
         return self.actions
            
@@ -144,6 +147,7 @@ class Windows_Controller:
         self.Mx, self.My, self.Mz = 0,0,0
         self.alpha, self.gamma, self.freq,self.psi = 0,0,0,0
         self.acoustic_frequency = 0
+        self.typ = 0
 
 
     def deadzone(self, value):
@@ -211,14 +215,17 @@ class Windows_Controller:
             elif event.type == pygame.JOYBUTTONDOWN:
                 # Joystick button press event
                 button = event.button
-                if button == 1: #circle
-                    pass
                 if button == 0: #X
                     self.acoustic_status = 1
-                if button == 2: #square
-                    pass
                 if button == 3: #triangle
                     pass
+
+                if button == 2: #square
+                    self.typ = 1 #spin clockwise
+                    self.freq = 1
+                if button == 1: #circle
+                    self.typ = 2 #spin counter clockwise
+                    self.freq = 1
                 if button == 10: #rb
                     self.Bz = 1
                 if button == 9: #lb
@@ -246,14 +253,15 @@ class Windows_Controller:
                 self.freq = 0
                 self.acoustic_frequency = 0
         
-        self.actions = [self.Bx, 
-                self.By,
-                self.Bz,
-                self.alpha,
-                self.gamma,
-                self.freq,
-                self.psi,
-                self.acoustic_frequency]
+        self.actions = [self.typ, 
+                        self.Bx, 
+                        self.By,
+                        self.Bz,
+                        self.alpha,
+                        self.gamma,
+                        self.freq,
+                        self.psi,
+                        self.acoustic_frequency]
 
         return self.actions
 
@@ -270,6 +278,7 @@ class Linux_Controller:
         self.Mx, self.My, self.Mz = 0,0,0
         self.alpha, self.gamma, self.freq, self.psi = 0,0,0,0
         self.acoustic_frequency = 0
+        self.typ = 0
 
      
     def deadzone(self, value):
@@ -346,10 +355,16 @@ class Linux_Controller:
                 button = event.button
                 if button == 0: #X
                     self.acoustic_status = 1
+                if button == 2: 
+                    pass
                 if button == 3: #square
-                    pass
-                if button == 2: #triangle #supposed to spin but is overwritten in GUI
-                    pass
+                    self.typ = 1 #spin clockwise
+                    self.freq = 1
+                if button == 1: #circle
+                    self.typ = 2 #spin counter clockwise
+                    self.freq = 1
+
+
                 if button == 5: #rb
                     self.Bz = 1
                 if button == 4: #lb
@@ -359,14 +374,14 @@ class Linux_Controller:
                 # Joystick button press event
                 button = event.button
                 if button == 1: #circle
-                    pass
+                    self.typ = 0 #spin clockwise
+                    self.freq = 0
                 if button == 0: #X
                     self.acoustic_status = 0
                 if button == 3: #square
-                    pass
+                    self.typ = 0 #spin clockwise
+                    self.freq = 0
                 if button == 2: #triangle
-                    #self.freq = 0
-                    #self.gamma = np.pi/2
                     pass
                 if button == 5: #rb
                     self.Bz = 0
@@ -380,7 +395,9 @@ class Linux_Controller:
                 self.Mx, self.My = event.value
 
 
-        self.actions = [self.Bx, 
+        self.actions = [
+                self.typ, 
+                self.Bx, 
                 self.By,
                 self.Bz,
                 self.alpha,
