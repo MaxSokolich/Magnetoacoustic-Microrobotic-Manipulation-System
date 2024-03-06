@@ -39,16 +39,16 @@ class RecordThread(QThread):
                         (int(self.width * (7/10)),
                         int(self.height * (9.9/10))),
                         cv2.FONT_HERSHEY_SIMPLEX,
-                        fontScale=1, 
-                        thickness=4,
+                        fontScale=1.5, 
+                        thickness=3,
                         color = (255, 255, 255))
             
             cv2.putText(self.parent.currentframe, "frame: {}".format(self.parent.tracker.framenum),
                         (int(self.width * (6/10)),
                         int(self.height * (9.9/10))),
                         cv2.FONT_HERSHEY_SIMPLEX,
-                        fontScale=1, 
-                        thickness=4,
+                        fontScale=1.5, 
+                        thickness=3,
                         color = (255, 255, 255))
                         
             #frame = cv2.resize(frame, (self.width,self.height), interpolation = cv2.INTER_AREA)

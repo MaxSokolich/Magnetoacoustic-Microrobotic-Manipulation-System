@@ -187,13 +187,6 @@ class algorithm:
             
         self.B_vec = np.dot(self.T_R, direction_vec)
 
-        #OUTPUT SIGNAL      
-                
-        print("\ntheta",np.degrees(self.theta))
-            
-        print(self.B_vec)
-        print("velbot",vel_bot)
-
         
         Bx = self.B_vec[0] / np.sqrt(self.B_vec[0] ** 2 + self.B_vec[1] ** 2)
         By = self.B_vec[1] / np.sqrt(self.B_vec[0] ** 2 + self.B_vec[1] ** 2)

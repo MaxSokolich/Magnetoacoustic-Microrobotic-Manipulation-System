@@ -674,10 +674,10 @@ class MainWindow(QtWidgets.QMainWindow):
             
             rotatingfield = "alpha: {:.0f}, gamma: {:.0f}, psi: {:.0f}, freq: {:.0f}".format(np.degrees(self.alpha)+90, np.degrees(self.gamma), np.degrees(self.psi), self.freq) #adding 90 to alpha for display purposes only
             cv2.putText(frame, rotatingfield,
-                (int(self.video_width / 1.5),int(self.video_height / 20)),
+                (int(self.video_width / 1.7),int(self.video_height / 20)),
                 cv2.FONT_HERSHEY_SIMPLEX,
-                fontScale=1, 
-                thickness=4,
+                fontScale=1.5, 
+                thickness=3,
                 color = (255, 255, 255),
             )
         
@@ -685,8 +685,8 @@ class MainWindow(QtWidgets.QMainWindow):
         cv2.putText(frame, acousticfreq,
             (int(self.video_width / 8),int(self.video_height / 14)),
             cv2.FONT_HERSHEY_SIMPLEX,
-            fontScale=1, 
-            thickness=4,
+            fontScale=1.5, 
+            thickness=3,
             color = (255, 255, 255),
         )
 
