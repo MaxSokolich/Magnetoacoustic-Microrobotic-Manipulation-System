@@ -11,8 +11,6 @@ from classes.gui_functions import MainWindow
 # calibrate x and y z coils by adding a calbration value
 # add a track all feature
 
- 
-
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

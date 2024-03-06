@@ -573,9 +573,6 @@ class MainWindow(QtWidgets.QMainWindow):
                         newx, newy = self.convert_coords(event.pos())
                         #generate original bounding box
                         
-
-                        
-                     
                         #reset algorithm nodes
                         self.tracker.control_robot.reset()
 
@@ -670,6 +667,9 @@ class MainWindow(QtWidgets.QMainWindow):
         #display projection
         if self.control_status == True or self.joystick_status == True or self.manual_status == True:
             self.projection.roll = self.ui.rollradio.isChecked()
+            self.projection.gradient = self.gradient_status
+
+
             frame, self.projection.draw_sideview(frame,self.Bx,self.By,self.Bz,self.alpha,self.gamma,self.video_width,self.video_height)
             frame, self.projection.draw_topview(frame,self.Bx,self.By,self.Bz,self.alpha,self.gamma,self.video_width,self.video_height)
             

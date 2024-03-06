@@ -9,6 +9,10 @@ class AxisProjection:
     """
     def __init__(self):
         self.roll = True
+        self.gradient = 0
+
+
+
     def projection(self, window, Bx,By,Bz,alpha, gamma, pitch, yaw, roll, w, h, offsetx, offsety,title):
         
         if self.roll == False:
@@ -25,12 +29,19 @@ class AxisProjection:
         #projection from rotating field
         if [Bx, By, Bz] != [0,0,0]:
             x2,y2,z2 = Bx*scaleline,By*scaleline,Bz*scaleline
-            title = title + "(uniform)"
+            if self.gradient == 1:
+                title = title + "(gradient)"
+            else:
+                title = title + "(uniform)"
         #projection from constant field
+        
+        
         else:
             alpha = alpha + np.pi/2
             x2, y2, z2 = spherical_to_cartesian(scaleline, alpha, gamma)
             title = title + "(rotating)"
+        
+        
         axis_points = np.float32([[0, 0, 0], [scaleline, 0, 0], [0, -scaleline, 0], [0, 0, scaleline], [x2, -y2, z2]])
 
         # rotate axis
