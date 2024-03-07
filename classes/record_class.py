@@ -44,7 +44,7 @@ class RecordThread(QThread):
                         color = (255, 255, 255))
             
             cv2.putText(self.parent.currentframe, "frame: {}".format(self.parent.tracker.framenum),
-                        (int(self.width * (6/10)),
+                        (int(self.width * (5/10)),
                         int(self.height * (9.9/10))),
                         cv2.FONT_HERSHEY_SIMPLEX,
                         fontScale=1.5, 
