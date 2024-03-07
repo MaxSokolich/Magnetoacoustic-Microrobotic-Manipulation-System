@@ -526,7 +526,7 @@ class MainWindow(QtWidgets.QMainWindow):
             #self.tbprint("Control On: {} Hz".format(self.acoustic_frequency))
             self.acoustic_frequency = self.ui.acousticfreq_spinBox.value()
             #self.acoustic_module.start(self.acoustic_frequency, 0)
-            self.apply_actions(True)
+            #self.apply_actions(True)
             self.ui.led.setStyleSheet("\n"
 "                background-color: rgb(0, 255, 0);\n"
 "                border-style: outset;\n"

@@ -440,9 +440,6 @@ class VideoThread(QThread):
 
 
 
-
-
-
     def run(self):
     
         # capture from web camx
