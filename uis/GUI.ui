@@ -1568,7 +1568,7 @@ color: rgb(0,255,0);</string>
      <widget class="QLabel" name="led">
       <property name="geometry">
        <rect>
-        <x>320</x>
+        <x>390</x>
         <y>160</y>
         <width>31</width>
         <height>31</height>
@@ -1591,8 +1591,8 @@ color: rgb(0,255,0);</string>
      <widget class="QRadioButton" name="swimradio">
       <property name="geometry">
        <rect>
-        <x>150</x>
-        <y>90</y>
+        <x>90</x>
+        <y>120</y>
         <width>91</width>
         <height>20</height>
        </rect>
@@ -1604,10 +1604,10 @@ color: rgb(0,255,0);</string>
      <widget class="QPushButton" name="applyacousticbutton">
       <property name="geometry">
        <rect>
-        <x>150</x>
-        <y>160</y>
+        <x>230</x>
+        <y>170</y>
         <width>71</width>
-        <height>31</height>
+        <height>21</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -1648,8 +1648,8 @@ color: rgb(0,255,0);</string>
      <widget class="QRadioButton" name="rollradio">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>90</y>
+        <x>10</x>
+        <y>120</y>
         <width>81</width>
         <height>21</height>
        </rect>
@@ -1671,10 +1671,10 @@ color: rgb(0,255,0);</string>
      <widget class="QPushButton" name="joystickbutton">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>10</y>
-        <width>141</width>
-        <height>71</height>
+        <x>20</x>
+        <y>60</y>
+        <width>181</width>
+        <height>41</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -1687,7 +1687,7 @@ color: rgb(0,255,0);</string>
                 border-color: rgb(0, 255, 255);
                 min-width: 1em;
                 padding: 6px;
-                font: bold 25px;
+                font: bold 20px;
             }
       
             QPushButton:checked {
@@ -1697,7 +1697,7 @@ color: rgb(0,255,0);</string>
                 border-width: 3px;
                 border-radius: 10px;
                 border-color: rgb(255, 0, 0);
-                font: bold 25px;
+                font: bold 21px;
                 min-width: 1em;
 			  padding-left: 5px;
                 padding-top: 5px;
@@ -1723,8 +1723,8 @@ color: rgb(0,255,0);</string>
        <rect>
         <x>20</x>
         <y>10</y>
-        <width>141</width>
-        <height>71</height>
+        <width>181</width>
+        <height>41</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -1737,7 +1737,7 @@ color: rgb(0,255,0);</string>
                 border-color: rgb(0, 0, 255);
                 min-width: 1em;
                 padding: 6px;
-                font: bold 25px;
+                font: bold 20px;
             }
       
             QPushButton:checked {
@@ -1747,7 +1747,7 @@ color: rgb(0,255,0);</string>
                 border-width: 3px;
                 border-radius: 10px;
                 border-color: rgb(255, 0, 0);
-                font: bold 25px;
+                font: bold 21px;
                 min-width: 1em;
                
             }
@@ -1769,8 +1769,8 @@ color: rgb(0,255,0);</string>
      <widget class="QRadioButton" name="orientradio">
       <property name="geometry">
        <rect>
-        <x>290</x>
-        <y>90</y>
+        <x>190</x>
+        <y>120</y>
         <width>91</width>
         <height>20</height>
        </rect>
@@ -1782,9 +1782,9 @@ color: rgb(0,255,0);</string>
      <widget class="QSpinBox" name="acousticfreq_spinBox">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>120</x>
         <y>160</y>
-        <width>121</width>
+        <width>101</width>
         <height>41</height>
        </rect>
       </property>
@@ -1801,26 +1801,27 @@ color: rgb(0,255,0);</string>
      <widget class="QLabel" name="acousticfreqlabel">
       <property name="geometry">
        <rect>
-        <x>60</x>
-        <y>130</y>
-        <width>201</width>
-        <height>21</height>
+        <x>10</x>
+        <y>160</y>
+        <width>101</width>
+        <height>41</height>
        </rect>
       </property>
       <property name="styleSheet">
        <string notr="true"/>
       </property>
       <property name="text">
-       <string>Acoustic Frequency</string>
+       <string>Acoustic 
+Frequency</string>
       </property>
      </widget>
      <widget class="QPushButton" name="autoacousticbutton">
       <property name="geometry">
        <rect>
-        <x>230</x>
-        <y>160</y>
+        <x>310</x>
+        <y>170</y>
         <width>71</width>
-        <height>31</height>
+        <height>21</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -1861,14 +1862,108 @@ color: rgb(0,255,0);</string>
      <widget class="QCheckBox" name="gradient_status_checkbox">
       <property name="geometry">
        <rect>
-        <x>330</x>
-        <y>30</y>
+        <x>280</x>
+        <y>120</y>
         <width>85</width>
-        <height>31</height>
+        <height>21</height>
        </rect>
       </property>
       <property name="text">
        <string>Gradient</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="import_excel_actions">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>10</y>
+        <width>181</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+                color: rgb(255, 255, 255);
+                background-color: rgb(150, 150, 150);
+                border-style: outset;
+                border-width: 3px;
+                border-radius: 10px;
+                border-color: rgb(150, 150 150);
+                min-width: 1em;
+                padding: 6px;
+                font: bold 15px;
+            }
+
+            QPushButton:hover {
+                background-color: rgb(100, 100, 100);
+                color: rgb(255, 255, 255);
+                border-color: rgb(100, 100, 100);
+                padding-left: 5px;
+                padding-top: 5px;
+            }</string>
+      </property>
+      <property name="text">
+       <string>Import Excel Actions</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="apply_actions">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>60</y>
+        <width>181</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>-1</pointsize>
+        <italic>false</italic>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+                color: rgb(0, 0, 0);
+                background-color: rgb(255, 0, 255);
+                border-style: outset;
+                border-width: 3px;
+                border-radius: 10px;
+                border-color: rgb(255, 0, 255);
+                min-width: 1em;
+                padding: 6px;
+                font: bold 15px;
+            }
+      
+            QPushButton:checked {
+                color: rgb(0, 0, 0);
+                background-color: rgb(255, 0, 0);
+                border-style: inset;
+                border-width: 3px;
+                border-radius: 10px;
+                border-color: rgb(255, 0, 0);
+                font: bold 16px;
+                min-width: 1em;
+			  padding-left: 5px;
+                padding-top: 5px;
+               
+            }
+            QPushButton:hover {
+                background-color: rgb(100, 100, 100);
+                color: rgb(255, 255, 255);
+                border-color: rgb(100, 100, 100);
+                padding-left: 5px;
+                padding-top: 5px;
+            }</string>
+      </property>
+      <property name="text">
+       <string>Apply Excel Actions</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
       </property>
      </widget>
     </widget>
