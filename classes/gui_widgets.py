@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'uis/CellPusher.ui'
+# Form implementation generated from reading ui file 'uis/GUI.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -680,7 +680,7 @@ class Ui_MainWindow(object):
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
         self.led = QtWidgets.QLabel(self.frame)
-        self.led.setGeometry(QtCore.QRect(320, 160, 31, 31))
+        self.led.setGeometry(QtCore.QRect(390, 160, 31, 31))
         self.led.setStyleSheet("\n"
 "                background-color: rgb(255, 0, 0);\n"
 "                border-style: outset;\n"
@@ -692,10 +692,10 @@ class Ui_MainWindow(object):
         self.led.setText("")
         self.led.setObjectName("led")
         self.swimradio = QtWidgets.QRadioButton(self.frame)
-        self.swimradio.setGeometry(QtCore.QRect(150, 90, 91, 20))
+        self.swimradio.setGeometry(QtCore.QRect(90, 120, 91, 20))
         self.swimradio.setObjectName("swimradio")
         self.applyacousticbutton = QtWidgets.QPushButton(self.frame)
-        self.applyacousticbutton.setGeometry(QtCore.QRect(150, 160, 71, 31))
+        self.applyacousticbutton.setGeometry(QtCore.QRect(230, 170, 71, 21))
         self.applyacousticbutton.setStyleSheet("QPushButton {\n"
 "                color: rgb(255, 255, 255);\n"
 "                background-color: rgb(0, 0, 0);\n"
@@ -725,7 +725,7 @@ class Ui_MainWindow(object):
         self.applyacousticbutton.setCheckable(True)
         self.applyacousticbutton.setObjectName("applyacousticbutton")
         self.rollradio = QtWidgets.QRadioButton(self.frame)
-        self.rollradio.setGeometry(QtCore.QRect(20, 90, 81, 21))
+        self.rollradio.setGeometry(QtCore.QRect(10, 120, 81, 21))
         font = QtGui.QFont()
         font.setPointSize(12)
         font.setBold(False)
@@ -734,7 +734,7 @@ class Ui_MainWindow(object):
         self.rollradio.setChecked(True)
         self.rollradio.setObjectName("rollradio")
         self.joystickbutton = QtWidgets.QPushButton(self.frame)
-        self.joystickbutton.setGeometry(QtCore.QRect(180, 10, 141, 71))
+        self.joystickbutton.setGeometry(QtCore.QRect(20, 60, 181, 41))
         self.joystickbutton.setStyleSheet("QPushButton {\n"
 "                color: rgb(0, 0, 0);\n"
 "                background-color: rgb(0, 255, 255);\n"
@@ -744,7 +744,7 @@ class Ui_MainWindow(object):
 "                border-color: rgb(0, 255, 255);\n"
 "                min-width: 1em;\n"
 "                padding: 6px;\n"
-"                font: bold 25px;\n"
+"                font: bold 20px;\n"
 "            }\n"
 "      \n"
 "            QPushButton:checked {\n"
@@ -754,7 +754,7 @@ class Ui_MainWindow(object):
 "                border-width: 3px;\n"
 "                border-radius: 10px;\n"
 "                border-color: rgb(255, 0, 0);\n"
-"                font: bold 25px;\n"
+"                font: bold 21px;\n"
 "                min-width: 1em;\n"
 "              padding-left: 5px;\n"
 "                padding-top: 5px;\n"
@@ -770,7 +770,7 @@ class Ui_MainWindow(object):
         self.joystickbutton.setCheckable(True)
         self.joystickbutton.setObjectName("joystickbutton")
         self.controlbutton = QtWidgets.QPushButton(self.frame)
-        self.controlbutton.setGeometry(QtCore.QRect(20, 10, 141, 71))
+        self.controlbutton.setGeometry(QtCore.QRect(20, 10, 181, 41))
         self.controlbutton.setStyleSheet("QPushButton {\n"
 "                color: rgb(255, 255, 255);\n"
 "                background-color: rgb(0, 0, 255);\n"
@@ -780,7 +780,7 @@ class Ui_MainWindow(object):
 "                border-color: rgb(0, 0, 255);\n"
 "                min-width: 1em;\n"
 "                padding: 6px;\n"
-"                font: bold 25px;\n"
+"                font: bold 20px;\n"
 "            }\n"
 "      \n"
 "            QPushButton:checked {\n"
@@ -790,7 +790,7 @@ class Ui_MainWindow(object):
 "                border-width: 3px;\n"
 "                border-radius: 10px;\n"
 "                border-color: rgb(255, 0, 0);\n"
-"                font: bold 25px;\n"
+"                font: bold 21px;\n"
 "                min-width: 1em;\n"
 "               \n"
 "            }\n"
@@ -804,20 +804,20 @@ class Ui_MainWindow(object):
         self.controlbutton.setCheckable(True)
         self.controlbutton.setObjectName("controlbutton")
         self.orientradio = QtWidgets.QRadioButton(self.frame)
-        self.orientradio.setGeometry(QtCore.QRect(290, 90, 91, 20))
+        self.orientradio.setGeometry(QtCore.QRect(190, 120, 91, 20))
         self.orientradio.setObjectName("orientradio")
         self.acousticfreq_spinBox = QtWidgets.QSpinBox(self.frame)
-        self.acousticfreq_spinBox.setGeometry(QtCore.QRect(10, 160, 121, 41))
+        self.acousticfreq_spinBox.setGeometry(QtCore.QRect(120, 160, 101, 41))
         self.acousticfreq_spinBox.setMaximum(3000000)
         self.acousticfreq_spinBox.setSingleStep(1000)
         self.acousticfreq_spinBox.setProperty("value", 1000000)
         self.acousticfreq_spinBox.setObjectName("acousticfreq_spinBox")
         self.acousticfreqlabel = QtWidgets.QLabel(self.frame)
-        self.acousticfreqlabel.setGeometry(QtCore.QRect(60, 130, 201, 21))
+        self.acousticfreqlabel.setGeometry(QtCore.QRect(10, 160, 101, 41))
         self.acousticfreqlabel.setStyleSheet("")
         self.acousticfreqlabel.setObjectName("acousticfreqlabel")
         self.autoacousticbutton = QtWidgets.QPushButton(self.frame)
-        self.autoacousticbutton.setGeometry(QtCore.QRect(230, 160, 71, 31))
+        self.autoacousticbutton.setGeometry(QtCore.QRect(310, 170, 71, 21))
         self.autoacousticbutton.setStyleSheet("QPushButton {\n"
 "                color: rgb(255, 255, 255);\n"
 "                background-color: rgb(0, 0, 0);\n"
@@ -847,8 +847,72 @@ class Ui_MainWindow(object):
         self.autoacousticbutton.setCheckable(True)
         self.autoacousticbutton.setObjectName("autoacousticbutton")
         self.gradient_status_checkbox = QtWidgets.QCheckBox(self.frame)
-        self.gradient_status_checkbox.setGeometry(QtCore.QRect(330, 30, 85, 31))
+        self.gradient_status_checkbox.setGeometry(QtCore.QRect(280, 120, 85, 21))
         self.gradient_status_checkbox.setObjectName("gradient_status_checkbox")
+        self.import_excel_actions = QtWidgets.QPushButton(self.frame)
+        self.import_excel_actions.setGeometry(QtCore.QRect(230, 10, 181, 41))
+        self.import_excel_actions.setStyleSheet("QPushButton {\n"
+"                color: rgb(255, 255, 255);\n"
+"                background-color: rgb(150, 150, 150);\n"
+"                border-style: outset;\n"
+"                border-width: 3px;\n"
+"                border-radius: 10px;\n"
+"                border-color: rgb(150, 150 150);\n"
+"                min-width: 1em;\n"
+"                padding: 6px;\n"
+"                font: bold 15px;\n"
+"            }\n"
+"\n"
+"            QPushButton:hover {\n"
+"                background-color: rgb(100, 100, 100);\n"
+"                color: rgb(255, 255, 255);\n"
+"                border-color: rgb(100, 100, 100);\n"
+"                padding-left: 5px;\n"
+"                padding-top: 5px;\n"
+"            }")
+        self.import_excel_actions.setCheckable(True)
+        self.import_excel_actions.setObjectName("import_excel_actions")
+        self.apply_actions = QtWidgets.QPushButton(self.frame)
+        self.apply_actions.setGeometry(QtCore.QRect(230, 60, 181, 41))
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(True)
+        font.setItalic(False)
+        self.apply_actions.setFont(font)
+        self.apply_actions.setStyleSheet("QPushButton {\n"
+"                color: rgb(0, 0, 0);\n"
+"                background-color: rgb(255, 0, 255);\n"
+"                border-style: outset;\n"
+"                border-width: 3px;\n"
+"                border-radius: 10px;\n"
+"                border-color: rgb(255, 0, 255);\n"
+"                min-width: 1em;\n"
+"                padding: 6px;\n"
+"                font: bold 15px;\n"
+"            }\n"
+"      \n"
+"            QPushButton:checked {\n"
+"                color: rgb(0, 0, 0);\n"
+"                background-color: rgb(255, 0, 0);\n"
+"                border-style: inset;\n"
+"                border-width: 3px;\n"
+"                border-radius: 10px;\n"
+"                border-color: rgb(255, 0, 0);\n"
+"                font: bold 16px;\n"
+"                min-width: 1em;\n"
+"              padding-left: 5px;\n"
+"                padding-top: 5px;\n"
+"               \n"
+"            }\n"
+"            QPushButton:hover {\n"
+"                background-color: rgb(100, 100, 100);\n"
+"                color: rgb(255, 255, 255);\n"
+"                border-color: rgb(100, 100, 100);\n"
+"                padding-left: 5px;\n"
+"                padding-top: 5px;\n"
+"            }")
+        self.apply_actions.setCheckable(True)
+        self.apply_actions.setObjectName("apply_actions")
         self.controlparamsframe = QtWidgets.QFrame(self.dockWidgetContents_4)
         self.controlparamsframe.setGeometry(QtCore.QRect(10, 398, 431, 71))
         self.controlparamsframe.setStyleSheet(" color: rgb(0, 0, 0);\n"
@@ -1202,9 +1266,12 @@ class Ui_MainWindow(object):
         self.joystickbutton.setText(_translate("MainWindow", "Joystick"))
         self.controlbutton.setText(_translate("MainWindow", "Control"))
         self.orientradio.setText(_translate("MainWindow", "Orient"))
-        self.acousticfreqlabel.setText(_translate("MainWindow", "Acoustic Frequency"))
+        self.acousticfreqlabel.setText(_translate("MainWindow", "Acoustic \n"
+"Frequency"))
         self.autoacousticbutton.setText(_translate("MainWindow", "Auto"))
         self.gradient_status_checkbox.setText(_translate("MainWindow", "Gradient"))
+        self.import_excel_actions.setText(_translate("MainWindow", "Import Excel Actions"))
+        self.apply_actions.setText(_translate("MainWindow", "Apply Excel Actions"))
         self.memorylabel.setText(_translate("MainWindow", "Memory"))
         self.RRTtreesizelabel.setText(_translate("MainWindow", "Tree Size"))
         self.arrivalthreshlabel.setText(_translate("MainWindow", "Arrive Thresh"))
