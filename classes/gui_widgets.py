@@ -880,7 +880,7 @@ class Ui_MainWindow(object):
         font.setItalic(False)
         self.apply_actions.setFont(font)
         self.apply_actions.setStyleSheet("QPushButton {\n"
-"                color: rgb(0, 0, 0);\n"
+"                color: rgb(255, 255,255);\n"
 "                background-color: rgb(255, 0, 255);\n"
 "                border-style: outset;\n"
 "                border-width: 3px;\n"
