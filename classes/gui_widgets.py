@@ -725,7 +725,7 @@ class Ui_MainWindow(object):
         self.applyacousticbutton.setCheckable(True)
         self.applyacousticbutton.setObjectName("applyacousticbutton")
         self.rollradio = QtWidgets.QRadioButton(self.frame)
-        self.rollradio.setGeometry(QtCore.QRect(10, 120, 81, 21))
+        self.rollradio.setGeometry(QtCore.QRect(10, 120, 71, 21))
         font = QtGui.QFont()
         font.setPointSize(12)
         font.setBold(False)

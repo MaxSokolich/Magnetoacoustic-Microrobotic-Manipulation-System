@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QFileDialog
 import sys
 from PyQt5.QtGui import QWheelEvent
 from PyQt5 import QtGui
@@ -168,7 +168,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         
         self.setFile()
-        self.setFile()
+
      
 
         #tracker tab functions
@@ -228,17 +228,38 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.manualfieldBz.valueChanged.connect(self.get_slider_vals)
         self.ui.croppedmasktoggle.clicked.connect(self.showcroppedoriginal)
         self.ui.croppedrecordbutton.clicked.connect(self.croppedrecordfunction)
-        #self.ui.robotmask_radio.
-        #self.showFullScreen()
 
-    def spinbox_alphachanged(self):
-        self.ui.alphadial.setValue(self.ui.alphaspinBox.value())
+        self.ui.import_excel_actions.clicked.connect(self.read_excel_actions)
+        self.ui.apply_actions.clicked.connect(self.apply_excel_actions)
+
+        self.excel_file_name = None
+        self.excel_actions_df = None
+        self.excel_actions_status = False
+        
+
     
-    def dial_alphachanged(self):
-        self.ui.alphaspinBox.setValue(self.ui.alphadial.value())
 
-    def gradientcommand(self):
-        self.gradient_status = int(self.ui.gradient_status_checkbox.isChecked())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     def update_actions(self, actions, stopped, robot_list, cell_list):
         self.frame_number+=1
@@ -285,12 +306,32 @@ class MainWindow(QtWidgets.QMainWindow):
             self.Bx = self.ui.manualfieldBx.value()/100
             self.By = self.ui.manualfieldBy.value()/100
             self.Bz = self.ui.manualfieldBz.value()/100
-            
             self.freq = self.ui.magneticfrequencydial.value()
             self.gamma = np.radians(self.ui.gammadial.value())
             self.psi = np.radians(self.ui.psidial.value())
-
             self.alpha = np.radians(self.ui.alphadial.value())
+
+
+        elif self.excel_actions_status == True and self.excel_actions_df is not None:            
+            self.actions_counter +=1
+            if self.actions_counter < self.excel_actions_df['Frame'].iloc[-1]:
+                filtered_row = self.excel_actions_df[self.excel_actions_df['Frame'] == self.actions_counter]
+                
+                self.Bx = float(filtered_row["Bx"])
+                self.By = float(filtered_row["By"])
+                self.Bz = float(filtered_row["Bz"])
+                self.alpha = float(filtered_row["Alpha"])
+                self.gamma = float(filtered_row["Gamma"])
+                self.freq = float(filtered_row["Rolling Frequency"])
+                self.psi = float(filtered_row["Psi"])
+                self.gradient = float(filtered_row["Gradient"])
+                self.acoustic_freq = float(filtered_row["Acoustic Frequency"])
+            
+            else:
+                self.excel_actions_status = False
+                self.ui.apply_actions.setText("Apply")
+                self.ui.apply_actions.setChecked(False)
+                self.apply_actions(False)
             
         
 
@@ -312,6 +353,7 @@ class MainWindow(QtWidgets.QMainWindow):
                                     ]
                 
                 self.robots.append(currentbot_params)
+           
         
         #DEFINE CURRENT CELL PARAMS TO A LIST
         if len(cell_list) > 0:
@@ -332,7 +374,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #DEFINE CURRENT MAGNETIC FIELD OUTPUT TO A LIST 
         self.actions = [self.frame_number, self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.gradient_status,
                         self.acoustic_frequency, self.sensorBx, self.sensorBy, self.sensorBz] 
-        
+       
         self.magnetic_field_list.append(self.actions)
         self.apply_actions(True)
         
@@ -345,6 +387,71 @@ class MainWindow(QtWidgets.QMainWindow):
                 sheet.append(bot[:-1])
             for (sheet, cell) in zip(self.cell_params_sheets,self.cells):
                 sheet.append(cell[:-1])
+
+
+
+
+
+
+
+
+
+
+
+    def apply_actions(self, status):
+        #the purpose of this function is to output the actions via arduino, 
+        # show the actions via the simulator
+        # and record the actions by appending the field_list
+        
+        #toggle between alpha and orient
+        if self.freq > 0:
+            if self.ui.swimradio.isChecked():
+                self.simulator.roll = False
+            elif self.ui.rollradio.isChecked():
+                self.alpha = self.alpha - np.pi/2
+                self.simulator.roll = True
+
+        #zero output
+        if status == False:
+            self.manual_status = False
+            self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.acoustic_frequency = 0,0,0,0,0,0,0,0
+
+        #output current actions to simulator
+
+        self.simulator.Bx = self.Bx
+        self.simulator.By = self.By
+        self.simulator.Bz = self.Bz
+        self.simulator.alpha = self.alpha
+        self.simulator.gamma = self.gamma
+        self.simulator.psi = self.psi
+        self.simulator.freq = self.freq/15
+        self.simulator.omega = 2 * np.pi * self.simulator.freq
+
+         #send arduino commands
+        self.arduino.send(self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.gradient_status, self.acoustic_frequency)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -413,38 +520,23 @@ class MainWindow(QtWidgets.QMainWindow):
             self.date = datetime.now().strftime('%Y.%m.%d-%H.%M.%S')
             self.stop_data_record()
             
-
-    def apply_actions(self, status):
-        #the purpose of this function is to output the actions via arduino, 
-        # show the actions via the simulator
-        # and record the actions by appending the field_list
+    def read_excel_actions(self):
+        options = QFileDialog.Options()
+        self.excel_file_name, _ = QFileDialog.getOpenFileName(self, "Open Excel File", "", "Excel Files (*.xlsx *.xls)", options=options)
+        if self.excel_file_name:
+            self.excel_actions_df = pd.read_excel(self.excel_file_name)
+            
         
-        #toggle between alpha and orient
-        if self.freq > 0:
-            if self.ui.swimradio.isChecked():
-                self.simulator.roll = False
-            elif self.ui.rollradio.isChecked():
-                self.alpha = self.alpha - np.pi/2
-                self.simulator.roll = True
-
-        #zero output
-        if status == False:
-            self.manual_status = False
-            self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.acoustic_frequency = 0,0,0,0,0,0,0,0
-
-        #output current actions to simulator
-
-        self.simulator.Bx = self.Bx
-        self.simulator.By = self.By
-        self.simulator.Bz = self.Bz
-        self.simulator.alpha = self.alpha
-        self.simulator.gamma = self.gamma
-        self.simulator.psi = self.psi
-        self.simulator.freq = self.freq/15
-        self.simulator.omega = 2 * np.pi * self.simulator.freq
-
-         #send arduino commands
-        self.arduino.send(self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.gradient_status, self.acoustic_frequency)
+    def apply_excel_actions(self):
+        if self.ui.apply_actions.isChecked():
+            self.excel_actions_status = True
+            self.actions_counter = 0
+            self.ui.apply_actions.setText("Stop")
+        else:
+            self.excel_actions_status = False
+            self.ui.apply_actions.setText("Apply")
+            self.apply_actions(False)
+    
     
 
 
@@ -946,7 +1038,15 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.tracker.croppedmask_flag = True
 
 
-         
+    def spinbox_alphachanged(self):
+        self.ui.alphadial.setValue(self.ui.alphaspinBox.value())
+    
+    def dial_alphachanged(self):
+        self.ui.alphaspinBox.setValue(self.ui.alphadial.value())
+
+    def gradientcommand(self):
+        self.gradient_status = int(self.ui.gradient_status_checkbox.isChecked())
+
     def get_objective(self):
         if self.tracker is not None:
             self.tracker.objective = self.ui.objectivebox.value()

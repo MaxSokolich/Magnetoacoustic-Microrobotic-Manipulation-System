@@ -63,7 +63,7 @@ sections (Mechanical, Electrical, and Software)
 
 11) optional: install arduino using jetsonhacks github and upload main.ino from src/arduino
 
-pyuic5 uis/CellPusher.ui -o gui_widgets.py
+pyuic5 uis/GUI.ui -o gui_widgets.py
 
 /opt/homebrew/bin/python3.10 -m PyInstaller --onedir --windowed --icon MagScopeBox.icns --name MagScope main.py
 
