@@ -397,12 +397,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
 
-
-
-
-
-
-
     def apply_actions(self, status):
         #the purpose of this function is to output the actions via arduino, 
         # show the actions via the simulator
@@ -432,7 +426,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.simulator.freq = self.freq/15
         self.simulator.omega = 2 * np.pi * self.simulator.freq
 
-         #send arduino commands
+        #send arduino commands
         self.arduino.send(self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.gradient_status, self.acoustic_frequency)
 
 
@@ -762,7 +756,7 @@ class MainWindow(QtWidgets.QMainWindow):
         """Updates the image_label with a new opencv image"""
         #display projection
         if self.ui.toggledisplayvisualscheckbox.isChecked():
-            if self.control_status == True or self.joystick_status == True or self.manual_status == True:
+            if self.control_status == True or self.joystick_status == True or self.manual_status == True or self.excel_actions_status == True :
                 self.projection.roll = self.ui.rollradio.isChecked()
                 self.projection.gradient = self.gradient_status
 
