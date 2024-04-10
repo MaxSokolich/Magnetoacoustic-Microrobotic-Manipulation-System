@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1728, 1027)
+        MainWindow.resize(1080, 1867)
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(12)
@@ -97,7 +97,7 @@ class Ui_MainWindow(object):
 "            }")
         self.choosevideobutton.setObjectName("choosevideobutton")
         self.pausebutton = QtWidgets.QPushButton(self.frame_3)
-        self.pausebutton.setGeometry(QtCore.QRect(170, 50, 121, 30))
+        self.pausebutton.setGeometry(QtCore.QRect(170, 50, 121, 21))
         self.pausebutton.setMaximumSize(QtCore.QSize(300, 30))
         self.pausebutton.setStyleSheet("QPushButton {\n"
 "                color: rgb(255, 255, 255);\n"
@@ -130,7 +130,7 @@ class Ui_MainWindow(object):
         self.pausebutton.setCheckable(True)
         self.pausebutton.setObjectName("pausebutton")
         self.savedatabutton = QtWidgets.QPushButton(self.frame_3)
-        self.savedatabutton.setGeometry(QtCore.QRect(10, 120, 131, 31))
+        self.savedatabutton.setGeometry(QtCore.QRect(10, 110, 131, 31))
         self.savedatabutton.setStyleSheet("QPushButton {\n"
 "                color: rgb(0, 0, 0);\n"
 "                background-color: rgb(255, 255, 0);\n"
@@ -155,7 +155,7 @@ class Ui_MainWindow(object):
         self.savedatabutton.setCheckable(True)
         self.savedatabutton.setObjectName("savedatabutton")
         self.recordbutton = QtWidgets.QPushButton(self.frame_3)
-        self.recordbutton.setGeometry(QtCore.QRect(170, 120, 131, 31))
+        self.recordbutton.setGeometry(QtCore.QRect(170, 110, 131, 31))
         self.recordbutton.setStyleSheet("QPushButton {\n"
 "                color: rgb(255, 255, 255);\n"
 "                background-color: rgb(0, 0, 0);\n"
@@ -192,7 +192,7 @@ class Ui_MainWindow(object):
         self.framelabel.setMaximumSize(QtCore.QSize(300, 25))
         self.framelabel.setObjectName("framelabel")
         self.leftbutton = QtWidgets.QToolButton(self.frame_3)
-        self.leftbutton.setGeometry(QtCore.QRect(170, 90, 51, 21))
+        self.leftbutton.setGeometry(QtCore.QRect(170, 80, 51, 21))
         self.leftbutton.setStyleSheet("QToolButton {\n"
 "                color: rgb(255, 255, 255);\n"
 "                background-color: rgb(0, 0, 0);\n"
@@ -258,7 +258,7 @@ class Ui_MainWindow(object):
         self.trackbutton.setCheckable(True)
         self.trackbutton.setObjectName("trackbutton")
         self.rightbutton = QtWidgets.QToolButton(self.frame_3)
-        self.rightbutton.setGeometry(QtCore.QRect(240, 90, 50, 21))
+        self.rightbutton.setGeometry(QtCore.QRect(240, 80, 50, 21))
         self.rightbutton.setStyleSheet("QToolButton {\n"
 "                color: rgb(255, 255, 255);\n"
 "                background-color: rgb(0, 0, 0);\n"
@@ -310,6 +310,10 @@ class Ui_MainWindow(object):
         self.objectivebox.setProperty("value", 10)
         self.objectivebox.setDisplayIntegerBase(10)
         self.objectivebox.setObjectName("objectivebox")
+        self.toggledisplayvisualscheckbox = QtWidgets.QCheckBox(self.frame_3)
+        self.toggledisplayvisualscheckbox.setGeometry(QtCore.QRect(20, 150, 191, 21))
+        self.toggledisplayvisualscheckbox.setChecked(True)
+        self.toggledisplayvisualscheckbox.setObjectName("toggledisplayvisualscheckbox")
         self.trackerparamsframe = QtWidgets.QFrame(self.dockWidgetContents)
         self.trackerparamsframe.setGeometry(QtCore.QRect(10, 250, 311, 281))
         self.trackerparamsframe.setStyleSheet(" color: rgb(0, 0, 0);\n"
@@ -996,25 +1000,25 @@ class Ui_MainWindow(object):
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_2.setObjectName("frame_2")
         self.bxlabel = QtWidgets.QLabel(self.frame_2)
-        self.bxlabel.setGeometry(QtCore.QRect(300, 50, 61, 21))
+        self.bxlabel.setGeometry(QtCore.QRect(330, 90, 61, 21))
         self.bxlabel.setObjectName("bxlabel")
         self.bzlabel = QtWidgets.QLabel(self.frame_2)
-        self.bzlabel.setGeometry(QtCore.QRect(300, 110, 61, 21))
+        self.bzlabel.setGeometry(QtCore.QRect(330, 130, 61, 21))
         self.bzlabel.setObjectName("bzlabel")
         self.bylabel = QtWidgets.QLabel(self.frame_2)
-        self.bylabel.setGeometry(QtCore.QRect(300, 80, 61, 21))
+        self.bylabel.setGeometry(QtCore.QRect(330, 110, 61, 21))
         self.bylabel.setObjectName("bylabel")
         self.label_2 = QtWidgets.QLabel(self.frame_2)
-        self.label_2.setGeometry(QtCore.QRect(360, 50, 31, 21))
+        self.label_2.setGeometry(QtCore.QRect(390, 90, 31, 21))
         self.label_2.setObjectName("label_2")
         self.label_3 = QtWidgets.QLabel(self.frame_2)
-        self.label_3.setGeometry(QtCore.QRect(360, 80, 31, 21))
+        self.label_3.setGeometry(QtCore.QRect(390, 110, 31, 21))
         self.label_3.setObjectName("label_3")
         self.label_4 = QtWidgets.QLabel(self.frame_2)
-        self.label_4.setGeometry(QtCore.QRect(360, 110, 31, 21))
+        self.label_4.setGeometry(QtCore.QRect(390, 130, 31, 21))
         self.label_4.setObjectName("label_4")
         self.label_5 = QtWidgets.QLabel(self.frame_2)
-        self.label_5.setGeometry(QtCore.QRect(310, 20, 61, 21))
+        self.label_5.setGeometry(QtCore.QRect(340, 60, 61, 21))
         self.label_5.setObjectName("label_5")
         self.label_6 = QtWidgets.QLabel(self.frame_2)
         self.label_6.setGeometry(QtCore.QRect(30, 10, 131, 21))
@@ -1093,6 +1097,33 @@ class Ui_MainWindow(object):
         self.manualalphalabel = QtWidgets.QLabel(self.frame_2)
         self.manualalphalabel.setGeometry(QtCore.QRect(130, 100, 41, 16))
         self.manualalphalabel.setObjectName("manualalphalabel")
+        self.makeshapebutton = QtWidgets.QPushButton(self.frame_2)
+        self.makeshapebutton.setGeometry(QtCore.QRect(250, 10, 101, 31))
+        self.makeshapebutton.setStyleSheet("QPushButton {\n"
+"                color: rgb(255, 255, 255);\n"
+"                background-color: rgb(0, 0, 0);\n"
+"                border-style: outset;\n"
+"                border-width: 2px;\n"
+"                border-radius: 10px;\n"
+"                border-color: rgb(0, 0, 0);\n"
+"                min-width: 1em;\n"
+"                padding: 1px;\n"
+"            }\n"
+"            QPushButton:hover {\n"
+"                background-color: rgb(100, 100, 100);\n"
+"                color: rgb(255, 255, 255);\n"
+"                border-style: inset;\n"
+"              border-color: rgb(0, 255, 0);\n"
+"            }")
+        self.makeshapebutton.setCheckable(True)
+        self.makeshapebutton.setChecked(False)
+        self.makeshapebutton.setObjectName("makeshapebutton")
+        self.shapemaker_nodes = QtWidgets.QSpinBox(self.frame_2)
+        self.shapemaker_nodes.setGeometry(QtCore.QRect(360, 10, 61, 35))
+        self.shapemaker_nodes.setMinimum(1)
+        self.shapemaker_nodes.setMaximum(400)
+        self.shapemaker_nodes.setProperty("value", 100)
+        self.shapemaker_nodes.setObjectName("shapemaker_nodes")
         self.bzlabel.raise_()
         self.bxlabel.raise_()
         self.bylabel.raise_()
@@ -1111,6 +1142,8 @@ class Ui_MainWindow(object):
         self.alphadial.raise_()
         self.alphaspinBox.raise_()
         self.manualalphalabel.raise_()
+        self.makeshapebutton.raise_()
+        self.shapemaker_nodes.raise_()
         self.frame_4 = QtWidgets.QFrame(self.dockWidgetContents_4)
         self.frame_4.setGeometry(QtCore.QRect(10, 475, 431, 141))
         self.frame_4.setStyleSheet(" color: rgb(0, 0, 0);\n"
@@ -1238,6 +1271,7 @@ class Ui_MainWindow(object):
         self.rightbutton.setText(_translate("MainWindow", "..."))
         self.exposurelabel.setText(_translate("MainWindow", "Exposure"))
         self.objectivelabel.setText(_translate("MainWindow", "Objective"))
+        self.toggledisplayvisualscheckbox.setText(_translate("MainWindow", "Toggle Image Display Visuals"))
         self.maskthreshlabel.setText(_translate("MainWindow", "Lower Thresh"))
         self.maskdilationlabel.setText(_translate("MainWindow", "Dilation"))
         self.croplengthlabel.setText(_translate("MainWindow", "Crop Length"))
@@ -1289,6 +1323,7 @@ class Ui_MainWindow(object):
         self.label_8.setText(_translate("MainWindow", "By:"))
         self.label_9.setText(_translate("MainWindow", "Bz:"))
         self.manualalphalabel.setText(_translate("MainWindow", "Alpha:"))
+        self.makeshapebutton.setText(_translate("MainWindow", "Make Shape"))
         self.gammalabel.setText(_translate("MainWindow", "Gamma: 90"))
         self.rollingfrequencylabel.setText(_translate("MainWindow", "Freq: 10"))
         self.psilabel.setText(_translate("MainWindow", "Psi: 90"))

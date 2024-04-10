@@ -374,68 +374,69 @@ class VideoThread(QThread):
 
 
     def display_hud(self, frame):
-        
         display_frame = frame.copy()
-        if len(self.robot_list) > 0:
-            color = plt.cm.rainbow(np.linspace(1, 0.2, len(self.robot_list))) * 255
-    
-            for (botnum,botcolor) in zip(range(len(self.robot_list)), color):
-                try:
-                    bot  = self.robot_list[botnum]
-                    x1, y1, w, h = bot.cropped_frame[-1]
+        if self.parent.ui.toggledisplayvisualscheckbox.isChecked():
+            
+            if len(self.robot_list) > 0:
+                color = plt.cm.rainbow(np.linspace(1, 0.2, len(self.robot_list))) * 255
+        
+                for (botnum,botcolor) in zip(range(len(self.robot_list)), color):
+                    try:
+                        bot  = self.robot_list[botnum]
+                        x1, y1, w, h = bot.cropped_frame[-1]
 
-                    cv2.rectangle(display_frame, (x1, y1), (x1 + w, y1 + h), botcolor, 4)
-                    cv2.putText(display_frame,str(botnum+1),(x1 + w,y1 + h),cv2.FONT_HERSHEY_SIMPLEX, fontScale=1.5, thickness=3,color = (255, 255, 255))
+                        cv2.rectangle(display_frame, (x1, y1), (x1 + w, y1 + h), botcolor, 4)
+                        cv2.putText(display_frame,str(botnum+1),(x1 + w,y1 + h),cv2.FONT_HERSHEY_SIMPLEX, fontScale=1.5, thickness=3,color = (255, 255, 255))
+                        
+                        pts = np.array(bot.position_list, np.int32)
+                        cv2.polylines(display_frame, [pts], False, botcolor, 5)
+
+                        targets = bot.trajectory
+                        if len(targets) > 0:
+                            pts = np.array(bot.trajectory, np.int32)
+                            cv2.polylines(display_frame, [pts], False, (0, 0, 255), 5)
+                            tar = targets[-1]
+                            cv2.circle(display_frame,(int(tar[0]), int(tar[1])),10,(0,0,0), -1,)
+                    except Exception:
+                        pass
+            
+            if len(self.cell_list) > 0:
+                color = plt.cm.rainbow(np.linspace(0.5, 0, len(self.cell_list))) *0
+                for (cellnum,cellcolor) in zip(range(len(self.cell_list)),color):
+                    cell  = self.cell_list[cellnum]
+                    x1, y1, w, h = cell.cropped_frame[-1]
+
+                    cv2.rectangle(display_frame, (x1, y1), (x1 + w, y1 + h), (0,255,0), 5)
+                    cv2.putText(display_frame,str(cellnum+1),(x1 + w, y1 + h),cv2.FONT_HERSHEY_SIMPLEX, fontScale=1.5, thickness=3,color = (255, 255, 255))
                     
-                    pts = np.array(bot.position_list, np.int32)
-                    cv2.polylines(display_frame, [pts], False, botcolor, 5)
+                    pts = np.array(cell.position_list, np.int32)
+                    cv2.polylines(display_frame, [pts], False, cellcolor, 5)
 
-                    targets = bot.trajectory
-                    if len(targets) > 0:
-                        pts = np.array(bot.trajectory, np.int32)
-                        cv2.polylines(display_frame, [pts], False, (0, 0, 255), 5)
-                        tar = targets[-1]
-                        cv2.circle(display_frame,(int(tar[0]), int(tar[1])),10,(0,0,0), -1,)
-                except Exception:
-                    pass
-        
-        if len(self.cell_list) > 0:
-            color = plt.cm.rainbow(np.linspace(0.5, 0, len(self.cell_list))) *0
-            for (cellnum,cellcolor) in zip(range(len(self.cell_list)),color):
-                cell  = self.cell_list[cellnum]
-                x1, y1, w, h = cell.cropped_frame[-1]
-
-                cv2.rectangle(display_frame, (x1, y1), (x1 + w, y1 + h), (0,255,0), 5)
-                cv2.putText(display_frame,str(cellnum+1),(x1 + w, y1 + h),cv2.FONT_HERSHEY_SIMPLEX, fontScale=1.5, thickness=3,color = (255, 255, 255))
-                
-                pts = np.array(cell.position_list, np.int32)
-                cv2.polylines(display_frame, [pts], False, cellcolor, 5)
-
-        
-        cv2.putText(display_frame,"fps:"+str(int(self.fps.get_fps())),
-                    (int(self.width  / 80),int(self.height / 14)),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    fontScale=1.5, 
-                    thickness=3,
-                    color = (255, 255, 255))
-        
-        
-        
-        cv2.putText(display_frame,"100 um",
-            (int(self.width / 80),int(self.height / 30)),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            fontScale=1.5, 
-            thickness=3,
-            color = (255, 255, 255),
-          
-        )
-        cv2.line(
-            display_frame, 
-            (int(self.width / 8),int(self.height /40)),
-            (int(self.width / 8) + int(100 * (self.pix2metric)),int(self.height / 40)), 
-            (255, 255, 255), 
-            thickness=5
-        )
+            
+            cv2.putText(display_frame,"fps:"+str(int(self.fps.get_fps())),
+                        (int(self.width  / 80),int(self.height / 14)),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        fontScale=1.5, 
+                        thickness=3,
+                        color = (255, 255, 255))
+            
+            
+            
+            cv2.putText(display_frame,"100 um",
+                (int(self.width / 80),int(self.height / 30)),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                fontScale=1.5, 
+                thickness=3,
+                color = (255, 255, 255),
+            
+            )
+            cv2.line(
+                display_frame, 
+                (int(self.width / 8),int(self.height /40)),
+                (int(self.width / 8) + int(100 * (self.pix2metric)),int(self.height / 40)), 
+                (255, 255, 255), 
+                thickness=5
+            )
 
         return display_frame
 

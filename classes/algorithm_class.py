@@ -51,8 +51,9 @@ class algorithm:
                 cv2.rectangle(mask, (x, y), (x + w, y + h), (0, 0, 0), -1)
             
                 pathplanner = RRT(mask, startpos, endpos, stepsize)
+                
+                
                 trajectory = pathplanner.run()
-
                 trajectory.append(endpos)    
             
         
@@ -87,14 +88,14 @@ class algorithm:
                 else:
                     self.Bx, self.By, self.Bz = 0,0,0
 
-                #draw error arrow
+                """#draw error arrow
                 cv2.arrowedLine(
                     frame,
                     (int(robotx), int(roboty)),
                     (int(targetx), int(targety)),
                     [0, 0, 0],
                     3,
-                )
+                )"""
         
                 if error < arrivialthresh:
                     self.node += 1
@@ -247,8 +248,7 @@ class algorithm:
 
 
 
-
-
+    
 
 
 class Nodes:

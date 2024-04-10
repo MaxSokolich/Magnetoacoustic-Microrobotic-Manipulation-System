@@ -235,29 +235,34 @@ class MainWindow(QtWidgets.QMainWindow):
         self.excel_file_name = None
         self.excel_actions_df = None
         self.excel_actions_status = False
+
+
+        self.ui.makeshapebutton.clicked.connect(self.makeshape_trajectory)
+
+
+
         
+    def makeshape_trajectory(self):
+        if self.tracker is not None:
+            if len(self.tracker.robot_list)>0:
+                node_number = self.ui.shapemaker_nodes.value()
 
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                center_x = self.video_width // 2
+                center_y = self.video_height // 2
+                radius = min(self.video_width, self.video_height) // 4  # Assume circle fits within a quarter of the image
+                
+                coordinates = []
+                for i in range(node_number):
+                    theta = 2 * np.pi * i / node_number
+                    x = center_x + int(radius * np.cos(theta))
+                    y = center_y + int(radius * np.sin(theta))
+                    coordinates.append((x, y))
+                
+                coordinates.append(coordinates[0])
+                
+                self.tracker.robot_list[-1].trajectory = coordinates 
+        
+        
 
 
 
@@ -378,7 +383,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.magnetic_field_list.append(self.actions)
         self.apply_actions(True)
         
-
+        
 
         #IF SAVE STATUS THEN CONTINOUSLY SAVE THE CURRENT ROBOT PARAMS AND MAGNETIC FIELD PARAMS TO AN EXCEL ROWS
         if self.save_status == True:
@@ -756,33 +761,35 @@ class MainWindow(QtWidgets.QMainWindow):
     def update_image(self, frame):
         """Updates the image_label with a new opencv image"""
         #display projection
-        if self.control_status == True or self.joystick_status == True or self.manual_status == True:
-            self.projection.roll = self.ui.rollradio.isChecked()
-            self.projection.gradient = self.gradient_status
+        if self.ui.toggledisplayvisualscheckbox.isChecked():
+            if self.control_status == True or self.joystick_status == True or self.manual_status == True:
+                self.projection.roll = self.ui.rollradio.isChecked()
+                self.projection.gradient = self.gradient_status
 
 
-            frame, self.projection.draw_sideview(frame,self.Bx,self.By,self.Bz,self.alpha,self.gamma,self.video_width,self.video_height)
-            frame, self.projection.draw_topview(frame,self.Bx,self.By,self.Bz,self.alpha,self.gamma,self.video_width,self.video_height)
+                frame, self.projection.draw_sideview(frame,self.Bx,self.By,self.Bz,self.alpha,self.gamma,self.video_width,self.video_height)
+                frame, self.projection.draw_topview(frame,self.Bx,self.By,self.Bz,self.alpha,self.gamma,self.video_width,self.video_height)
+                
+                rotatingfield = "alpha: {:.0f}, gamma: {:.0f}, psi: {:.0f}, freq: {:.0f}".format(np.degrees(self.alpha)+90, np.degrees(self.gamma), np.degrees(self.psi), self.freq) #adding 90 to alpha for display purposes only
+                
+                cv2.putText(frame, rotatingfield,
+                    (int(self.video_width / 1.8),int(self.video_height / 20)),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    fontScale=1.5, 
+                    thickness=3,
+                    color = (255, 255, 255),
+                )
             
-            rotatingfield = "alpha: {:.0f}, gamma: {:.0f}, psi: {:.0f}, freq: {:.0f}".format(np.degrees(self.alpha)+90, np.degrees(self.gamma), np.degrees(self.psi), self.freq) #adding 90 to alpha for display purposes only
-            cv2.putText(frame, rotatingfield,
-                (int(self.video_width / 1.8),int(self.video_height / 20)),
+            acousticfreq = f'{self.acoustic_frequency:,} Hz'
+            cv2.putText(frame, acousticfreq,
+                (int(self.video_width / 8),int(self.video_height / 14)),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 fontScale=1.5, 
                 thickness=3,
                 color = (255, 255, 255),
             )
-        
-        acousticfreq = f'{self.acoustic_frequency:,} Hz'
-        cv2.putText(frame, acousticfreq,
-            (int(self.video_width / 8),int(self.video_height / 14)),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            fontScale=1.5, 
-            thickness=3,
-            color = (255, 255, 255),
-        )
 
-        
+            
         
 
         

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1728</width>
-    <height>1027</height>
+    <width>1080</width>
+    <height>1867</height>
    </rect>
   </property>
   <property name="font">
@@ -189,7 +189,7 @@
         <x>170</x>
         <y>50</y>
         <width>121</width>
-        <height>30</height>
+        <height>21</height>
        </rect>
       </property>
       <property name="maximumSize">
@@ -239,7 +239,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>120</y>
+        <y>110</y>
         <width>131</width>
         <height>31</height>
        </rect>
@@ -278,7 +278,7 @@
       <property name="geometry">
        <rect>
         <x>170</x>
-        <y>120</y>
+        <y>110</y>
         <width>131</width>
         <height>31</height>
        </rect>
@@ -344,7 +344,7 @@
       <property name="geometry">
        <rect>
         <x>170</x>
-        <y>90</y>
+        <y>80</y>
         <width>51</width>
         <height>21</height>
        </rect>
@@ -446,7 +446,7 @@ QPushButton {
       <property name="geometry">
        <rect>
         <x>240</x>
-        <y>90</y>
+        <y>80</y>
         <width>50</width>
         <height>21</height>
        </rect>
@@ -575,6 +575,22 @@ QPushButton {
       </property>
       <property name="displayIntegerBase">
        <number>10</number>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="toggledisplayvisualscheckbox">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>150</y>
+        <width>191</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Toggle Image Display Visuals</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
       </property>
      </widget>
     </widget>
@@ -2171,8 +2187,8 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QLabel" name="bxlabel">
       <property name="geometry">
        <rect>
-        <x>300</x>
-        <y>50</y>
+        <x>330</x>
+        <y>90</y>
         <width>61</width>
         <height>21</height>
        </rect>
@@ -2184,8 +2200,8 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QLabel" name="bzlabel">
       <property name="geometry">
        <rect>
-        <x>300</x>
-        <y>110</y>
+        <x>330</x>
+        <y>130</y>
         <width>61</width>
         <height>21</height>
        </rect>
@@ -2197,8 +2213,8 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QLabel" name="bylabel">
       <property name="geometry">
        <rect>
-        <x>300</x>
-        <y>80</y>
+        <x>330</x>
+        <y>110</y>
         <width>61</width>
         <height>21</height>
        </rect>
@@ -2210,8 +2226,8 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QLabel" name="label_2">
       <property name="geometry">
        <rect>
-        <x>360</x>
-        <y>50</y>
+        <x>390</x>
+        <y>90</y>
         <width>31</width>
         <height>21</height>
        </rect>
@@ -2223,8 +2239,8 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QLabel" name="label_3">
       <property name="geometry">
        <rect>
-        <x>360</x>
-        <y>80</y>
+        <x>390</x>
+        <y>110</y>
         <width>31</width>
         <height>21</height>
        </rect>
@@ -2236,8 +2252,8 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QLabel" name="label_4">
       <property name="geometry">
        <rect>
-        <x>360</x>
-        <y>110</y>
+        <x>390</x>
+        <y>130</y>
         <width>31</width>
         <height>21</height>
        </rect>
@@ -2249,8 +2265,8 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QLabel" name="label_5">
       <property name="geometry">
        <rect>
-        <x>310</x>
-        <y>20</y>
+        <x>340</x>
+        <y>60</y>
         <width>61</width>
         <height>21</height>
        </rect>
@@ -2469,6 +2485,62 @@ font-size: 14pt; font: Arial;</string>
        <string>Alpha:</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="makeshapebutton">
+      <property name="geometry">
+       <rect>
+        <x>250</x>
+        <y>10</y>
+        <width>101</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+                color: rgb(255, 255, 255);
+                background-color: rgb(0, 0, 0);
+                border-style: outset;
+                border-width: 2px;
+                border-radius: 10px;
+                border-color: rgb(0, 0, 0);
+                min-width: 1em;
+                padding: 1px;
+            }
+            QPushButton:hover {
+                background-color: rgb(100, 100, 100);
+                color: rgb(255, 255, 255);
+                border-style: inset;
+			  border-color: rgb(0, 255, 0);
+            }</string>
+      </property>
+      <property name="text">
+       <string>Make Shape</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QSpinBox" name="shapemaker_nodes">
+      <property name="geometry">
+       <rect>
+        <x>360</x>
+        <y>10</y>
+        <width>61</width>
+        <height>35</height>
+       </rect>
+      </property>
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>400</number>
+      </property>
+      <property name="value">
+       <number>100</number>
+      </property>
+     </widget>
      <zorder>bzlabel</zorder>
      <zorder>bxlabel</zorder>
      <zorder>bylabel</zorder>
@@ -2487,6 +2559,8 @@ font-size: 14pt; font: Arial;</string>
      <zorder>alphadial</zorder>
      <zorder>alphaspinBox</zorder>
      <zorder>manualalphalabel</zorder>
+     <zorder>makeshapebutton</zorder>
+     <zorder>shapemaker_nodes</zorder>
     </widget>
     <widget class="QFrame" name="frame_4">
      <property name="geometry">
