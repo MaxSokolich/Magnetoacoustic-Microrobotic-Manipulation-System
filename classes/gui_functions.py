@@ -1152,7 +1152,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.ui.gammalabel.setText("Gamma: {}".format(gamma))
         self.ui.psilabel.setText("Psi: {}".format(psi))
-        self.ui.rollingfrequencylabel.setText("Freq: {}".format(magneticfreq))
+        #self.ui.rollingfrequencylabel.setText("Freq: {}".format(magneticfreq))
 
          
         
@@ -1176,7 +1176,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.arrivalthreshbox.setValue(100)
         self.ui.gammadial.setSliderPosition(90)
         self.ui.psidial.setSliderPosition(90)
-        self.ui.magneticfrequencydial.setSliderPosition(10)
+        self.ui.magneticfrequencydial.setValue(10)
         self.ui.acousticfreq_spinBox.setValue(1000000)
         self.ui.objectivebox.setValue(10)
         self.ui.exposurebox.setValue(5000)

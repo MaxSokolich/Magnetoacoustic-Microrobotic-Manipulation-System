@@ -2582,65 +2582,6 @@ font-size: 14pt; font: Arial;</string>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <widget class="QDial" name="magneticfrequencydial">
-      <property name="geometry">
-       <rect>
-        <x>300</x>
-        <y>10</y>
-        <width>91</width>
-        <height>101</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Arial</family>
-        <pointsize>12</pointsize>
-        <italic>false</italic>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QDial {
-    background-color: qconicalgradient(cx:0.5, cy:0.5, angle:90, stop:0 #1a5276, stop:0.3 #2980b9, stop:0.7 #3498db, stop:1 #1a5276);
-    border: 2px solid #1a5276;
-    padding: 5px;
-}
-
-QDial::handle {
-    background-color: qconicalgradient(cx:0.5, cy:0.5, angle:90, stop:0 #f39c12, stop:0.3 #f1c40f, stop:0.7 #f39c12, stop:1 #f1c40f);
-    border: 2px solid #e67e22;
-    width: 20px;
-    height: 20px;
-    border-radius: 10px;
-    margin: -5px;
-}
-</string>
-      </property>
-      <property name="maximum">
-       <number>40</number>
-      </property>
-      <property name="singleStep">
-       <number>1</number>
-      </property>
-      <property name="pageStep">
-       <number>1</number>
-      </property>
-      <property name="value">
-       <number>10</number>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="wrapping">
-       <bool>false</bool>
-      </property>
-      <property name="notchTarget">
-       <double>10.000000000000000</double>
-      </property>
-      <property name="notchesVisible">
-       <bool>true</bool>
-      </property>
-     </widget>
      <widget class="QDial" name="psidial">
       <property name="geometry">
        <rect>
@@ -2701,14 +2642,15 @@ QDial::handle {
      <widget class="QLabel" name="rollingfrequencylabel">
       <property name="geometry">
        <rect>
-        <x>320</x>
-        <y>115</y>
-        <width>101</width>
-        <height>21</height>
+        <x>290</x>
+        <y>10</y>
+        <width>121</width>
+        <height>61</height>
        </rect>
       </property>
       <property name="text">
-       <string>Freq: 10</string>
+       <string>Magnetic Rotating 
+Frequency:</string>
       </property>
      </widget>
      <widget class="QLabel" name="psilabel">
@@ -2781,6 +2723,25 @@ QDial::handle {
       </property>
       <property name="notchesVisible">
        <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QDoubleSpinBox" name="magneticfrequencydial">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>60</y>
+        <width>81</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="decimals">
+       <number>2</number>
+      </property>
+      <property name="maximum">
+       <double>60.000000000000000</double>
+      </property>
+      <property name="value">
+       <double>10.000000000000000</double>
       </property>
      </widget>
     </widget>

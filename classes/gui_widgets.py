@@ -1152,38 +1152,6 @@ class Ui_MainWindow(object):
         self.frame_4.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_4.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_4.setObjectName("frame_4")
-        self.magneticfrequencydial = QtWidgets.QDial(self.frame_4)
-        self.magneticfrequencydial.setGeometry(QtCore.QRect(300, 10, 91, 101))
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(12)
-        font.setBold(False)
-        font.setItalic(False)
-        self.magneticfrequencydial.setFont(font)
-        self.magneticfrequencydial.setStyleSheet("QDial {\n"
-"    background-color: qconicalgradient(cx:0.5, cy:0.5, angle:90, stop:0 #1a5276, stop:0.3 #2980b9, stop:0.7 #3498db, stop:1 #1a5276);\n"
-"    border: 2px solid #1a5276;\n"
-"    padding: 5px;\n"
-"}\n"
-"\n"
-"QDial::handle {\n"
-"    background-color: qconicalgradient(cx:0.5, cy:0.5, angle:90, stop:0 #f39c12, stop:0.3 #f1c40f, stop:0.7 #f39c12, stop:1 #f1c40f);\n"
-"    border: 2px solid #e67e22;\n"
-"    width: 20px;\n"
-"    height: 20px;\n"
-"    border-radius: 10px;\n"
-"    margin: -5px;\n"
-"}\n"
-"")
-        self.magneticfrequencydial.setMaximum(40)
-        self.magneticfrequencydial.setSingleStep(1)
-        self.magneticfrequencydial.setPageStep(1)
-        self.magneticfrequencydial.setProperty("value", 10)
-        self.magneticfrequencydial.setOrientation(QtCore.Qt.Horizontal)
-        self.magneticfrequencydial.setWrapping(False)
-        self.magneticfrequencydial.setNotchTarget(10.0)
-        self.magneticfrequencydial.setNotchesVisible(True)
-        self.magneticfrequencydial.setObjectName("magneticfrequencydial")
         self.psidial = QtWidgets.QDial(self.frame_4)
         self.psidial.setGeometry(QtCore.QRect(30, 10, 91, 101))
         self.psidial.setStyleSheet("QDial\n"
@@ -1211,7 +1179,7 @@ class Ui_MainWindow(object):
         self.gammalabel.setGeometry(QtCore.QRect(180, 115, 121, 20))
         self.gammalabel.setObjectName("gammalabel")
         self.rollingfrequencylabel = QtWidgets.QLabel(self.frame_4)
-        self.rollingfrequencylabel.setGeometry(QtCore.QRect(320, 115, 101, 21))
+        self.rollingfrequencylabel.setGeometry(QtCore.QRect(290, 10, 121, 61))
         self.rollingfrequencylabel.setObjectName("rollingfrequencylabel")
         self.psilabel = QtWidgets.QLabel(self.frame_4)
         self.psilabel.setGeometry(QtCore.QRect(40, 115, 91, 21))
@@ -1248,6 +1216,12 @@ class Ui_MainWindow(object):
         self.gammadial.setNotchTarget(10.0)
         self.gammadial.setNotchesVisible(True)
         self.gammadial.setObjectName("gammadial")
+        self.magneticfrequencydial = QtWidgets.QDoubleSpinBox(self.frame_4)
+        self.magneticfrequencydial.setGeometry(QtCore.QRect(320, 60, 81, 41))
+        self.magneticfrequencydial.setDecimals(2)
+        self.magneticfrequencydial.setMaximum(60.0)
+        self.magneticfrequencydial.setProperty("value", 10.0)
+        self.magneticfrequencydial.setObjectName("magneticfrequencydial")
         self.dockWidget_2.setWidget(self.dockWidgetContents_4)
         MainWindow.addDockWidget(QtCore.Qt.DockWidgetArea(2), self.dockWidget_2)
         self.actiondock = QtWidgets.QAction(MainWindow)
@@ -1325,6 +1299,7 @@ class Ui_MainWindow(object):
         self.manualalphalabel.setText(_translate("MainWindow", "Alpha:"))
         self.makeshapebutton.setText(_translate("MainWindow", "Make Shape"))
         self.gammalabel.setText(_translate("MainWindow", "Gamma: 90"))
-        self.rollingfrequencylabel.setText(_translate("MainWindow", "Freq: 10"))
+        self.rollingfrequencylabel.setText(_translate("MainWindow", "Magnetic Rotating \n"
+"Frequency:"))
         self.psilabel.setText(_translate("MainWindow", "Psi: 90"))
         self.actiondock.setText(_translate("MainWindow", "dock"))

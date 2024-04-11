@@ -51,6 +51,7 @@ class ArduinoHandler:
         alpha = round(alpha,3)
         gamma = round(gamma,3)
         psi = round(psi,3)
+        freq = round(freq,3)
         Bx = round(Bx,3)
         By = round(By,3)
         Bz = round(Bz,3)
