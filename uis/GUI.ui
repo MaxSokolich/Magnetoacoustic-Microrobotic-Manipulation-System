@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1080</width>
-    <height>1867</height>
+    <height>1027</height>
    </rect>
   </property>
   <property name="font">
@@ -521,7 +521,7 @@ QPushButton {
        <number>100</number>
       </property>
       <property name="maximum">
-       <number>30000</number>
+       <number>100000</number>
       </property>
       <property name="singleStep">
        <number>100</number>
@@ -565,7 +565,7 @@ QPushButton {
        <number>1</number>
       </property>
       <property name="maximum">
-       <number>50</number>
+       <number>100</number>
       </property>
       <property name="singleStep">
        <number>5</number>
@@ -707,7 +707,7 @@ QPushButton {
        <number>5</number>
       </property>
       <property name="maximum">
-       <number>400</number>
+       <number>1000</number>
       </property>
       <property name="singleStep">
        <number>1</number>
