@@ -359,7 +359,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 
                 self.robots.append(currentbot_params)
            
-                print("currentbot_frame", currentbot_params[0])
+      
         #DEFINE CURRENT CELL PARAMS TO A LIST
         if len(cell_list) > 0:
             self.cells = []
@@ -379,7 +379,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #DEFINE CURRENT MAGNETIC FIELD OUTPUT TO A LIST 
         self.actions = [self.frame_number, self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.gradient_status,
                         self.acoustic_frequency, self.sensorBx, self.sensorBy, self.sensorBz] 
-        print("actions_frame", self.frame_number)
+       
         self.magnetic_field_list.append(self.actions)
         self.apply_actions(True)
         
