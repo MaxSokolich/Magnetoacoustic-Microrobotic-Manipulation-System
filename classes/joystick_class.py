@@ -120,7 +120,7 @@ class Mac_Controller: #mac
                 self.freq = 0
                 self.acoustic_frequency = 0
         
-        print("typ",self.typ)
+
         self.actions = [self.typ, 
                         self.Bx, 
                         self.By,

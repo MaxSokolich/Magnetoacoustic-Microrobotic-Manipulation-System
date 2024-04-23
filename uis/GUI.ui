@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1080</width>
+    <width>1728</width>
     <height>1027</height>
    </rect>
   </property>
@@ -1550,7 +1550,7 @@ color: rgb(0,255,0);</string>
   <widget class="QDockWidget" name="dockWidget_2">
    <property name="minimumSize">
     <size>
-     <width>464</width>
+     <width>411</width>
      <height>1000</height>
     </size>
    </property>
@@ -1565,8 +1565,8 @@ color: rgb(0,255,0);</string>
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>5</y>
-       <width>431</width>
+       <y>10</y>
+       <width>391</width>
        <height>212</height>
       </rect>
      </property>
@@ -1584,10 +1584,10 @@ color: rgb(0,255,0);</string>
      <widget class="QLabel" name="led">
       <property name="geometry">
        <rect>
-        <x>390</x>
-        <y>160</y>
-        <width>31</width>
-        <height>31</height>
+        <x>350</x>
+        <y>170</y>
+        <width>21</width>
+        <height>21</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -1620,7 +1620,7 @@ color: rgb(0,255,0);</string>
      <widget class="QPushButton" name="applyacousticbutton">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>190</x>
         <y>170</y>
         <width>71</width>
         <height>21</height>
@@ -1687,9 +1687,9 @@ color: rgb(0,255,0);</string>
      <widget class="QPushButton" name="joystickbutton">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>10</x>
         <y>60</y>
-        <width>181</width>
+        <width>161</width>
         <height>41</height>
        </rect>
       </property>
@@ -1737,9 +1737,9 @@ color: rgb(0,255,0);</string>
      <widget class="QPushButton" name="controlbutton">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>10</x>
         <y>10</y>
-        <width>181</width>
+        <width>161</width>
         <height>41</height>
        </rect>
       </property>
@@ -1798,7 +1798,7 @@ color: rgb(0,255,0);</string>
      <widget class="QSpinBox" name="acousticfreq_spinBox">
       <property name="geometry">
        <rect>
-        <x>120</x>
+        <x>80</x>
         <y>160</y>
         <width>101</width>
         <height>41</height>
@@ -1819,7 +1819,7 @@ color: rgb(0,255,0);</string>
        <rect>
         <x>10</x>
         <y>160</y>
-        <width>101</width>
+        <width>71</width>
         <height>41</height>
        </rect>
       </property>
@@ -1834,7 +1834,7 @@ Frequency</string>
      <widget class="QPushButton" name="autoacousticbutton">
       <property name="geometry">
        <rect>
-        <x>310</x>
+        <x>270</x>
         <y>170</y>
         <width>71</width>
         <height>21</height>
@@ -1891,7 +1891,7 @@ Frequency</string>
      <widget class="QPushButton" name="import_excel_actions">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>190</x>
         <y>10</y>
         <width>181</width>
         <height>41</height>
@@ -1928,7 +1928,7 @@ Frequency</string>
      <widget class="QPushButton" name="apply_actions">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>190</x>
         <y>60</y>
         <width>181</width>
         <height>41</height>
@@ -1987,8 +1987,8 @@ Frequency</string>
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>398</y>
-       <width>431</width>
+       <y>400</y>
+       <width>391</width>
        <height>71</height>
       </rect>
      </property>
@@ -2006,7 +2006,7 @@ Frequency</string>
      <widget class="QSpinBox" name="RRTtreesizebox">
       <property name="geometry">
        <rect>
-        <x>150</x>
+        <x>180</x>
         <y>10</y>
         <width>71</width>
         <height>35</height>
@@ -2025,7 +2025,7 @@ Frequency</string>
      <widget class="QLabel" name="memorylabel">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>80</x>
         <y>45</y>
         <width>91</width>
         <height>21</height>
@@ -2038,7 +2038,7 @@ Frequency</string>
      <widget class="QLabel" name="RRTtreesizelabel">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>180</x>
         <y>45</y>
         <width>111</width>
         <height>21</height>
@@ -2053,7 +2053,7 @@ Frequency</string>
        <rect>
         <x>270</x>
         <y>45</y>
-        <width>151</width>
+        <width>91</width>
         <height>21</height>
        </rect>
       </property>
@@ -2083,7 +2083,7 @@ Frequency</string>
      <widget class="QSpinBox" name="memorybox">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>80</x>
         <y>10</y>
         <width>71</width>
         <height>35</height>
@@ -2099,11 +2099,41 @@ Frequency</string>
        <number>15</number>
       </property>
      </widget>
+     <widget class="QCheckBox" name="ricochet_effect_checkbox">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>40</y>
+        <width>31</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="ricocheteffectlabel">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>58</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Ricochet 
+Effect:</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QLabel" name="magneticfieldsimlabel">
      <property name="geometry">
       <rect>
-       <x>70</x>
+       <x>40</x>
        <y>620</y>
        <width>310</width>
        <height>310</height>
@@ -2119,7 +2149,7 @@ Frequency</string>
     <widget class="QPushButton" name="simulationbutton">
      <property name="geometry">
       <rect>
-       <x>150</x>
+       <x>110</x>
        <y>940</y>
        <width>171</width>
        <height>25</height>
@@ -2169,7 +2199,7 @@ Frequency</string>
       <rect>
        <x>10</x>
        <y>230</y>
-       <width>431</width>
+       <width>391</width>
        <height>161</height>
       </rect>
      </property>
@@ -2187,7 +2217,7 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QLabel" name="bxlabel">
       <property name="geometry">
        <rect>
-        <x>330</x>
+        <x>270</x>
         <y>90</y>
         <width>61</width>
         <height>21</height>
@@ -2200,7 +2230,7 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QLabel" name="bzlabel">
       <property name="geometry">
        <rect>
-        <x>330</x>
+        <x>270</x>
         <y>130</y>
         <width>61</width>
         <height>21</height>
@@ -2213,7 +2243,7 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QLabel" name="bylabel">
       <property name="geometry">
        <rect>
-        <x>330</x>
+        <x>270</x>
         <y>110</y>
         <width>61</width>
         <height>21</height>
@@ -2226,7 +2256,7 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QLabel" name="label_2">
       <property name="geometry">
        <rect>
-        <x>390</x>
+        <x>330</x>
         <y>90</y>
         <width>31</width>
         <height>21</height>
@@ -2239,7 +2269,7 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QLabel" name="label_3">
       <property name="geometry">
        <rect>
-        <x>390</x>
+        <x>330</x>
         <y>110</y>
         <width>31</width>
         <height>21</height>
@@ -2252,7 +2282,7 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QLabel" name="label_4">
       <property name="geometry">
        <rect>
-        <x>390</x>
+        <x>330</x>
         <y>130</y>
         <width>31</width>
         <height>21</height>
@@ -2265,8 +2295,8 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QLabel" name="label_5">
       <property name="geometry">
        <rect>
-        <x>340</x>
-        <y>60</y>
+        <x>280</x>
+        <y>70</y>
         <width>61</width>
         <height>21</height>
        </rect>
@@ -2437,7 +2467,7 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QDial" name="alphadial">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>120</x>
         <y>10</y>
         <width>81</width>
         <height>81</height>
@@ -2488,7 +2518,7 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QPushButton" name="makeshapebutton">
       <property name="geometry">
        <rect>
-        <x>250</x>
+        <x>210</x>
         <y>10</y>
         <width>101</width>
         <height>31</height>
@@ -2525,9 +2555,9 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QSpinBox" name="shapemaker_nodes">
       <property name="geometry">
        <rect>
-        <x>360</x>
+        <x>320</x>
         <y>10</y>
-        <width>61</width>
+        <width>51</width>
         <height>35</height>
        </rect>
       </property>
@@ -2566,9 +2596,9 @@ font-size: 14pt; font: Arial;</string>
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>475</y>
-       <width>431</width>
-       <height>141</height>
+       <y>480</y>
+       <width>381</width>
+       <height>131</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -2585,8 +2615,8 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QDial" name="psidial">
       <property name="geometry">
        <rect>
-        <x>30</x>
-        <y>10</y>
+        <x>10</x>
+        <y>5</y>
         <width>91</width>
         <height>101</height>
        </rect>
@@ -2629,8 +2659,8 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QLabel" name="gammalabel">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>115</y>
+        <x>150</x>
+        <y>105</y>
         <width>121</width>
         <height>20</height>
        </rect>
@@ -2642,9 +2672,9 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QLabel" name="rollingfrequencylabel">
       <property name="geometry">
        <rect>
-        <x>290</x>
+        <x>250</x>
         <y>10</y>
-        <width>121</width>
+        <width>111</width>
         <height>61</height>
        </rect>
       </property>
@@ -2657,7 +2687,7 @@ Frequency:</string>
       <property name="geometry">
        <rect>
         <x>40</x>
-        <y>115</y>
+        <y>105</y>
         <width>91</width>
         <height>21</height>
        </rect>
@@ -2669,8 +2699,8 @@ Frequency:</string>
      <widget class="QDial" name="gammadial">
       <property name="geometry">
        <rect>
-        <x>170</x>
-        <y>10</y>
+        <x>130</x>
+        <y>5</y>
         <width>91</width>
         <height>101</height>
        </rect>
@@ -2728,8 +2758,8 @@ QDial::handle {
      <widget class="QDoubleSpinBox" name="magneticfrequencydial">
       <property name="geometry">
        <rect>
-        <x>320</x>
-        <y>60</y>
+        <x>260</x>
+        <y>70</y>
         <width>81</width>
         <height>41</height>
        </rect>

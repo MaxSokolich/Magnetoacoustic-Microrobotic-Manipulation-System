@@ -38,6 +38,7 @@ class algorithm:
 
 
     def run(self, frame, mask, robot_list, stepsize, arrivialthresh, orientstatus, autoacoustic_status):
+        
         if len(robot_list[-1].trajectory) > 0:
             if self.count == 0: #% 10
             
@@ -100,7 +101,7 @@ class algorithm:
                 if error < arrivialthresh:
                     self.node += 1
                 
-               
+         
         
 
         if autoacoustic_status == True:

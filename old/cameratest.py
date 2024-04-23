@@ -113,7 +113,7 @@ while True:
     if cv2.waitKey(1) & 0xFF == ord('q'):
         #Send(arduino,0,0,4)
         break
-    
+      
 
 cv2.destroyAllWindows()
 cam.release()

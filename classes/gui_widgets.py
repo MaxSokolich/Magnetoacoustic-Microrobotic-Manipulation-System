@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1080, 1027)
+        MainWindow.resize(1728, 1027)
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(12)
@@ -670,13 +670,13 @@ class Ui_MainWindow(object):
         self.dockWidget.setWidget(self.dockWidgetContents)
         MainWindow.addDockWidget(QtCore.Qt.DockWidgetArea(1), self.dockWidget)
         self.dockWidget_2 = QtWidgets.QDockWidget(MainWindow)
-        self.dockWidget_2.setMinimumSize(QtCore.QSize(464, 1000))
+        self.dockWidget_2.setMinimumSize(QtCore.QSize(411, 1000))
         self.dockWidget_2.setStyleSheet("")
         self.dockWidget_2.setObjectName("dockWidget_2")
         self.dockWidgetContents_4 = QtWidgets.QWidget()
         self.dockWidgetContents_4.setObjectName("dockWidgetContents_4")
         self.frame = QtWidgets.QFrame(self.dockWidgetContents_4)
-        self.frame.setGeometry(QtCore.QRect(10, 5, 431, 212))
+        self.frame.setGeometry(QtCore.QRect(10, 10, 391, 212))
         self.frame.setStyleSheet(" color: rgb(0, 0, 0);\n"
 " background-color: rgb(255, 255, 255);\n"
 "")
@@ -684,7 +684,7 @@ class Ui_MainWindow(object):
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
         self.led = QtWidgets.QLabel(self.frame)
-        self.led.setGeometry(QtCore.QRect(390, 160, 31, 31))
+        self.led.setGeometry(QtCore.QRect(350, 170, 21, 21))
         self.led.setStyleSheet("\n"
 "                background-color: rgb(255, 0, 0);\n"
 "                border-style: outset;\n"
@@ -699,7 +699,7 @@ class Ui_MainWindow(object):
         self.swimradio.setGeometry(QtCore.QRect(90, 120, 91, 20))
         self.swimradio.setObjectName("swimradio")
         self.applyacousticbutton = QtWidgets.QPushButton(self.frame)
-        self.applyacousticbutton.setGeometry(QtCore.QRect(230, 170, 71, 21))
+        self.applyacousticbutton.setGeometry(QtCore.QRect(190, 170, 71, 21))
         self.applyacousticbutton.setStyleSheet("QPushButton {\n"
 "                color: rgb(255, 255, 255);\n"
 "                background-color: rgb(0, 0, 0);\n"
@@ -738,7 +738,7 @@ class Ui_MainWindow(object):
         self.rollradio.setChecked(True)
         self.rollradio.setObjectName("rollradio")
         self.joystickbutton = QtWidgets.QPushButton(self.frame)
-        self.joystickbutton.setGeometry(QtCore.QRect(20, 60, 181, 41))
+        self.joystickbutton.setGeometry(QtCore.QRect(10, 60, 161, 41))
         self.joystickbutton.setStyleSheet("QPushButton {\n"
 "                color: rgb(0, 0, 0);\n"
 "                background-color: rgb(0, 255, 255);\n"
@@ -774,7 +774,7 @@ class Ui_MainWindow(object):
         self.joystickbutton.setCheckable(True)
         self.joystickbutton.setObjectName("joystickbutton")
         self.controlbutton = QtWidgets.QPushButton(self.frame)
-        self.controlbutton.setGeometry(QtCore.QRect(20, 10, 181, 41))
+        self.controlbutton.setGeometry(QtCore.QRect(10, 10, 161, 41))
         self.controlbutton.setStyleSheet("QPushButton {\n"
 "                color: rgb(255, 255, 255);\n"
 "                background-color: rgb(0, 0, 255);\n"
@@ -811,17 +811,17 @@ class Ui_MainWindow(object):
         self.orientradio.setGeometry(QtCore.QRect(190, 120, 91, 20))
         self.orientradio.setObjectName("orientradio")
         self.acousticfreq_spinBox = QtWidgets.QSpinBox(self.frame)
-        self.acousticfreq_spinBox.setGeometry(QtCore.QRect(120, 160, 101, 41))
+        self.acousticfreq_spinBox.setGeometry(QtCore.QRect(80, 160, 101, 41))
         self.acousticfreq_spinBox.setMaximum(3000000)
         self.acousticfreq_spinBox.setSingleStep(1000)
         self.acousticfreq_spinBox.setProperty("value", 1000000)
         self.acousticfreq_spinBox.setObjectName("acousticfreq_spinBox")
         self.acousticfreqlabel = QtWidgets.QLabel(self.frame)
-        self.acousticfreqlabel.setGeometry(QtCore.QRect(10, 160, 101, 41))
+        self.acousticfreqlabel.setGeometry(QtCore.QRect(10, 160, 71, 41))
         self.acousticfreqlabel.setStyleSheet("")
         self.acousticfreqlabel.setObjectName("acousticfreqlabel")
         self.autoacousticbutton = QtWidgets.QPushButton(self.frame)
-        self.autoacousticbutton.setGeometry(QtCore.QRect(310, 170, 71, 21))
+        self.autoacousticbutton.setGeometry(QtCore.QRect(270, 170, 71, 21))
         self.autoacousticbutton.setStyleSheet("QPushButton {\n"
 "                color: rgb(255, 255, 255);\n"
 "                background-color: rgb(0, 0, 0);\n"
@@ -854,7 +854,7 @@ class Ui_MainWindow(object):
         self.gradient_status_checkbox.setGeometry(QtCore.QRect(280, 120, 85, 21))
         self.gradient_status_checkbox.setObjectName("gradient_status_checkbox")
         self.import_excel_actions = QtWidgets.QPushButton(self.frame)
-        self.import_excel_actions.setGeometry(QtCore.QRect(230, 10, 181, 41))
+        self.import_excel_actions.setGeometry(QtCore.QRect(190, 10, 181, 41))
         self.import_excel_actions.setStyleSheet("QPushButton {\n"
 "                color: rgb(255, 255, 255);\n"
 "                background-color: rgb(150, 150, 150);\n"
@@ -877,7 +877,7 @@ class Ui_MainWindow(object):
         self.import_excel_actions.setCheckable(True)
         self.import_excel_actions.setObjectName("import_excel_actions")
         self.apply_actions = QtWidgets.QPushButton(self.frame)
-        self.apply_actions.setGeometry(QtCore.QRect(230, 60, 181, 41))
+        self.apply_actions.setGeometry(QtCore.QRect(190, 60, 181, 41))
         font = QtGui.QFont()
         font.setPointSize(-1)
         font.setBold(True)
@@ -918,7 +918,7 @@ class Ui_MainWindow(object):
         self.apply_actions.setCheckable(True)
         self.apply_actions.setObjectName("apply_actions")
         self.controlparamsframe = QtWidgets.QFrame(self.dockWidgetContents_4)
-        self.controlparamsframe.setGeometry(QtCore.QRect(10, 398, 431, 71))
+        self.controlparamsframe.setGeometry(QtCore.QRect(10, 400, 391, 71))
         self.controlparamsframe.setStyleSheet(" color: rgb(0, 0, 0);\n"
 " background-color: rgb(255, 255, 255);\n"
 "")
@@ -926,19 +926,19 @@ class Ui_MainWindow(object):
         self.controlparamsframe.setFrameShadow(QtWidgets.QFrame.Raised)
         self.controlparamsframe.setObjectName("controlparamsframe")
         self.RRTtreesizebox = QtWidgets.QSpinBox(self.controlparamsframe)
-        self.RRTtreesizebox.setGeometry(QtCore.QRect(150, 10, 71, 35))
+        self.RRTtreesizebox.setGeometry(QtCore.QRect(180, 10, 71, 35))
         self.RRTtreesizebox.setMinimum(1)
         self.RRTtreesizebox.setMaximum(100)
         self.RRTtreesizebox.setProperty("value", 25)
         self.RRTtreesizebox.setObjectName("RRTtreesizebox")
         self.memorylabel = QtWidgets.QLabel(self.controlparamsframe)
-        self.memorylabel.setGeometry(QtCore.QRect(10, 45, 91, 21))
+        self.memorylabel.setGeometry(QtCore.QRect(80, 45, 91, 21))
         self.memorylabel.setObjectName("memorylabel")
         self.RRTtreesizelabel = QtWidgets.QLabel(self.controlparamsframe)
-        self.RRTtreesizelabel.setGeometry(QtCore.QRect(140, 45, 111, 21))
+        self.RRTtreesizelabel.setGeometry(QtCore.QRect(180, 45, 111, 21))
         self.RRTtreesizelabel.setObjectName("RRTtreesizelabel")
         self.arrivalthreshlabel = QtWidgets.QLabel(self.controlparamsframe)
-        self.arrivalthreshlabel.setGeometry(QtCore.QRect(270, 45, 151, 21))
+        self.arrivalthreshlabel.setGeometry(QtCore.QRect(270, 45, 91, 21))
         self.arrivalthreshlabel.setObjectName("arrivalthreshlabel")
         self.arrivalthreshbox = QtWidgets.QSpinBox(self.controlparamsframe)
         self.arrivalthreshbox.setGeometry(QtCore.QRect(290, 10, 81, 35))
@@ -947,18 +947,26 @@ class Ui_MainWindow(object):
         self.arrivalthreshbox.setProperty("value", 100)
         self.arrivalthreshbox.setObjectName("arrivalthreshbox")
         self.memorybox = QtWidgets.QSpinBox(self.controlparamsframe)
-        self.memorybox.setGeometry(QtCore.QRect(10, 10, 71, 35))
+        self.memorybox.setGeometry(QtCore.QRect(80, 10, 71, 35))
         self.memorybox.setMinimum(1)
         self.memorybox.setMaximum(100)
         self.memorybox.setProperty("value", 15)
         self.memorybox.setObjectName("memorybox")
+        self.ricochet_effect_checkbox = QtWidgets.QCheckBox(self.controlparamsframe)
+        self.ricochet_effect_checkbox.setGeometry(QtCore.QRect(20, 40, 31, 21))
+        self.ricochet_effect_checkbox.setText("")
+        self.ricochet_effect_checkbox.setChecked(False)
+        self.ricochet_effect_checkbox.setObjectName("ricochet_effect_checkbox")
+        self.ricocheteffectlabel = QtWidgets.QLabel(self.controlparamsframe)
+        self.ricocheteffectlabel.setGeometry(QtCore.QRect(10, 10, 58, 31))
+        self.ricocheteffectlabel.setObjectName("ricocheteffectlabel")
         self.magneticfieldsimlabel = QtWidgets.QLabel(self.dockWidgetContents_4)
-        self.magneticfieldsimlabel.setGeometry(QtCore.QRect(70, 620, 310, 310))
+        self.magneticfieldsimlabel.setGeometry(QtCore.QRect(40, 620, 310, 310))
         self.magneticfieldsimlabel.setStyleSheet("background-color: rgb(0,0,0); border:2px solid rgb(255, 0, 0); ")
         self.magneticfieldsimlabel.setText("")
         self.magneticfieldsimlabel.setObjectName("magneticfieldsimlabel")
         self.simulationbutton = QtWidgets.QPushButton(self.dockWidgetContents_4)
-        self.simulationbutton.setGeometry(QtCore.QRect(150, 940, 171, 25))
+        self.simulationbutton.setGeometry(QtCore.QRect(110, 940, 171, 25))
         self.simulationbutton.setStyleSheet("QPushButton {\n"
 "                color: rgb(255, 255, 255);\n"
 "                background-color: rgb(0, 255, 0);\n"
@@ -992,7 +1000,7 @@ class Ui_MainWindow(object):
         self.simulationbutton.setCheckable(True)
         self.simulationbutton.setObjectName("simulationbutton")
         self.frame_2 = QtWidgets.QFrame(self.dockWidgetContents_4)
-        self.frame_2.setGeometry(QtCore.QRect(10, 230, 431, 161))
+        self.frame_2.setGeometry(QtCore.QRect(10, 230, 391, 161))
         self.frame_2.setStyleSheet(" color: rgb(0, 0, 0);\n"
 " background-color: rgb(255, 255, 255);\n"
 "font-size: 14pt; font: Arial;")
@@ -1000,25 +1008,25 @@ class Ui_MainWindow(object):
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_2.setObjectName("frame_2")
         self.bxlabel = QtWidgets.QLabel(self.frame_2)
-        self.bxlabel.setGeometry(QtCore.QRect(330, 90, 61, 21))
+        self.bxlabel.setGeometry(QtCore.QRect(270, 90, 61, 21))
         self.bxlabel.setObjectName("bxlabel")
         self.bzlabel = QtWidgets.QLabel(self.frame_2)
-        self.bzlabel.setGeometry(QtCore.QRect(330, 130, 61, 21))
+        self.bzlabel.setGeometry(QtCore.QRect(270, 130, 61, 21))
         self.bzlabel.setObjectName("bzlabel")
         self.bylabel = QtWidgets.QLabel(self.frame_2)
-        self.bylabel.setGeometry(QtCore.QRect(330, 110, 61, 21))
+        self.bylabel.setGeometry(QtCore.QRect(270, 110, 61, 21))
         self.bylabel.setObjectName("bylabel")
         self.label_2 = QtWidgets.QLabel(self.frame_2)
-        self.label_2.setGeometry(QtCore.QRect(390, 90, 31, 21))
+        self.label_2.setGeometry(QtCore.QRect(330, 90, 31, 21))
         self.label_2.setObjectName("label_2")
         self.label_3 = QtWidgets.QLabel(self.frame_2)
-        self.label_3.setGeometry(QtCore.QRect(390, 110, 31, 21))
+        self.label_3.setGeometry(QtCore.QRect(330, 110, 31, 21))
         self.label_3.setObjectName("label_3")
         self.label_4 = QtWidgets.QLabel(self.frame_2)
-        self.label_4.setGeometry(QtCore.QRect(390, 130, 31, 21))
+        self.label_4.setGeometry(QtCore.QRect(330, 130, 31, 21))
         self.label_4.setObjectName("label_4")
         self.label_5 = QtWidgets.QLabel(self.frame_2)
-        self.label_5.setGeometry(QtCore.QRect(340, 60, 61, 21))
+        self.label_5.setGeometry(QtCore.QRect(280, 70, 61, 21))
         self.label_5.setObjectName("label_5")
         self.label_6 = QtWidgets.QLabel(self.frame_2)
         self.label_6.setGeometry(QtCore.QRect(30, 10, 131, 21))
@@ -1083,7 +1091,7 @@ class Ui_MainWindow(object):
         self.label_9.setGeometry(QtCore.QRect(10, 100, 21, 21))
         self.label_9.setObjectName("label_9")
         self.alphadial = QtWidgets.QDial(self.frame_2)
-        self.alphadial.setGeometry(QtCore.QRect(140, 10, 81, 81))
+        self.alphadial.setGeometry(QtCore.QRect(120, 10, 81, 81))
         self.alphadial.setMinimum(0)
         self.alphadial.setMaximum(360)
         self.alphadial.setProperty("value", 90)
@@ -1098,7 +1106,7 @@ class Ui_MainWindow(object):
         self.manualalphalabel.setGeometry(QtCore.QRect(130, 100, 41, 16))
         self.manualalphalabel.setObjectName("manualalphalabel")
         self.makeshapebutton = QtWidgets.QPushButton(self.frame_2)
-        self.makeshapebutton.setGeometry(QtCore.QRect(250, 10, 101, 31))
+        self.makeshapebutton.setGeometry(QtCore.QRect(210, 10, 101, 31))
         self.makeshapebutton.setStyleSheet("QPushButton {\n"
 "                color: rgb(255, 255, 255);\n"
 "                background-color: rgb(0, 0, 0);\n"
@@ -1119,7 +1127,7 @@ class Ui_MainWindow(object):
         self.makeshapebutton.setChecked(False)
         self.makeshapebutton.setObjectName("makeshapebutton")
         self.shapemaker_nodes = QtWidgets.QSpinBox(self.frame_2)
-        self.shapemaker_nodes.setGeometry(QtCore.QRect(360, 10, 61, 35))
+        self.shapemaker_nodes.setGeometry(QtCore.QRect(320, 10, 51, 35))
         self.shapemaker_nodes.setMinimum(1)
         self.shapemaker_nodes.setMaximum(400)
         self.shapemaker_nodes.setProperty("value", 100)
@@ -1145,7 +1153,7 @@ class Ui_MainWindow(object):
         self.makeshapebutton.raise_()
         self.shapemaker_nodes.raise_()
         self.frame_4 = QtWidgets.QFrame(self.dockWidgetContents_4)
-        self.frame_4.setGeometry(QtCore.QRect(10, 475, 431, 141))
+        self.frame_4.setGeometry(QtCore.QRect(10, 480, 381, 131))
         self.frame_4.setStyleSheet(" color: rgb(0, 0, 0);\n"
 " background-color: rgb(255, 255, 255);\n"
 "")
@@ -1153,7 +1161,7 @@ class Ui_MainWindow(object):
         self.frame_4.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_4.setObjectName("frame_4")
         self.psidial = QtWidgets.QDial(self.frame_4)
-        self.psidial.setGeometry(QtCore.QRect(30, 10, 91, 101))
+        self.psidial.setGeometry(QtCore.QRect(10, 5, 91, 101))
         self.psidial.setStyleSheet("QDial\n"
 "    {\n"
 "        background-color:QLinearGradient( \n"
@@ -1176,16 +1184,16 @@ class Ui_MainWindow(object):
         self.psidial.setNotchesVisible(True)
         self.psidial.setObjectName("psidial")
         self.gammalabel = QtWidgets.QLabel(self.frame_4)
-        self.gammalabel.setGeometry(QtCore.QRect(180, 115, 121, 20))
+        self.gammalabel.setGeometry(QtCore.QRect(150, 105, 121, 20))
         self.gammalabel.setObjectName("gammalabel")
         self.rollingfrequencylabel = QtWidgets.QLabel(self.frame_4)
-        self.rollingfrequencylabel.setGeometry(QtCore.QRect(290, 10, 121, 61))
+        self.rollingfrequencylabel.setGeometry(QtCore.QRect(250, 10, 111, 61))
         self.rollingfrequencylabel.setObjectName("rollingfrequencylabel")
         self.psilabel = QtWidgets.QLabel(self.frame_4)
-        self.psilabel.setGeometry(QtCore.QRect(40, 115, 91, 21))
+        self.psilabel.setGeometry(QtCore.QRect(40, 105, 91, 21))
         self.psilabel.setObjectName("psilabel")
         self.gammadial = QtWidgets.QDial(self.frame_4)
-        self.gammadial.setGeometry(QtCore.QRect(170, 10, 91, 101))
+        self.gammadial.setGeometry(QtCore.QRect(130, 5, 91, 101))
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(12)
@@ -1217,7 +1225,7 @@ class Ui_MainWindow(object):
         self.gammadial.setNotchesVisible(True)
         self.gammadial.setObjectName("gammadial")
         self.magneticfrequencydial = QtWidgets.QDoubleSpinBox(self.frame_4)
-        self.magneticfrequencydial.setGeometry(QtCore.QRect(320, 60, 81, 41))
+        self.magneticfrequencydial.setGeometry(QtCore.QRect(260, 70, 81, 41))
         self.magneticfrequencydial.setDecimals(2)
         self.magneticfrequencydial.setMaximum(60.0)
         self.magneticfrequencydial.setProperty("value", 10.0)
@@ -1283,6 +1291,8 @@ class Ui_MainWindow(object):
         self.memorylabel.setText(_translate("MainWindow", "Memory"))
         self.RRTtreesizelabel.setText(_translate("MainWindow", "Tree Size"))
         self.arrivalthreshlabel.setText(_translate("MainWindow", "Arrive Thresh"))
+        self.ricocheteffectlabel.setText(_translate("MainWindow", "Ricochet \n"
+"Effect:"))
         self.simulationbutton.setText(_translate("MainWindow", "Simulation On"))
         self.bxlabel.setText(_translate("MainWindow", "Bx: 0"))
         self.bzlabel.setText(_translate("MainWindow", "Bz: 0"))

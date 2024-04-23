@@ -506,6 +506,8 @@ class VideoThread(QThread):
                 else:
                     actions = [0,0,0,0,0,0,0,0]
                     stopped = True    
+                
+                
                     
                 #gather most recent robot params
                 

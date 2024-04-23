@@ -129,7 +129,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #connect to arduino
         if "mac" in platform.platform():
             self.tbprint("Detected OS: macos")
-            PORT = "/dev/cu.usbmodem11301"
+            PORT = "/dev/cu.usbmodem11401"
             self.controller_actions = Mac_Controller()
         elif "Linux" in platform.platform():
             self.tbprint("Detected OS: Linux")
@@ -165,9 +165,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.joystick = pygame.joystick.Joystick(0)
             self.joystick.init()
             self.tbprint("Connected to: "+str(self.joystick.get_name()))
-        
-        
-        self.setFile()
+
 
      
 
@@ -314,8 +312,31 @@ class MainWindow(QtWidgets.QMainWindow):
             self.freq = self.ui.magneticfrequencydial.value()
             self.gamma = np.radians(self.ui.gammadial.value())
             self.psi = np.radians(self.ui.psidial.value())
-            self.alpha = np.radians(self.ui.alphadial.value())
+            
+            #ricochet conditions, too close to the x or y borders flip the conditions
+            if self.ui.ricochet_effect_checkbox.isChecked():
+                if len(self.tracker.robot_list) > 0:
+                    bot_pos_x = self.tracker.robot_list[-1].position_list[-1][0]
+                    bot_pos_y = self.tracker.robot_list[-1].position_list[-1][1]
+                    print("were too close to the x or y borders")
+                    print("bots pos: {}, video dims: {}".format((bot_pos_x,bot_pos_y), (self.video_width, self.video_height)))
+                        
+                    #ricochet conditions, too close to the x or y borders
+                    if bot_pos_x <= 10 or bot_pos_x >= self.video_width-10: #if the bot hits the left wall 
+                        self.alpha = np.pi - self.alpha 
+                        
+                    elif bot_pos_y <= 10 or bot_pos_y >= self.video_height-10: #if the bot hits the top wall
+                        self.alpha =  -self.alpha
+             
+            else:
+                self.alpha = np.radians(self.ui.alphadial.value())
+                    
+                    
 
+                
+  
+                    
+                
 
         elif self.excel_actions_status == True and self.excel_actions_df is not None:            
             self.actions_counter +=1
@@ -885,11 +906,17 @@ class MainWindow(QtWidgets.QMainWindow):
             try:
                 self.cap  = EasyPySpin.VideoCapture(0)
                 self.cap.set(cv2.CAP_PROP_AUTO_WB, True)
-                #self.cap.set(cv2.CAP_PROP_FPS, 30)
-                #self.cap.set(cv2.CAP_PROP_FPS, 30)
+                self.tbprint("Connected to FLIR Camera")
+
+                if not self.cap.isOpened():
+                    self.cap  = cv2.VideoCapture(0) 
+                    self.tbprint("No EasyPySpin Camera Available")
+            
             except Exception:
                 self.cap  = cv2.VideoCapture(0) 
                 self.tbprint("No EasyPySpin Camera Available")
+                
+                
             self.ui.pausebutton.hide()
             self.ui.leftbutton.hide()
             self.ui.rightbutton.hide()
