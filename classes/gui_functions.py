@@ -105,7 +105,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.save_status = False
         self.output_workbook = None
-        self.ricochet_counter = 0
+        self.ricochet_counter_x = [0]
+        self.ricochet_counter_y = [0]
         
         
         self.drawing = False
@@ -319,26 +320,34 @@ class MainWindow(QtWidgets.QMainWindow):
             #ricochet conditions, too close to the x or y borders flip the conditions
             if self.ui.ricochet_effect_checkbox.isChecked():
                 if len(self.tracker.robot_list) > 0:
-                    bot_pos_x = int(self.tracker.robot_list[-1].position_list[-1][0])
-                    bot_pos_y = int(self.tracker.robot_list[-1].position_list[-1][1])
+                    for i in range(len(self.tracker.robot_list)):
+                        bot = self.tracker.robot_list[i]
+                        bot_pos_x = int(bot.position_list[-1][0])
+                        bot_pos_y = int(bot.position_list[-1][1])
+                        
+                        vx = bot.velocity_list[-1][0]
+                        vy = bot.velocity_list[-1][1] 
+                        vel_angle = ((np.degrees(np.arctan2(-vy,vx)) + 360) % 360)
                     
-                    vx = self.tracker.robot_list[-1].velocity_list[-1][0]
-                    vy = self.tracker.robot_list[-1].velocity_list[-1][1] 
-                    vel_angle = ((np.degrees(np.arctan2(-vy,vx)) + 360) % 360)
-                    
-                    
-                    #ricochet conditions, too close to the x or y borders
-                    if bot_pos_x <= 1 or bot_pos_x >= self.video_width - 1: #if the bot hits the left wall 
-                        vx = -vx
-                        self.alpha = int(((np.degrees(np.arctan2(-vy,vx)) + 360) % 360))
-                        self.ui.alphadial.setValue(self.alpha)
-                        print("should happen once and thats it")
+                        #ricochet conditions, too close to the x or y borders
+                        
+                        if (bot_pos_x <= 100 or bot_pos_x >= self.video_width - 100):# and (self.frame_number - self.ricochet_counter_x[-1] > 30): #if the bot hits the left wall 
+                            vx = -vx
+                            alpha = int(((np.degrees(np.arctan2(-vy,vx)) + 360) % 360))
+                            #alpha = np.degrees(np.pi - self.alpha)
+                            self.ui.alphadial.setValue(alpha)
+                            self.ricochet_counter_x.append(self.frame_number)
+
                                                 
-                    elif bot_pos_y <= 1 or bot_pos_y >= self.video_height - 1: #if the bot hits the top wall
-                        vy = -vy
-                        self.alpha = int(((np.degrees(np.arctan2(-vy,vx)) + 360) % 360))
-                        self.ui.alphadial.setValue(self.alpha)
-                        print("should happen once and thats it")
+                        elif (bot_pos_y <= 100 or bot_pos_y >= self.video_height - 100):# and (self.frame_number - self.ricochet_counter_y[-1] > 30): #if the bot hits the top wall
+                            vy = -vy
+                            alpha = int(((np.degrees(np.arctan2(-vy,vx)) + 360) % 360))
+                            #alpha = -np.degrees(self.alpha)
+                            self.ui.alphadial.setValue(alpha)
+                            self.ricochet_counter_y.append(self.frame_number)
+                    
+                    
+             
                         
             
 
