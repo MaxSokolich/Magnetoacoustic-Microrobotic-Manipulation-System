@@ -327,7 +327,6 @@ class MainWindow(QtWidgets.QMainWindow):
                         
                         vx = bot.velocity_list[-1][0]
                         vy = bot.velocity_list[-1][1] 
-                        vel_angle = ((np.degrees(np.arctan2(-vy,vx)) + 360) % 360)
                         boundary = 200
                         #ricochet conditions, too close to the x or y borders
                         
