@@ -105,7 +105,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.save_status = False
         self.output_workbook = None
-        
+        self.ricochet_counter = 0
         
         
         self.drawing = False
@@ -266,7 +266,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def update_actions(self, actions, stopped, robot_list, cell_list):
         self.frame_number+=1
+        #toggle between alpha and orient
         
+
         #output actions if control status is on
         if self.ui.autoacousticbutton.isChecked():
             self.acoustic_frequency  = actions[-1]   
@@ -312,24 +314,41 @@ class MainWindow(QtWidgets.QMainWindow):
             self.freq = self.ui.magneticfrequencydial.value()
             self.gamma = np.radians(self.ui.gammadial.value())
             self.psi = np.radians(self.ui.psidial.value())
+            self.alpha = np.radians(self.ui.alphadial.value())
             
             #ricochet conditions, too close to the x or y borders flip the conditions
             if self.ui.ricochet_effect_checkbox.isChecked():
                 if len(self.tracker.robot_list) > 0:
-                    bot_pos_x = self.tracker.robot_list[-1].position_list[-1][0]
-                    bot_pos_y = self.tracker.robot_list[-1].position_list[-1][1]
-                    print("were too close to the x or y borders")
-                    print("bots pos: {}, video dims: {}".format((bot_pos_x,bot_pos_y), (self.video_width, self.video_height)))
-                        
+                    bot_pos_x = int(self.tracker.robot_list[-1].position_list[-1][0])
+                    bot_pos_y = int(self.tracker.robot_list[-1].position_list[-1][1])
+                    
+                    vx = self.tracker.robot_list[-1].velocity_list[-1][0]
+                    vy = self.tracker.robot_list[-1].velocity_list[-1][1] 
+                    vel_angle = ((np.degrees(np.arctan2(-vy,vx)) + 360) % 360)
+                    print(vel_angle)
+                    
                     #ricochet conditions, too close to the x or y borders
-                    if bot_pos_x <= 10 or bot_pos_x >= self.video_width-10: #if the bot hits the left wall 
-                        self.alpha = np.pi - self.alpha 
+                    if bot_pos_x <= 100 or bot_pos_x >= self.video_width - 100: #if the bot hits the left wall 
+                   
+                        vx = -vx
+                        self.alpha = int(((np.degrees(np.arctan2(-vy,vx)) + 360) % 360))
+                        self.ui.alphadial.setValue(self.alpha)
+                        print("should happen once and thats it")
+                                                
+                    elif bot_pos_y <= 100 or bot_pos_y >= self.video_height - 100: #if the bot hits the top wall
+                        vy = -vy
+                        self.alpha = int(((np.degrees(np.arctan2(-vy,vx)) + 360) % 360))
+                        self.ui.alphadial.setValue(self.alpha)
+                        print("should happen once and thats it")
                         
-                    elif bot_pos_y <= 10 or bot_pos_y >= self.video_height-10: #if the bot hits the top wall
-                        self.alpha =  -self.alpha
+            
+
+            
+            
+                
              
-            else:
-                self.alpha = np.radians(self.ui.alphadial.value())
+            
+                
                     
                     
 
@@ -422,8 +441,6 @@ class MainWindow(QtWidgets.QMainWindow):
         #the purpose of this function is to output the actions via arduino, 
         # show the actions via the simulator
         # and record the actions by appending the field_list
-        
-        #toggle between alpha and orient
         if self.freq > 0:
             if self.ui.swimradio.isChecked():
                 self.simulator.roll = False
