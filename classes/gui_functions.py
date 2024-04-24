@@ -325,17 +325,16 @@ class MainWindow(QtWidgets.QMainWindow):
                     vx = self.tracker.robot_list[-1].velocity_list[-1][0]
                     vy = self.tracker.robot_list[-1].velocity_list[-1][1] 
                     vel_angle = ((np.degrees(np.arctan2(-vy,vx)) + 360) % 360)
-                    print(vel_angle)
+                    
                     
                     #ricochet conditions, too close to the x or y borders
-                    if bot_pos_x <= 100 or bot_pos_x >= self.video_width - 100: #if the bot hits the left wall 
-                   
+                    if bot_pos_x <= 1 or bot_pos_x >= self.video_width - 1: #if the bot hits the left wall 
                         vx = -vx
                         self.alpha = int(((np.degrees(np.arctan2(-vy,vx)) + 360) % 360))
                         self.ui.alphadial.setValue(self.alpha)
                         print("should happen once and thats it")
                                                 
-                    elif bot_pos_y <= 100 or bot_pos_y >= self.video_height - 100: #if the bot hits the top wall
+                    elif bot_pos_y <= 1 or bot_pos_y >= self.video_height - 1: #if the bot hits the top wall
                         vy = -vy
                         self.alpha = int(((np.degrees(np.arctan2(-vy,vx)) + 360) % 360))
                         self.ui.alphadial.setValue(self.alpha)
@@ -343,19 +342,6 @@ class MainWindow(QtWidgets.QMainWindow):
                         
             
 
-            
-            
-                
-             
-            
-                
-                    
-                    
-
-                
-  
-                    
-                
 
         elif self.excel_actions_status == True and self.excel_actions_df is not None:            
             self.actions_counter +=1
