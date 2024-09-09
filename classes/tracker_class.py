@@ -76,7 +76,7 @@ class VideoThread(QThread):
         else:
             self.totalnumframes = 0
            
-        self.pix2metric =  0.28985 * self.objective #.29853 * self.objective#0.28985 * self.objective  
+        self.um2pixel =  3.35 / self.objective # each pixel is 3.35 um in size at 1x. [um] / [px]
         
             #at 10x objective
             #width_in_pixels = 2448 #pixels
@@ -184,7 +184,7 @@ class VideoThread(QThread):
                         for contour in contours:
                             if cv2.contourArea(contour) > cv2.contourArea(max_cnt): 
                                 max_cnt = contour
-                        area = cv2.contourArea(max_cnt)* (1/self.pix2metric**2)
+                        area = cv2.contourArea(max_cnt)* (self.um2pixel**2)
                         
                         #find the center of mass from the mask
                         szsorted=np.argsort(sizes)
@@ -204,8 +204,11 @@ class VideoThread(QThread):
 
                         #find velocity:
                         if len(bot.position_list) > self.memory:
-                            vx = (current_pos[0] - bot.position_list[-self.memory][0]) * (self.fps.get_fps()/self.memory) / self.pix2metric
-                            vy = (current_pos[1] - bot.position_list[-self.memory][1]) * (self.fps.get_fps()/self.memory) / self.pix2metric
+                            vx = (current_pos[0] - bot.position_list[-self.memory][0]) * (self.fps.get_fps()/self.memory) * self.um2pixel
+                            vy = (current_pos[1] - bot.position_list[-self.memory][1]) * (self.fps.get_fps()/self.memory) * self.um2pixel
+
+                            #vx = (current_pos[0] - bot.position_list[-1][0]) * (self.fps.get_fps()) / self.pix2metric
+                            #vy = (current_pos[1] - bot.position_list[-1][1]) * (self.fps.get_fps()) / self.pix2metric
                             magnitude = np.sqrt(vx**2 + vy**2)
 
                             velocity = [vx,vy,magnitude]
@@ -298,7 +301,7 @@ class VideoThread(QThread):
                         for contour in contours:
                             if cv2.contourArea(contour) > cv2.contourArea(max_cnt): 
                                 max_cnt = contour
-                        area = cv2.contourArea(max_cnt)* (1/self.pix2metric**2)
+                        area = cv2.contourArea(max_cnt)* (self.um2pixel**2)
                     
                         
                         #find the center of mass from the mask
@@ -319,8 +322,8 @@ class VideoThread(QThread):
 
                         #find velocity:
                         if len(cell.position_list) > self.memory:
-                            vx = (current_pos[0] - cell.position_list[-self.memory][0]) * (self.fps.get_fps()/self.memory) / self.pix2metric
-                            vy = (current_pos[1] - cell.position_list[-self.memory][1]) * (self.fps.get_fps()/self.memory) / self.pix2metric
+                            vx = (current_pos[0] - cell.position_list[-self.memory][0]) * (self.fps.get_fps()/self.memory) * self.um2pixel
+                            vy = (current_pos[1] - cell.position_list[-self.memory][1]) * (self.fps.get_fps()/self.memory) * self.um2pixel
                             magnitude = np.sqrt(vx**2 + vy**2)
 
                             velocity = [vx,vy,magnitude]
@@ -433,10 +436,12 @@ class VideoThread(QThread):
             cv2.line(
                 display_frame, 
                 (int(self.width / 8),int(self.height /40)),
-                (int(self.width / 8) + int(100 * (self.pix2metric)),int(self.height / 40)), 
+                (int(self.width / 8) + int(100 / (self.um2pixel)),int(self.height / 40)), 
                 (255, 255, 255), 
                 thickness=5
             )
+            
+    
 
         return display_frame
 
@@ -467,7 +472,7 @@ class VideoThread(QThread):
             if ret:       
                 if self.totalnumframes ==0:         
                     self.cap.set(cv2.CAP_PROP_EXPOSURE, self.exposure)
-                    self.pix2metric =  0.28985 * self.objective
+                    self.um2pixel =   3.35 / self.objective
                     
 
                 #step 1 track robot

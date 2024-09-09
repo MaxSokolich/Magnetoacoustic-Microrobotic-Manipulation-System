@@ -138,7 +138,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.controller_actions = Linux_Controller()
         elif "Windows" in platform.platform():
             self.tbprint("Detected OS:  Windows")
-            PORT = "COM3"
+            PORT = "COM4"
             self.controller_actions = Windows_Controller()
         else:
             self.tbprint("undetected operating system")
@@ -374,7 +374,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.gamma = float(filtered_row["Gamma"])
                 self.freq = float(filtered_row["Rolling Frequency"])
                 self.psi = float(filtered_row["Psi"])
-                self.gradient = float(filtered_row["Gradient"])
+                self.gradient = float(filtered_row["Gradient?"])
                 self.acoustic_freq = float(filtered_row["Acoustic Frequency"])
             
             else:
@@ -928,6 +928,7 @@ class MainWindow(QtWidgets.QMainWindow):
             try:
                 self.cap  = EasyPySpin.VideoCapture(0)
                 self.cap.set(cv2.CAP_PROP_AUTO_WB, True)
+                self.cap.set(cv2.CAP_PROP_FPS, 24)
                 self.tbprint("Connected to FLIR Camera")
 
                 if not self.cap.isOpened():
