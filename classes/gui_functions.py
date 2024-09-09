@@ -327,24 +327,33 @@ class MainWindow(QtWidgets.QMainWindow):
                         
                         vx = bot.velocity_list[-1][0]
                         vy = bot.velocity_list[-1][1] 
-                        vel_angle = ((np.degrees(np.arctan2(-vy,vx)) + 360) % 360)
-                    
+                        boundary = 200
                         #ricochet conditions, too close to the x or y borders
                         
-                        if (bot_pos_x <= 100 or bot_pos_x >= self.video_width - 100):# and (self.frame_number - self.ricochet_counter_x[-1] > 30): #if the bot hits the left wall 
+                        if (bot_pos_x <= boundary and vx < 0) and (self.frame_number - self.ricochet_counter_x[-1] > 30):
                             vx = -vx
                             alpha = int(((np.degrees(np.arctan2(-vy,vx)) + 360) % 360))
-                            #alpha = np.degrees(np.pi - self.alpha)
                             self.ui.alphadial.setValue(alpha)
                             self.ricochet_counter_x.append(self.frame_number)
 
-                                                
-                        elif (bot_pos_y <= 100 or bot_pos_y >= self.video_height - 100):# and (self.frame_number - self.ricochet_counter_y[-1] > 30): #if the bot hits the top wall
+                        if  (bot_pos_x >= self.video_width - boundary and vx > 0) and (self.frame_number - self.ricochet_counter_x[-1] > 30):   
+                            vx = -vx
+                            alpha = int(((np.degrees(np.arctan2(-vy,vx)) + 360) % 360))
+                            self.ui.alphadial.setValue(alpha)
+                            self.ricochet_counter_x.append(self.frame_number)                  
+                        
+                        if (bot_pos_y <= boundary and vy < 0) and (self.frame_number - self.ricochet_counter_y[-1] > 30):
                             vy = -vy
                             alpha = int(((np.degrees(np.arctan2(-vy,vx)) + 360) % 360))
-                            #alpha = -np.degrees(self.alpha)
                             self.ui.alphadial.setValue(alpha)
                             self.ricochet_counter_y.append(self.frame_number)
+            
+                        if (bot_pos_y >= self.video_height - boundary and vy > 0) and (self.frame_number - self.ricochet_counter_y[-1] > 30):# and (self.frame_number - self.ricochet_counter_y[-1] > 30): #if the bot hits the top wall   
+                            vy = -vy
+                            alpha = int(((np.degrees(np.arctan2(-vy,vx)) + 360) % 360))
+                            self.ui.alphadial.setValue(alpha)
+                            self.ricochet_counter_y.append(self.frame_number)
+                           
                     
                     
              
