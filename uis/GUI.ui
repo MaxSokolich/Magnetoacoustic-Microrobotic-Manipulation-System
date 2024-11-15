@@ -14,6 +14,7 @@
    <font>
     <family>Arial</family>
     <pointsize>12</pointsize>
+    <weight>50</weight>
     <italic>false</italic>
     <bold>false</bold>
    </font>
@@ -626,6 +627,7 @@ QPushButton {
       <property name="font">
        <font>
         <pointsize>12</pointsize>
+        <weight>50</weight>
         <italic>false</italic>
         <bold>false</bold>
        </font>
@@ -750,6 +752,7 @@ QPushButton {
       <property name="font">
        <font>
         <pointsize>12</pointsize>
+        <weight>50</weight>
         <italic>false</italic>
         <bold>false</bold>
        </font>
@@ -880,6 +883,7 @@ QPushButton {
       <property name="font">
        <font>
         <pointsize>12</pointsize>
+        <weight>50</weight>
         <italic>false</italic>
         <bold>false</bold>
        </font>
@@ -909,6 +913,7 @@ QPushButton {
       <property name="font">
        <font>
         <pointsize>12</pointsize>
+        <weight>50</weight>
         <italic>false</italic>
         <bold>false</bold>
        </font>
@@ -938,6 +943,7 @@ QPushButton {
       <property name="font">
        <font>
         <pointsize>12</pointsize>
+        <weight>50</weight>
         <italic>false</italic>
         <bold>false</bold>
        </font>
@@ -967,6 +973,7 @@ QPushButton {
       <property name="font">
        <font>
         <pointsize>12</pointsize>
+        <weight>50</weight>
         <italic>false</italic>
         <bold>false</bold>
        </font>
@@ -1063,6 +1070,7 @@ QPushButton {
       <property name="font">
        <font>
         <pointsize>12</pointsize>
+        <weight>50</weight>
         <italic>false</italic>
         <bold>false</bold>
        </font>
@@ -1095,6 +1103,7 @@ QPushButton {
       <property name="font">
        <font>
         <pointsize>12</pointsize>
+        <weight>50</weight>
         <italic>false</italic>
         <bold>false</bold>
        </font>
@@ -1413,6 +1422,7 @@ color: rgb(0,255,0);</string>
       <font>
        <family>Arial</family>
        <pointsize>12</pointsize>
+       <weight>50</weight>
        <italic>false</italic>
        <bold>false</bold>
       </font>
@@ -1463,6 +1473,7 @@ color: rgb(0,255,0);</string>
       <font>
        <family>Arial</family>
        <pointsize>12</pointsize>
+       <weight>50</weight>
        <italic>false</italic>
        <bold>false</bold>
       </font>
@@ -1503,7 +1514,7 @@ color: rgb(0,255,0);</string>
      </property>
      <property name="minimumSize">
       <size>
-       <width>21</width>
+       <width>25</width>
        <height>0</height>
       </size>
      </property>
@@ -1673,6 +1684,7 @@ color: rgb(0,255,0);</string>
       <property name="font">
        <font>
         <pointsize>12</pointsize>
+        <weight>50</weight>
         <italic>false</italic>
         <bold>false</bold>
        </font>
@@ -1937,6 +1949,7 @@ Frequency</string>
       <property name="font">
        <font>
         <pointsize>-1</pointsize>
+        <weight>75</weight>
         <italic>false</italic>
         <bold>true</bold>
        </font>
@@ -2709,6 +2722,7 @@ Frequency:</string>
        <font>
         <family>Arial</family>
         <pointsize>12</pointsize>
+        <weight>50</weight>
         <italic>false</italic>
         <bold>false</bold>
        </font>
@@ -2768,7 +2782,7 @@ QDial::handle {
        <number>2</number>
       </property>
       <property name="maximum">
-       <double>60.000000000000000</double>
+       <double>250.000000000000000</double>
       </property>
       <property name="value">
        <double>10.000000000000000</double>

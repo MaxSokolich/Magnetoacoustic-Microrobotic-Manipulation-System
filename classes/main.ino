@@ -26,6 +26,7 @@ float gradient_status;
 float acoustic_frequency;
 
 
+
 int phase = 0; 
 
 
@@ -406,7 +407,7 @@ void loop()
        Bx_final = magnitude * (Bx / sqrt(Bx*Bx + By*By + Bz*Bz));
        By_final = magnitude * (By / sqrt(Bx*Bx + By*By + Bz*Bz));
        Bz_final = magnitude * (Bz / sqrt(Bx*Bx + By*By + Bz*Bz));
-
+       //Bz_final = 0.15;
        //Bx_final = Bx_final;
        //By_final = By_final * .75;
        //Bz_final = Bz_final * .5;
@@ -462,6 +463,7 @@ void loop()
       set5(Bz_final);
       set6(-Bz_final);
    }
+
 
     }
   

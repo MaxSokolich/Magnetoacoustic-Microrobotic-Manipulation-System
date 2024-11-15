@@ -156,7 +156,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.halleffect.sensor_signal.connect(self.update_halleffect_sensor)
         self.halleffect.start()
         
-        
+        self.setFile()
         
         pygame.init()
         if pygame.joystick.get_count() == 0:
