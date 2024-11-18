@@ -112,6 +112,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.drawing = False
         self.acoustic_frequency = 0
         self.gradient_status = 0
+        self.equal_field_status = 0
         self.magnetic_field_list = []
         
         self.actions = [0,0,0,0,0,0,0,0,0,0,0,0,0]
@@ -198,6 +199,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
 
         self.ui.gradient_status_checkbox.toggled.connect(self.gradientcommand)
+        self.ui.equal_field_checkbox.toggled.connect(self.equalfieldcommand)
         self.ui.savedatabutton.clicked.connect(self.savedata)
         self.ui.VideoFeedLabel.installEventFilter(self)
         self.ui.recordbutton.clicked.connect(self.recordfunction_class)
@@ -374,6 +376,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.freq = float(filtered_row["Rolling Frequency"])
                 self.psi = float(filtered_row["Psi"])
                 self.gradient = float(filtered_row["Gradient?"])
+                self.equal_field_status = float(filtered_row["Equal Field?"])
                 self.acoustic_freq = float(filtered_row["Acoustic Frequency"])
             
             else:
@@ -421,7 +424,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.cells.append(currentcell_params)
         
         #DEFINE CURRENT MAGNETIC FIELD OUTPUT TO A LIST 
-        self.actions = [self.frame_number, self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.gradient_status,
+        
+        self.actions = [self.frame_number, self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.gradient_status,self.equal_field_status,
                         self.acoustic_frequency, self.sensorBx, self.sensorBy, self.sensorBz] 
        
         self.magnetic_field_list.append(self.actions)
@@ -469,7 +473,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.simulator.omega = 2 * np.pi * self.simulator.freq
 
         #send arduino commands
-        self.arduino.send(self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.gradient_status, self.acoustic_frequency)
+        self.arduino.send(self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.gradient_status, self.equal_field_status, self.acoustic_frequency)
 
 
 
@@ -501,7 +505,7 @@ class MainWindow(QtWidgets.QMainWindow):
             
         #create sheet for magneti field actions
         self.magnetic_field_sheet = self.output_workbook.create_sheet(title="Magnetic Field Actions")#self.output_workbook.active
-        self.magnetic_field_sheet.append(["Frame","Bx", "By", "Bz", "Alpha", "Gamma", "Rolling Frequency", "Psi", "Gradient?", "Acoustic Frequency","Sensor Bx", "Sensor By", "Sensor Bz"])
+        self.magnetic_field_sheet.append(["Frame","Bx", "By", "Bz", "Alpha", "Gamma", "Rolling Frequency", "Psi", "Gradient?","Equal Field?", "Acoustic Frequency","Sensor Bx", "Sensor By", "Sensor Bz"])
 
         #create sheet for robot data
         self.robot_params_sheets = []
@@ -1096,6 +1100,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def gradientcommand(self):
         self.gradient_status = int(self.ui.gradient_status_checkbox.isChecked())
+
+    def equalfieldcommand(self):
+        self.equal_field_status = int(self.ui.equal_field_checkbox.isChecked())
 
     def get_objective(self):
         if self.tracker is not None:

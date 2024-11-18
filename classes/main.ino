@@ -23,7 +23,9 @@ float gamma;
 float rolling_frequency;
 float psi;
 float gradient_status;
+float equal_field_status;
 float acoustic_frequency;
+
 
 
 
@@ -338,7 +340,8 @@ void loop()
    rolling_frequency = action[5]; 
    psi = action[6]; 
    gradient_status = action[7];
-   acoustic_frequency = action[8];
+   equal_field_status = action[8];
+   acoustic_frequency = action[9];
    
 
    if (acoustic_frequency != 0){
@@ -403,14 +406,18 @@ void loop()
    else{
        magnitude = max(sqrt(Bx_uniform*Bx_uniform + By_uniform*By_uniform + Bz_uniform*Bz_uniform), 
                        sqrt(Bx_roll*Bx_roll + By_roll*By_roll + Bz_roll*Bz_roll));
-                       
+
+
        Bx_final = magnitude * (Bx / sqrt(Bx*Bx + By*By + Bz*Bz));
        By_final = magnitude * (By / sqrt(Bx*Bx + By*By + Bz*Bz));
        Bz_final = magnitude * (Bz / sqrt(Bx*Bx + By*By + Bz*Bz));
-       //Bz_final = 0.15;
-       //Bx_final = Bx_final;
-       //By_final = By_final * .75;
-       //Bz_final = Bz_final * .5;
+       
+       if (equal_field_status == 1){
+           Bx_final = Bx_final;
+           By_final = By_final * .6;
+           Bz_final = Bz_final * .3;
+       }
+          
        
    }
    

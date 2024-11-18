@@ -1620,7 +1620,7 @@ color: rgb(0,255,0);</string>
        <rect>
         <x>90</x>
         <y>120</y>
-        <width>91</width>
+        <width>71</width>
         <height>20</height>
        </rect>
       </property>
@@ -1677,7 +1677,7 @@ color: rgb(0,255,0);</string>
        <rect>
         <x>10</x>
         <y>120</y>
-        <width>71</width>
+        <width>51</width>
         <height>21</height>
        </rect>
       </property>
@@ -1797,9 +1797,9 @@ color: rgb(0,255,0);</string>
      <widget class="QRadioButton" name="orientradio">
       <property name="geometry">
        <rect>
-        <x>190</x>
+        <x>170</x>
         <y>120</y>
-        <width>91</width>
+        <width>71</width>
         <height>20</height>
        </rect>
       </property>
@@ -1890,9 +1890,9 @@ Frequency</string>
      <widget class="QCheckBox" name="gradient_status_checkbox">
       <property name="geometry">
        <rect>
-        <x>280</x>
-        <y>120</y>
-        <width>85</width>
+        <x>260</x>
+        <y>110</y>
+        <width>101</width>
         <height>21</height>
        </rect>
       </property>
@@ -1993,6 +1993,19 @@ Frequency</string>
       </property>
       <property name="checkable">
        <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="equal_field_checkbox">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>140</y>
+        <width>111</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Equal Field</string>
       </property>
      </widget>
     </widget>
@@ -2321,7 +2334,7 @@ font-size: 14pt; font: Arial;</string>
      <widget class="QLabel" name="label_6">
       <property name="geometry">
        <rect>
-        <x>30</x>
+        <x>20</x>
         <y>10</y>
         <width>131</width>
         <height>21</height>
