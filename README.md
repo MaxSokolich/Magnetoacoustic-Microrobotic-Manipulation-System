@@ -1,12 +1,12 @@
 # Magnetoacoustic Microrobotic Manipulation System
 This system is a magnetic and acoustic microrobotic manipulation device. Its intention is to be a user friendly, portable, micro-robotic
-experimentation platform. It contains an embedded computer, a microscope, power supplies, power
-amplifiers, and control circuitry necessary for micro robotic research and experimentation. Custom
-control software is written in Python and C++ for handling live image feed from a camera, tracking
-and detection, and outputting the control signals to electromagnetic coils and acoustic transducers.
+experimentation platform. It contains an embedded single board computer, a microscope, power supplies, power
+amplifiers, and control circuitry necessary for generating the complex magnetic fields neccesary for actuating a variety of micro robots. Custom
+control software is written in Python and C++ for handling live image feed from a microscope camera, custom tracking
+and detection algorthims, and outputting the control signals to the electromagnetic coils and acoustic transducers.
 Furthermore, the system is the first of its kinda to combine both magnetic and acoustic actuation
 methods into a single, stand alone, portable device. Many of the mechanical components can be 3D
-printed allowing others to build the device at a low cost. The design can be divided into three
+printed allowing others to build the device at a low cost. The device can be divided into three
 sections (Mechanical, Electrical, and Software) 
 
 # CAD System Overview
