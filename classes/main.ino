@@ -427,6 +427,7 @@ void loop()
       //y gradient
       if (By_final > 0){
         set1(By_final);
+        
       }
       else if (By_final < 0){
         set3(By_final);

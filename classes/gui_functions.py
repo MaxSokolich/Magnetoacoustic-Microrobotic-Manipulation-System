@@ -469,7 +469,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.simulator.alpha = self.alpha
         self.simulator.gamma = self.gamma
         self.simulator.psi = self.psi
-        self.simulator.freq = self.freq/15
+        self.simulator.freq = self.freq
         self.simulator.omega = 2 * np.pi * self.simulator.freq
 
         #send arduino commands
