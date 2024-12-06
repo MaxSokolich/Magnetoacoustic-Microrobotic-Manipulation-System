@@ -17,7 +17,6 @@ sections (Mechanical, Electrical, and Software)
 
 
 # Tracking and Control Software UI
-
 <img width="1724" alt="Screenshot 2023-12-20 at 2 28 14 PM" src="https://github.com/MaxSokolich/Magnetoacoustic-Microrobotic-Manipulation-System/assets/50302377/4a14a2d1-431e-4f0e-a348-e22e0dc51acd">
 
 
@@ -25,8 +24,12 @@ sections (Mechanical, Electrical, and Software)
 <img width="699" alt="Screenshot 2023-12-20 at 2 14 26 PM" src="https://github.com/MaxSokolich/Magnetoacoustic-Microrobotic-Manipulation-System/assets/50302377/0eedb007-9db3-4152-8e76-12740618e227">
 
 # System
-
 ![Magscope3-2](https://github.com/MaxSokolich/Magnetoacoustic-Microrobotic-Manipulation-System/assets/50302377/697d35fd-252c-45ac-ad69-98e3f2571512)
+
+# Importing Excel Actions
+A predefined excel file with desired action commands can be imported into the system and applied. The software will begin executing each entry (or row) from the excel file once the "Apply Excel Actions" button is pressed. Each row of actions are applied at each subsequent frame from the camera. 
+<img width="259" alt="Screenshot 2024-12-06 at 11 27 47 AM" src="https://github.com/user-attachments/assets/9a6c4148-71ba-4c54-972f-bc68fefd5a64">
+<img width="775" alt="Screenshot 2024-12-06 at 11 25 11 AM" src="https://github.com/user-attachments/assets/9ce89367-d93f-425e-b5c2-988ce568c746">
 
 
 # Instructions for initial installation of system components on Nvidia Jetson AGX Orin:
