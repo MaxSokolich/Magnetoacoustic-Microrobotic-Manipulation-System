@@ -5,8 +5,9 @@ from PyQt5.QtGui import QWheelEvent
 from PyQt5 import QtGui
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import QPixmap,QIcon
-from PyQt5.QtCore import Qt, QTimer, PYQT_VERSION_STR
+from PyQt5.QtCore import Qt, QTimer, PYQT_VERSION_STR, QEvent
 from PyQt5 import QtWidgets, QtGui, QtCore
+
 import cv2
 import os
 from os.path import expanduser
@@ -52,6 +53,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
 
         
+
+        
         
         #self.showMaximized()
 
@@ -83,10 +86,11 @@ class MainWindow(QtWidgets.QMainWindow):
             if not os.path.exists(self.new_dir_path):
                 os.makedirs(self.new_dir_path)
         else:
-            home_dir = expanduser("~")
-            new_dir_name = "Tracking Data"
-            desktop_path = os.path.join(home_dir, "Desktop")
-            self.new_dir_path = os.path.join(desktop_path, new_dir_name)
+            #home_dir = expanduser("~")
+            #new_dir_name = "Tracking Data"
+            #desktop_path = os.path.join(home_dir, "Desktop")
+            
+            self.new_dir_path = "Data"#os.path.join(desktop_path, new_dir_name)
             if not os.path.exists(self.new_dir_path):
                 os.makedirs(self.new_dir_path)
 
@@ -129,7 +133,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #connect to arduino
         if "mac" in platform.platform():
             self.tbprint("Detected OS: macos")
-            PORT = "/dev/cu.usbmodem11301"
+            PORT = "/dev/cu.usbmodem11401"
             self.controller_actions = Mac_Controller()
         elif "Linux" in platform.platform():
             self.tbprint("Detected OS: Linux")
@@ -166,9 +170,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.joystick.init()
             self.tbprint("Connected to: "+str(self.joystick.get_name()))
         
-        
-        self.setFile()
-        self.setFile()
+      
      
 
         #tracker tab functions
@@ -563,10 +565,26 @@ class MainWindow(QtWidgets.QMainWindow):
         newx = int(pos.x() * (self.video_width / self.display_width)) 
         newy = int(pos.y() * (self.video_height / self.display_height))
         return newx, newy
+    
+    
+    def keyPressEvent(self, event):
+        # Check if the event type is QEvent.KeyPress
+        if event.type() == QEvent.KeyPress:
+            # Check if the key pressed is 'c'
+            if event.key() == Qt.Key_C:
+                print('c')
+        # Call the base class method for default processing
+        return super().keyPressEvent(event)
+ 
+
+    
 
     def eventFilter(self, object, event):
+        
         if object is self.ui.VideoFeedLabel: 
             if self.tracker is not None:
+                
+                    
                 if event.type() == QtCore.QEvent.MouseButtonPress:   
                     if event.buttons() == QtCore.Qt.LeftButton:
                         newx, newy = self.convert_coords(event.pos())
@@ -791,7 +809,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.videopath == 0:
             try:
                 self.cap  = EasyPySpin.VideoCapture(0)
-                self.cap.set(cv2.CAP_PROP_AUTO_WB, True)
+                self.cap.set(cv2.CAP_PROP_AUTO_WB, False)
                 #self.cap.set(cv2.CAP_PROP_FPS, 30)
                 #self.cap.set(cv2.CAP_PROP_FPS, 30)
             except Exception:
