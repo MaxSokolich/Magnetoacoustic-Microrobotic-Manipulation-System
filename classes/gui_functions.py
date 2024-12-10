@@ -406,7 +406,7 @@ class MainWindow(QtWidgets.QMainWindow):
                                      bot.area_list[-1],
                                      bot.avg_area,
                                      bot.cropped_frame[-1][0],bot.cropped_frame[-1][1],bot.cropped_frame[-1][2],bot.cropped_frame[-1][3],
-                                     bot.um2pixel,
+                                     bot.pix2metric,
                                      bot.trajectory,
                                     ]
                 
@@ -425,7 +425,7 @@ class MainWindow(QtWidgets.QMainWindow):
                                      cell.area_list[-1],
                                      cell.avg_area,
                                      cell.cropped_frame[-1][0],cell.cropped_frame[-1][1], cell.cropped_frame[-1][2],cell.cropped_frame[-1][3],
-                                     cell.um2pixel
+                                     cell.pix2metric
                                     ]
                 
                 self.cells.append(currentcell_params)
@@ -496,14 +496,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.robot_params_sheets = []
         for i in range(len(self.robots)):
             robot_sheet = self.output_workbook.create_sheet(title= "Robot {}".format(i+1))
-            robot_sheet.append(["Frame","Time(s)","Pos X (px)", "Pos Y (px)", "Vel X (um/s)", "Vel Y (um/s)", "Vel Mag (um/s)", "Blur", "Area (um^2)", "Avg Area (um^2)", "Cropped X (px)","Cropped Y (px)","Cropped W (px)","Cropped H (px)","um2pixel","Path X (px)", "Path Y (px)"])
+            robot_sheet.append(["Frame","Time(s)","Pos X (px)", "Pos Y (px)", "Vel X (um/s)", "Vel Y (um/s)", "Vel Mag (um/s)", "Blur", "Area (um^2)", "Avg Area (um^2)", "Cropped X (px)","Cropped Y (px)","Cropped W (px)","Cropped H (px)","pix2metric","Path X (px)", "Path Y (px)"])
             self.robot_params_sheets.append(robot_sheet)
         
         #create sheet for robot data
         self.cell_params_sheets = []
         for i in range(len(self.cells)):
             cell_sheet = self.output_workbook.create_sheet(title= "Cell {}".format(i+1))
-            cell_sheet.append(["Frame","Time(s)","Pos X (px)", "Pos Y (px)", "Vel X (um/s)", "Vel Y (um/s)", "Vel Mag (um/s)", "Blur", "Area (um^2)", "Avg Area (um^2)", "Cropped X (px)","Cropped Y (px)","Cropped W (px)","Cropped H (px)","um2pixel"])
+            cell_sheet.append(["Frame","Time(s)","Pos X (px)", "Pos Y (px)", "Vel X (um/s)", "Vel Y (um/s)", "Vel Mag (um/s)", "Blur", "Area (um^2)", "Avg Area (um^2)", "Cropped X (px)","Cropped Y (px)","Cropped W (px)","Cropped H (px)","pix2metric"])
             self.cell_params_sheets.append(cell_sheet)
 
         #tell update_actions function to start appending data to the sheets
@@ -727,7 +727,7 @@ class MainWindow(QtWidgets.QMainWindow):
                             robot.add_crop([x_1, y_1, w, h])
                             robot.add_area(0)
                             robot.add_blur(0)
-                            robot.add_um2pixel(0)
+                        
                             robot.crop_length = self.ui.robotcroplengthbox.value()
                             self.tracker.robot_list.append(robot) #this has to include tracker.robot_list because I need to add it to that class
                         
@@ -745,7 +745,7 @@ class MainWindow(QtWidgets.QMainWindow):
                             cell.add_crop([x_1, y_1, w, h])
                             cell.add_area(0)
                             cell.add_blur(0)
-                            cell.add_um2pixel(0)
+                           
                             cell.crop_length = self.ui.cellcroplengthbox.value()
                             
                             self.tracker.cell_list.append(cell) #this has to include tracker.robot_list because I need to add it to that class
@@ -853,6 +853,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         #also update robot info
         if len(self.robots) > 0:
+            print(self.robots[-1][8])
             robot_diameter = round(np.sqrt(4*self.robots[-1][8]/np.pi),1)
             self.ui.vellcdnum.display(int(self.robots[-1][6]))
             self.ui.blurlcdnum.display(int(self.robots[-1][7]))
