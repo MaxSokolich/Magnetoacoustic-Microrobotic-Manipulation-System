@@ -18,7 +18,7 @@ class Cell:
         self.avg_area = 0  # current average area of the bot in this frame
         self.trajectory = []  # track points from manual pathing
         self.times = []  #time step per frame in seconds
-        self.pix2metric = 0 #pixel 2 metric conversion
+        self.um2pixel = 0 #pixel 2 metric conversion
         self.crop_length = 40
         
 
@@ -49,8 +49,8 @@ class Cell:
     def add_time(self, time):
         self.times.append(time)
 
-    def add_pix2metric(self,m2p):
-        self.pix2metric = m2p
+    def add_um2pixel(self,m2p):
+        self.um2pixel = m2p
     
 
     def as_dict(self) -> dict:

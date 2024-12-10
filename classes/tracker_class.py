@@ -229,7 +229,7 @@ class VideoThread(QThread):
                         bot.add_area(area)
                         bot.add_blur(blur)
                         bot.set_avg_area(np.mean(bot.area_list))
-                        bot.add_pix2metric(self.um2pixel)
+                        bot.add_um2pixel(self.um2pixel)
 
                         #this will toggle between the cropped frame display being the masked version and the original
                         if self.croppedmask_flag == False:
@@ -337,7 +337,7 @@ class VideoThread(QThread):
                         cell.add_area(area)
                         cell.add_blur(blur)
                         cell.set_avg_area(np.mean(cell.area_list))
-                        cell.add_pix2metric(self.um2pixel)
+                        cell.add_um2pixel(self.um2pixel)
                         
                         #this will toggle between the cropped frame display being the masked version and the original
                         if self.croppedmask_flag == False:
