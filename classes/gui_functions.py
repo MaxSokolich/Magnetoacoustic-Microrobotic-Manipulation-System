@@ -853,7 +853,6 @@ class MainWindow(QtWidgets.QMainWindow):
         
         #also update robot info
         if len(self.robots) > 0:
-            print(self.robots[-1][8])
             robot_diameter = round(np.sqrt(4*self.robots[-1][8]/np.pi),1)
             self.ui.vellcdnum.display(int(self.robots[-1][6]))
             self.ui.blurlcdnum.display(int(self.robots[-1][7]))
