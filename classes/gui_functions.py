@@ -932,9 +932,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.videopath == 0:
             try:
                 self.cap  = EasyPySpin.VideoCapture(0)
-                self.cap.set(cv2.CAP_PROP_AUTO_WB, False)
-                #self.cap.set(cv2.CAP_PROP_FPS, 30)
-                #self.cap.set(cv2.CAP_PROP_FPS, 30)
+   
                 self.cap.set(cv2.CAP_PROP_AUTO_WB, True)
                 self.cap.set(cv2.CAP_PROP_FPS, 24)
                 self.tbprint("Connected to FLIR Camera")
