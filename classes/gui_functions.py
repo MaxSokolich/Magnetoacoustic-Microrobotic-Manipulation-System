@@ -139,7 +139,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.controller_actions = Linux_Controller()
         elif "Windows" in platform.platform():
             self.tbprint("Detected OS:  Windows")
-            PORT = "COM4"
+            PORT = "COM3" #use 3 for one of them
             self.controller_actions = Windows_Controller()
         else:
             self.tbprint("undetected operating system")
@@ -400,7 +400,7 @@ class MainWindow(QtWidgets.QMainWindow):
                                      bot.area_list[-1],
                                      bot.avg_area,
                                      bot.cropped_frame[-1][0],bot.cropped_frame[-1][1],bot.cropped_frame[-1][2],bot.cropped_frame[-1][3],
-                                     bot.stuck_status_list[-1],
+                                     bot.um2pixel,
                                      bot.trajectory,
                                     ]
                 
@@ -419,6 +419,7 @@ class MainWindow(QtWidgets.QMainWindow):
                                      cell.area_list[-1],
                                      cell.avg_area,
                                      cell.cropped_frame[-1][0],cell.cropped_frame[-1][1], cell.cropped_frame[-1][2],cell.cropped_frame[-1][3],
+                                     cell.um2pixel
                                     ]
                 
                 self.cells.append(currentcell_params)
@@ -478,28 +479,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     def start_data_record(self):
         self.output_workbook = openpyxl.Workbook()
             
@@ -511,14 +490,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.robot_params_sheets = []
         for i in range(len(self.robots)):
             robot_sheet = self.output_workbook.create_sheet(title= "Robot {}".format(i+1))
-            robot_sheet.append(["Frame","Times","Pos X", "Pos Y", "Vel X", "Vel Y", "Vel Mag", "Blur", "Area", "Avg Area", "Cropped X","Cropped Y","Cropped W","Cropped H","Stuck?","Path X", "Path Y"])
+            robot_sheet.append(["Frame","Time(s)","Pos X (px)", "Pos Y (px)", "Vel X (um/s)", "Vel Y (um/s)", "Vel Mag (um/s)", "Blur", "Area (um^2)", "Avg Area (um^2)", "Cropped X (px)","Cropped Y (px)","Cropped W (px)","Cropped H (px)","um2pixel","Path X (px)", "Path Y (px)"])
             self.robot_params_sheets.append(robot_sheet)
         
         #create sheet for robot data
         self.cell_params_sheets = []
         for i in range(len(self.cells)):
             cell_sheet = self.output_workbook.create_sheet(title= "Cell {}".format(i+1))
-            cell_sheet.append(["Frame","Times","Pos X", "Pos Y", "Vel X", "Vel Y", "Vel Mag", "Blur", "Area", "Avg Area", "Cropped X","Cropped Y","Cropped W","Cropped H"])
+            cell_sheet.append(["Frame","Time(s)","Pos X (px)", "Pos Y (px)", "Vel X (um/s)", "Vel Y (um/s)", "Vel Mag (um/s)", "Blur", "Area (um^2)", "Avg Area (um^2)", "Cropped X (px)","Cropped Y (px)","Cropped W (px)","Cropped H (px)","um2pixel"])
             self.cell_params_sheets.append(cell_sheet)
 
         #tell update_actions function to start appending data to the sheets
@@ -726,7 +705,7 @@ class MainWindow(QtWidgets.QMainWindow):
                             robot.add_crop([x_1, y_1, w, h])
                             robot.add_area(0)
                             robot.add_blur(0)
-                            robot.add_stuck_status(0)
+                            robot.add_um2pixel(0)
                             robot.crop_length = self.ui.robotcroplengthbox.value()
                             self.tracker.robot_list.append(robot) #this has to include tracker.robot_list because I need to add it to that class
                         
@@ -744,7 +723,7 @@ class MainWindow(QtWidgets.QMainWindow):
                             cell.add_crop([x_1, y_1, w, h])
                             cell.add_area(0)
                             cell.add_blur(0)
-                            cell.add_stuck_status(0)
+                            cell.add_um2pixel(0)
                             cell.crop_length = self.ui.cellcroplengthbox.value()
                             
                             self.tracker.cell_list.append(cell) #this has to include tracker.robot_list because I need to add it to that class

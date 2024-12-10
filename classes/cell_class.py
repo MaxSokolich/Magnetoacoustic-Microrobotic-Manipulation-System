@@ -9,16 +9,16 @@ class Cell:
     """
 
     def __init__(self):
-        self.velocity_list = []  # stores cell velocities per frame
-        self.position_list = []  # stores cell positions per frame
+        self.velocity_list = []  # stores bot velocities per frame
+        self.position_list = []  # stores bot positions per frame
         self.blur_list = []  # stores calculated blur values per frame (AKA z-value)
         self.frame_list = []  # unused? stores frames
         self.area_list = []  # stores the cropped areas
-        self.cropped_frame = []  # cropped section of a frame representing the cell
-        self.avg_area = 0  # current average area of the cell in this frame
+        self.cropped_frame = []  # cropped section of a frame representing the bot
+        self.avg_area = 0  # current average area of the bot in this frame
         self.trajectory = []  # track points from manual pathing
         self.times = []  #time step per frame in seconds
-        self.stuck_status_list = [] #whether or not the cell is stuck or not
+        self.p2m = 0 #pixel 2 metric conversion
         self.crop_length = 40
         
 
@@ -49,20 +49,20 @@ class Cell:
     def add_time(self, time):
         self.times.append(time)
 
-    def add_stuck_status(self,stuck):
-        self.stuck_status_list.append(stuck)
+    def add_um2pixel(self,m2p):
+        self.add_um2pixel = m2p
     
 
     def as_dict(self) -> dict:
         """
-        Convert's the cell's current frame and position information into a
+        Convert's the bot's current frame and position information into a
         readable dictionary
 
         Args:
             None
 
         Returns:
-            dictionary of the cell's current position and frame information
+            dictionary of the bot's current position and frame information
         """
         mydict = {
             "Frame": self.frame_list,

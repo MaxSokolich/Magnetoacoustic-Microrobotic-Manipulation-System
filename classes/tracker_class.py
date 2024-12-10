@@ -207,8 +207,8 @@ class VideoThread(QThread):
                             vx = (current_pos[0] - bot.position_list[-self.memory][0]) * (self.fps.get_fps()/self.memory) * self.um2pixel
                             vy = (current_pos[1] - bot.position_list[-self.memory][1]) * (self.fps.get_fps()/self.memory) * self.um2pixel
 
-                            #vx = (current_pos[0] - bot.position_list[-1][0]) * (self.fps.get_fps()) / self.pix2metric
-                            #vy = (current_pos[1] - bot.position_list[-1][1]) * (self.fps.get_fps()) / self.pix2metric
+                            #vx = (current_pos[0] - bot.position_list[-1][0]) * (self.fps.get_fps()) / self.um2pixel
+                            #vy = (current_pos[1] - bot.position_list[-1][1]) * (self.fps.get_fps()) / self.um2pixel
                             magnitude = np.sqrt(vx**2 + vy**2)
 
                             velocity = [vx,vy,magnitude]
@@ -229,14 +229,7 @@ class VideoThread(QThread):
                         bot.add_area(area)
                         bot.add_blur(blur)
                         bot.set_avg_area(np.mean(bot.area_list))
-
-
-                        #stuck condition
-                        if len(bot.position_list) > self.memory and velocity[2] < 20 and self.parent.freq > 0:
-                            stuck_status = 1
-                        else:
-                            stuck_status = 0
-                        bot.add_stuck_status(stuck_status)
+                        bot.add_um2pixel(self.um2pixel)
 
                         #this will toggle between the cropped frame display being the masked version and the original
                         if self.croppedmask_flag == False:
@@ -344,13 +337,7 @@ class VideoThread(QThread):
                         cell.add_area(area)
                         cell.add_blur(blur)
                         cell.set_avg_area(np.mean(cell.area_list))
-                    
-                        #stuck condition
-                        if len(cell.position_list) > self.memory and velocity[2] < 20 and self.parent.freq > 0:
-                            stuck_status = 1
-                        else:
-                            stuck_status = 0
-                        cell.add_stuck_status(stuck_status)
+                        cell.add_um2pixel(self.um2pixel)
                         
                         #this will toggle between the cropped frame display being the masked version and the original
                         if self.croppedmask_flag == False:

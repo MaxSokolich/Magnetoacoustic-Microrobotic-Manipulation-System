@@ -26,6 +26,9 @@ float gradient_status;
 float equal_field_status;
 float acoustic_frequency;
 
+float T_switch;
+float phase_switch;
+float t2;
 
 
 
@@ -367,7 +370,16 @@ void loop()
       Bx_roll = (-sin(alpha) * sin(omega*t)) + (-cos(alpha) * cos(gamma)  * cos(omega*t)); 
       By_roll =  (cos(alpha) * sin(omega*t)) + (-sin(alpha) * cos(gamma) *  cos(omega*t)); 
       Bz_roll = sin(gamma) * cos(omega*t);
+      
+      //Tswitch = 1/(4*omega/(2*PI));
+      //phase_switch = sign(sin(2*PI*omega*t/T_switch ));
+      //t2 = phase_switch*t;
 
+      //Bx_roll = (-sin(alpha) * sin(omega*t2)) + (-cos(alpha) * cos(gamma)  * cos(omega*t2));  
+      //By_roll =  (cos(alpha) * sin(omega*t2)) + (-sin(alpha) * cos(gamma) *  cos(omega*t2)); 
+      //Bz_roll = sin(gamma) * cos(omega*t2);
+      
+      
        // condition for perpendicular field (psi cannot be 90)
        // condition for perpendicular field (psi cannot be 90)
       if (psi < PI/2){
