@@ -5,7 +5,7 @@ import random
 import math
 
 
-class algorithm:
+class p_algorithm:
    
     def __init__(self):
         self.reset()
@@ -51,6 +51,8 @@ class algorithm:
                 x,y,w,h = robot_list[-1].cropped_frame[-1]
                 cv2.rectangle(mask, (x, y), (x + w, y + h), (0, 0, 0), -1)
             
+
+            
                 pathplanner = RRT(mask, startpos, endpos, stepsize)
                 
                 
@@ -85,20 +87,18 @@ class algorithm:
                 self.alpha = np.arctan2(-direction_vec[1], direction_vec[0])
                 
                 if orientstatus == True:
-                    #self.Bx, self.By, self.Bz, self.alpha = self.orient(robot_list[-1], direction_vec)
-                    
-                    self.Bx, self.By, self.Bz, self.alpha = direction_vec[0]/np.linalg.norm(direction_vec), -(direction_vec[1]/np.linalg.norm(direction_vec)), 0,0
+                    self.Bx, self.By, self.Bz, self.alpha = self.orient(robot_list[-1], direction_vec)
                 else:
                     self.Bx, self.By, self.Bz = 0,0,0
 
-                #draw error arrow
+                """#draw error arrow
                 cv2.arrowedLine(
                     frame,
                     (int(robotx), int(roboty)),
                     (int(targetx), int(targety)),
                     [0, 0, 0],
                     3,
-                )
+                )"""
         
                 if error < arrivialthresh:
                     self.node += 1
@@ -109,7 +109,7 @@ class algorithm:
         if autoacoustic_status == True:
             self.acoustic_frequency = self.find_optimal_acoustic_freq(robot_list)
         
-  
+        
         self.actions = [self.Bx,self.By,self.Bz,self.alpha, self.gamma, self.freq, self.psi, self.acoustic_frequency]
         self.count += 1
 
@@ -198,7 +198,6 @@ class algorithm:
         alpha = np.arctan2(By, Bx)
 
         return Bx,By,Bz,alpha
-    
     
 
     def orient2(self, bot, direction_vec):
@@ -356,7 +355,7 @@ class RRT:
 
         i=1
         pathFound = False
-        for k in range(20000):#
+        for k in range(10000):#
             nx,ny = self.rnd_point(h,l)  #generate random point
             #print("Random points:",nx,ny)
 

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from itertools import combinations
 
 def is_prime(num):
@@ -29,3 +30,17 @@ if prime_combinations:
         print(f"Combination: {combo}, Sum: {sum_value}")
 else:
     print("No combinations found with prime sums.")
+=======
+import math
+
+def calculate_ricochet_angle(incident_angle):
+    # Ensure that the incident angle is between 0 and 360 degrees
+    incident_angle = incident_angle % 360
+    # Calculate the ricochet angle
+    return (2 * 180 - incident_angle) % 360
+
+# Calculate ricochet angles for angles from 0 to 359 degrees
+for angle in range(360):
+    ricochet_angle = calculate_ricochet_angle(angle)
+    print(f"Angle of incidence: {angle} degrees, Ricochet angle: {ricochet_angle} degrees")
+>>>>>>> 9e8c59663ff3bedc7f3b6aa0d5d186cac71fd8d7

@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QFileDialog
 import sys
 from PyQt5.QtGui import QWheelEvent
 from PyQt5 import QtGui
@@ -109,12 +109,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.save_status = False
         self.output_workbook = None
-        
+        self.ricochet_counter_x = [0]
+        self.ricochet_counter_y = [0]
         
         
         self.drawing = False
         self.acoustic_frequency = 0
         self.gradient_status = 0
+        self.equal_field_status = 0
         self.magnetic_field_list = []
         
         self.actions = [0,0,0,0,0,0,0,0,0,0,0,0,0]
@@ -141,7 +143,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.controller_actions = Linux_Controller()
         elif "Windows" in platform.platform():
             self.tbprint("Detected OS:  Windows")
-            PORT = "COM3"
+            PORT = "COM3" #use 3 for one of them
             self.controller_actions = Windows_Controller()
         else:
             self.tbprint("undetected operating system")
@@ -159,7 +161,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.halleffect.sensor_signal.connect(self.update_halleffect_sensor)
         self.halleffect.start()
         
-        
+        self.setFile()
         
         pygame.init()
         if pygame.joystick.get_count() == 0:
@@ -171,6 +173,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.tbprint("Connected to: "+str(self.joystick.get_name()))
         
       
+
+
      
 
         #tracker tab functions
@@ -201,6 +205,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
 
         self.ui.gradient_status_checkbox.toggled.connect(self.gradientcommand)
+        self.ui.equal_field_checkbox.toggled.connect(self.equalfieldcommand)
         self.ui.savedatabutton.clicked.connect(self.savedata)
         self.ui.VideoFeedLabel.installEventFilter(self)
         self.ui.recordbutton.clicked.connect(self.recordfunction_class)
@@ -230,21 +235,49 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.manualfieldBz.valueChanged.connect(self.get_slider_vals)
         self.ui.croppedmasktoggle.clicked.connect(self.showcroppedoriginal)
         self.ui.croppedrecordbutton.clicked.connect(self.croppedrecordfunction)
-        #self.ui.robotmask_radio.
-        #self.showFullScreen()
 
-    def spinbox_alphachanged(self):
-        self.ui.alphadial.setValue(self.ui.alphaspinBox.value())
-    
-    def dial_alphachanged(self):
-        self.ui.alphaspinBox.setValue(self.ui.alphadial.value())
+        self.ui.import_excel_actions.clicked.connect(self.read_excel_actions)
+        self.ui.apply_actions.clicked.connect(self.apply_excel_actions)
 
-    def gradientcommand(self):
-        self.gradient_status = int(self.ui.gradient_status_checkbox.isChecked())
+        self.excel_file_name = None
+        self.excel_actions_df = None
+        self.excel_actions_status = False
+
+
+        self.ui.makeshapebutton.clicked.connect(self.makeshape_trajectory)
+
+
+
+        
+    def makeshape_trajectory(self):
+        if self.tracker is not None:
+            if len(self.tracker.robot_list)>0:
+                node_number = self.ui.shapemaker_nodes.value()
+
+                center_x = self.video_width // 2
+                center_y = self.video_height // 2
+                radius = min(self.video_width, self.video_height) // 4  # Assume circle fits within a quarter of the image
+                
+                coordinates = []
+                for i in range(node_number):
+                    theta = 2 * np.pi * i / node_number
+                    x = center_x + int(radius * np.cos(theta))
+                    y = center_y + int(radius * np.sin(theta))
+                    coordinates.append((x, y))
+                
+                coordinates.append(coordinates[0])
+                
+                self.tracker.robot_list[-1].trajectory = coordinates 
+        
+        
+
+
 
     def update_actions(self, actions, stopped, robot_list, cell_list):
         self.frame_number+=1
+        #toggle between alpha and orient
         
+
         #output actions if control status is on
         if self.ui.autoacousticbutton.isChecked():
             self.acoustic_frequency  = actions[-1]   
@@ -287,12 +320,76 @@ class MainWindow(QtWidgets.QMainWindow):
             self.Bx = self.ui.manualfieldBx.value()/100
             self.By = self.ui.manualfieldBy.value()/100
             self.Bz = self.ui.manualfieldBz.value()/100
-            
             self.freq = self.ui.magneticfrequencydial.value()
             self.gamma = np.radians(self.ui.gammadial.value())
             self.psi = np.radians(self.ui.psidial.value())
-
             self.alpha = np.radians(self.ui.alphadial.value())
+            
+            #ricochet conditions, too close to the x or y borders flip the conditions
+            if self.ui.ricochet_effect_checkbox.isChecked():
+                if len(self.tracker.robot_list) > 0:
+                    for i in range(len(self.tracker.robot_list)):
+                        bot = self.tracker.robot_list[i]
+                        bot_pos_x = int(bot.position_list[-1][0])
+                        bot_pos_y = int(bot.position_list[-1][1])
+                        
+                        vx = bot.velocity_list[-1][0]
+                        vy = bot.velocity_list[-1][1] 
+                        boundary = 200
+                        #ricochet conditions, too close to the x or y borders
+                        
+                        if (bot_pos_x <= boundary and vx < 0) and (self.frame_number - self.ricochet_counter_x[-1] > 30):
+                            vx = -vx
+                            alpha = int(((np.degrees(np.arctan2(-vy,vx)) + 360) % 360))
+                            self.ui.alphadial.setValue(alpha)
+                            self.ricochet_counter_x.append(self.frame_number)
+
+                        if  (bot_pos_x >= self.video_width - boundary and vx > 0) and (self.frame_number - self.ricochet_counter_x[-1] > 30):   
+                            vx = -vx
+                            alpha = int(((np.degrees(np.arctan2(-vy,vx)) + 360) % 360))
+                            self.ui.alphadial.setValue(alpha)
+                            self.ricochet_counter_x.append(self.frame_number)                  
+                        
+                        if (bot_pos_y <= boundary and vy < 0) and (self.frame_number - self.ricochet_counter_y[-1] > 30):
+                            vy = -vy
+                            alpha = int(((np.degrees(np.arctan2(-vy,vx)) + 360) % 360))
+                            self.ui.alphadial.setValue(alpha)
+                            self.ricochet_counter_y.append(self.frame_number)
+            
+                        if (bot_pos_y >= self.video_height - boundary and vy > 0) and (self.frame_number - self.ricochet_counter_y[-1] > 30):# and (self.frame_number - self.ricochet_counter_y[-1] > 30): #if the bot hits the top wall   
+                            vy = -vy
+                            alpha = int(((np.degrees(np.arctan2(-vy,vx)) + 360) % 360))
+                            self.ui.alphadial.setValue(alpha)
+                            self.ricochet_counter_y.append(self.frame_number)
+                           
+                    
+                    
+             
+                        
+            
+
+
+        elif self.excel_actions_status == True and self.excel_actions_df is not None:            
+            self.actions_counter +=1
+            if self.actions_counter < self.excel_actions_df['Frame'].iloc[-1]:
+                filtered_row = self.excel_actions_df[self.excel_actions_df['Frame'] == self.actions_counter]
+                
+                self.Bx = float(filtered_row["Bx"])
+                self.By = float(filtered_row["By"])
+                self.Bz = float(filtered_row["Bz"])
+                self.alpha = float(filtered_row["Alpha"])
+                self.gamma = float(filtered_row["Gamma"])
+                self.freq = float(filtered_row["Rolling Frequency"])
+                self.psi = float(filtered_row["Psi"])
+                self.gradient = float(filtered_row["Gradient?"])
+                self.equal_field_status = float(filtered_row["Equal Field?"])
+                self.acoustic_freq = float(filtered_row["Acoustic Frequency"])
+            
+            else:
+                self.excel_actions_status = False
+                self.ui.apply_actions.setText("Apply")
+                self.ui.apply_actions.setChecked(False)
+                self.apply_actions(False)
             
         
 
@@ -309,12 +406,13 @@ class MainWindow(QtWidgets.QMainWindow):
                                      bot.area_list[-1],
                                      bot.avg_area,
                                      bot.cropped_frame[-1][0],bot.cropped_frame[-1][1],bot.cropped_frame[-1][2],bot.cropped_frame[-1][3],
-                                     bot.stuck_status_list[-1],
+                                     bot.um2pixel,
                                      bot.trajectory,
                                     ]
                 
                 self.robots.append(currentbot_params)
-        
+           
+      
         #DEFINE CURRENT CELL PARAMS TO A LIST
         if len(cell_list) > 0:
             self.cells = []
@@ -327,18 +425,20 @@ class MainWindow(QtWidgets.QMainWindow):
                                      cell.area_list[-1],
                                      cell.avg_area,
                                      cell.cropped_frame[-1][0],cell.cropped_frame[-1][1], cell.cropped_frame[-1][2],cell.cropped_frame[-1][3],
+                                     cell.um2pixel
                                     ]
                 
                 self.cells.append(currentcell_params)
         
         #DEFINE CURRENT MAGNETIC FIELD OUTPUT TO A LIST 
-        self.actions = [self.frame_number, self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.gradient_status,
-                        self.acoustic_frequency, self.sensorBx, self.sensorBy, self.sensorBz] 
         
+        self.actions = [self.frame_number, self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.gradient_status,self.equal_field_status,
+                        self.acoustic_frequency, self.sensorBx, self.sensorBy, self.sensorBz] 
+       
         self.magnetic_field_list.append(self.actions)
         self.apply_actions(True)
         
-
+        
 
         #IF SAVE STATUS THEN CONTINOUSLY SAVE THE CURRENT ROBOT PARAMS AND MAGNETIC FIELD PARAMS TO AN EXCEL ROWS
         if self.save_status == True:
@@ -350,25 +450,60 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
 
+
+
+    def apply_actions(self, status):
+        #the purpose of this function is to output the actions via arduino, 
+        # show the actions via the simulator
+        # and record the actions by appending the field_list
+        if self.freq > 0:
+            if self.ui.swimradio.isChecked():
+                self.simulator.roll = False
+            elif self.ui.rollradio.isChecked():
+                self.alpha = self.alpha - np.pi/2
+                self.simulator.roll = True
+
+        #zero output
+        if status == False:
+            self.manual_status = False
+            self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.acoustic_frequency = 0,0,0,0,0,0,0,0
+
+        #output current actions to simulator
+
+        self.simulator.Bx = self.Bx
+        self.simulator.By = self.By
+        self.simulator.Bz = self.Bz
+        self.simulator.alpha = self.alpha
+        self.simulator.gamma = self.gamma
+        self.simulator.psi = self.psi
+        self.simulator.freq = self.freq
+        self.simulator.omega = 2 * np.pi * self.simulator.freq
+
+        #send arduino commands
+        self.arduino.send(self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.gradient_status, self.equal_field_status, self.acoustic_frequency)
+
+
+
+
     def start_data_record(self):
         self.output_workbook = openpyxl.Workbook()
             
         #create sheet for magneti field actions
         self.magnetic_field_sheet = self.output_workbook.create_sheet(title="Magnetic Field Actions")#self.output_workbook.active
-        self.magnetic_field_sheet.append(["Frame","Bx", "By", "Bz", "Alpha", "Gamma", "Rolling Frequency", "Psi", "Gradient?", "Acoustic Frequency","Sensor Bx", "Sensor By", "Sensor Bz"])
+        self.magnetic_field_sheet.append(["Frame","Bx", "By", "Bz", "Alpha", "Gamma", "Rolling Frequency", "Psi", "Gradient?","Equal Field?", "Acoustic Frequency","Sensor Bx", "Sensor By", "Sensor Bz"])
 
         #create sheet for robot data
         self.robot_params_sheets = []
         for i in range(len(self.robots)):
             robot_sheet = self.output_workbook.create_sheet(title= "Robot {}".format(i+1))
-            robot_sheet.append(["Frame","Times","Pos X", "Pos Y", "Vel X", "Vel Y", "Vel Mag", "Blur", "Area", "Avg Area", "Cropped X","Cropped Y","Cropped W","Cropped H","Stuck?","Path X", "Path Y"])
+            robot_sheet.append(["Frame","Time(s)","Pos X (px)", "Pos Y (px)", "Vel X (um/s)", "Vel Y (um/s)", "Vel Mag (um/s)", "Blur", "Area (um^2)", "Avg Area (um^2)", "Cropped X (px)","Cropped Y (px)","Cropped W (px)","Cropped H (px)","um2pixel","Path X (px)", "Path Y (px)"])
             self.robot_params_sheets.append(robot_sheet)
         
         #create sheet for robot data
         self.cell_params_sheets = []
         for i in range(len(self.cells)):
             cell_sheet = self.output_workbook.create_sheet(title= "Cell {}".format(i+1))
-            cell_sheet.append(["Frame","Times","Pos X", "Pos Y", "Vel X", "Vel Y", "Vel Mag", "Blur", "Area", "Avg Area", "Cropped X","Cropped Y","Cropped W","Cropped H"])
+            cell_sheet.append(["Frame","Time(s)","Pos X (px)", "Pos Y (px)", "Vel X (um/s)", "Vel Y (um/s)", "Vel Mag (um/s)", "Blur", "Area (um^2)", "Avg Area (um^2)", "Cropped X (px)","Cropped Y (px)","Cropped W (px)","Cropped H (px)","um2pixel"])
             self.cell_params_sheets.append(cell_sheet)
 
         #tell update_actions function to start appending data to the sheets
@@ -415,38 +550,23 @@ class MainWindow(QtWidgets.QMainWindow):
             self.date = datetime.now().strftime('%Y.%m.%d-%H.%M.%S')
             self.stop_data_record()
             
-
-    def apply_actions(self, status):
-        #the purpose of this function is to output the actions via arduino, 
-        # show the actions via the simulator
-        # and record the actions by appending the field_list
+    def read_excel_actions(self):
+        options = QFileDialog.Options()
+        self.excel_file_name, _ = QFileDialog.getOpenFileName(self, "Open Excel File", "", "Excel Files (*.xlsx *.xls)", options=options)
+        if self.excel_file_name:
+            self.excel_actions_df = pd.read_excel(self.excel_file_name)
+            
         
-        #toggle between alpha and orient
-        if self.freq > 0:
-            if self.ui.swimradio.isChecked():
-                self.simulator.roll = False
-            elif self.ui.rollradio.isChecked():
-                self.alpha = self.alpha - np.pi/2
-                self.simulator.roll = True
-
-        #zero output
-        if status == False:
-            self.manual_status = False
-            self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.acoustic_frequency = 0,0,0,0,0,0,0,0
-
-        #output current actions to simulator
-
-        self.simulator.Bx = self.Bx
-        self.simulator.By = self.By
-        self.simulator.Bz = self.Bz
-        self.simulator.alpha = self.alpha
-        self.simulator.gamma = self.gamma
-        self.simulator.psi = self.psi
-        self.simulator.freq = self.freq/15
-        self.simulator.omega = 2 * np.pi * self.simulator.freq
-
-         #send arduino commands
-        self.arduino.send(self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.gradient_status, self.acoustic_frequency)
+    def apply_excel_actions(self):
+        if self.ui.apply_actions.isChecked():
+            self.excel_actions_status = True
+            self.actions_counter = 0
+            self.ui.apply_actions.setText("Stop")
+        else:
+            self.excel_actions_status = False
+            self.ui.apply_actions.setText("Apply")
+            self.apply_actions(False)
+    
     
 
 
@@ -607,7 +727,7 @@ class MainWindow(QtWidgets.QMainWindow):
                             robot.add_crop([x_1, y_1, w, h])
                             robot.add_area(0)
                             robot.add_blur(0)
-                            robot.add_stuck_status(0)
+                            robot.add_um2pixel(0)
                             robot.crop_length = self.ui.robotcroplengthbox.value()
                             self.tracker.robot_list.append(robot) #this has to include tracker.robot_list because I need to add it to that class
                         
@@ -625,7 +745,7 @@ class MainWindow(QtWidgets.QMainWindow):
                             cell.add_crop([x_1, y_1, w, h])
                             cell.add_area(0)
                             cell.add_blur(0)
-                            cell.add_stuck_status(0)
+                            cell.add_um2pixel(0)
                             cell.crop_length = self.ui.cellcroplengthbox.value()
                             
                             self.tracker.cell_list.append(cell) #this has to include tracker.robot_list because I need to add it to that class
@@ -682,33 +802,35 @@ class MainWindow(QtWidgets.QMainWindow):
     def update_image(self, frame):
         """Updates the image_label with a new opencv image"""
         #display projection
-        if self.control_status == True or self.joystick_status == True or self.manual_status == True:
-            self.projection.roll = self.ui.rollradio.isChecked()
-            self.projection.gradient = self.gradient_status
+        if self.ui.toggledisplayvisualscheckbox.isChecked():
+            if self.control_status == True or self.joystick_status == True or self.manual_status == True or self.excel_actions_status == True :
+                self.projection.roll = self.ui.rollradio.isChecked()
+                self.projection.gradient = self.gradient_status
 
 
-            frame, self.projection.draw_sideview(frame,self.Bx,self.By,self.Bz,self.alpha,self.gamma,self.video_width,self.video_height)
-            frame, self.projection.draw_topview(frame,self.Bx,self.By,self.Bz,self.alpha,self.gamma,self.video_width,self.video_height)
+                frame, self.projection.draw_sideview(frame,self.Bx,self.By,self.Bz,self.alpha,self.gamma,self.video_width,self.video_height)
+                frame, self.projection.draw_topview(frame,self.Bx,self.By,self.Bz,self.alpha,self.gamma,self.video_width,self.video_height)
+                
+                rotatingfield = "alpha: {:.0f}, gamma: {:.0f}, psi: {:.0f}, freq: {:.0f}".format(np.degrees(self.alpha)+90, np.degrees(self.gamma), np.degrees(self.psi), self.freq) #adding 90 to alpha for display purposes only
+                
+                cv2.putText(frame, rotatingfield,
+                    (int(self.video_width / 1.8),int(self.video_height / 20)),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    fontScale=1.5, 
+                    thickness=3,
+                    color = (255, 255, 255),
+                )
             
-            rotatingfield = "alpha: {:.0f}, gamma: {:.0f}, psi: {:.0f}, freq: {:.0f}".format(np.degrees(self.alpha)+90, np.degrees(self.gamma), np.degrees(self.psi), self.freq) #adding 90 to alpha for display purposes only
-            cv2.putText(frame, rotatingfield,
-                (int(self.video_width / 1.8),int(self.video_height / 20)),
+            acousticfreq = f'{self.acoustic_frequency:,} Hz'
+            cv2.putText(frame, acousticfreq,
+                (int(self.video_width / 8),int(self.video_height / 14)),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 fontScale=1.5, 
                 thickness=3,
                 color = (255, 255, 255),
             )
-        
-        acousticfreq = f'{self.acoustic_frequency:,} Hz'
-        cv2.putText(frame, acousticfreq,
-            (int(self.video_width / 8),int(self.video_height / 14)),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            fontScale=1.5, 
-            thickness=3,
-            color = (255, 255, 255),
-        )
 
-        
+            
         
 
         
@@ -812,9 +934,19 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.cap.set(cv2.CAP_PROP_AUTO_WB, False)
                 #self.cap.set(cv2.CAP_PROP_FPS, 30)
                 #self.cap.set(cv2.CAP_PROP_FPS, 30)
+                self.cap.set(cv2.CAP_PROP_AUTO_WB, True)
+                self.cap.set(cv2.CAP_PROP_FPS, 24)
+                self.tbprint("Connected to FLIR Camera")
+
+                if not self.cap.isOpened():
+                    self.cap  = cv2.VideoCapture(0) 
+                    self.tbprint("No EasyPySpin Camera Available")
+            
             except Exception:
                 self.cap  = cv2.VideoCapture(0) 
                 self.tbprint("No EasyPySpin Camera Available")
+                
+                
             self.ui.pausebutton.hide()
             self.ui.leftbutton.hide()
             self.ui.rightbutton.hide()
@@ -880,7 +1012,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def track(self):
         if self.videopath is not None:
             if self.ui.trackbutton.isChecked():
-                    
+                self.frame_number = 0
                 self.setFile()
                 
                 self.tracker = VideoThread(self)
@@ -964,7 +1096,18 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.tracker.croppedmask_flag = True
 
 
-         
+    def spinbox_alphachanged(self):
+        self.ui.alphadial.setValue(self.ui.alphaspinBox.value())
+    
+    def dial_alphachanged(self):
+        self.ui.alphaspinBox.setValue(self.ui.alphadial.value())
+
+    def gradientcommand(self):
+        self.gradient_status = int(self.ui.gradient_status_checkbox.isChecked())
+
+    def equalfieldcommand(self):
+        self.equal_field_status = int(self.ui.equal_field_checkbox.isChecked())
+
     def get_objective(self):
         if self.tracker is not None:
             self.tracker.objective = self.ui.objectivebox.value()
@@ -1069,7 +1212,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.ui.gammalabel.setText("Gamma: {}".format(gamma))
         self.ui.psilabel.setText("Psi: {}".format(psi))
-        self.ui.rollingfrequencylabel.setText("Freq: {}".format(magneticfreq))
+        #self.ui.rollingfrequencylabel.setText("Freq: {}".format(magneticfreq))
 
          
         
@@ -1093,7 +1236,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.arrivalthreshbox.setValue(100)
         self.ui.gammadial.setSliderPosition(90)
         self.ui.psidial.setSliderPosition(90)
-        self.ui.magneticfrequencydial.setSliderPosition(10)
+        self.ui.magneticfrequencydial.setValue(10)
         self.ui.acousticfreq_spinBox.setValue(1000000)
         self.ui.objectivebox.setValue(10)
         self.ui.exposurebox.setValue(5000)

@@ -23,7 +23,13 @@ float gamma;
 float rolling_frequency;
 float psi;
 float gradient_status;
+float equal_field_status;
 float acoustic_frequency;
+
+float T_switch;
+float phase_switch;
+float t2;
+
 
 
 int phase = 0; 
@@ -337,7 +343,8 @@ void loop()
    rolling_frequency = action[5]; 
    psi = action[6]; 
    gradient_status = action[7];
-   acoustic_frequency = action[8];
+   equal_field_status = action[8];
+   acoustic_frequency = action[9];
    
 
    if (acoustic_frequency != 0){
@@ -363,7 +370,16 @@ void loop()
       Bx_roll = (-sin(alpha) * sin(omega*t)) + (-cos(alpha) * cos(gamma)  * cos(omega*t)); 
       By_roll =  (cos(alpha) * sin(omega*t)) + (-sin(alpha) * cos(gamma) *  cos(omega*t)); 
       Bz_roll = sin(gamma) * cos(omega*t);
+      
+      //Tswitch = 1/(4*omega/(2*PI));
+      //phase_switch = sign(sin(2*PI*omega*t/T_switch ));
+      //t2 = phase_switch*t;
 
+      //Bx_roll = (-sin(alpha) * sin(omega*t2)) + (-cos(alpha) * cos(gamma)  * cos(omega*t2));  
+      //By_roll =  (cos(alpha) * sin(omega*t2)) + (-sin(alpha) * cos(gamma) *  cos(omega*t2)); 
+      //Bz_roll = sin(gamma) * cos(omega*t2);
+      
+      
        // condition for perpendicular field (psi cannot be 90)
        // condition for perpendicular field (psi cannot be 90)
       if (psi < PI/2){
@@ -402,14 +418,18 @@ void loop()
    else{
        magnitude = max(sqrt(Bx_uniform*Bx_uniform + By_uniform*By_uniform + Bz_uniform*Bz_uniform), 
                        sqrt(Bx_roll*Bx_roll + By_roll*By_roll + Bz_roll*Bz_roll));
-                       
+
+
        Bx_final = magnitude * (Bx / sqrt(Bx*Bx + By*By + Bz*Bz));
        By_final = magnitude * (By / sqrt(Bx*Bx + By*By + Bz*Bz));
        Bz_final = magnitude * (Bz / sqrt(Bx*Bx + By*By + Bz*Bz));
-
-       //Bx_final = Bx_final;
-       //By_final = By_final * .75;
-       //Bz_final = Bz_final * .5;
+       
+       if (equal_field_status == 1){
+           Bx_final = Bx_final;
+           By_final = By_final * .6;
+           Bz_final = Bz_final * .3;
+       }
+          
        
    }
    
@@ -419,6 +439,7 @@ void loop()
       //y gradient
       if (By_final > 0){
         set1(By_final);
+        
       }
       else if (By_final < 0){
         set3(By_final);
@@ -462,6 +483,7 @@ void loop()
       set5(Bz_final);
       set6(-Bz_final);
    }
+
 
     }
   

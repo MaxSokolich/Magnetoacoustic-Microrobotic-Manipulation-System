@@ -76,7 +76,7 @@ class VideoThread(QThread):
         else:
             self.totalnumframes = 0
            
-        self.pix2metric =  0.28985 * self.objective #.29853 * self.objective#0.28985 * self.objective  
+        self.um2pixel =  3.35 / self.objective # each pixel is 3.35 um in size at 1x. [um] / [px]
         
             #at 10x objective
             #width_in_pixels = 2448 #pixels
@@ -184,7 +184,7 @@ class VideoThread(QThread):
                         for contour in contours:
                             if cv2.contourArea(contour) > cv2.contourArea(max_cnt): 
                                 max_cnt = contour
-                        area = cv2.contourArea(max_cnt)* (1/self.pix2metric**2)
+                        area = cv2.contourArea(max_cnt)* (self.um2pixel**2)
                         
                         #find the center of mass from the mask
                         szsorted=np.argsort(sizes)
@@ -204,8 +204,11 @@ class VideoThread(QThread):
 
                         #find velocity:
                         if len(bot.position_list) > self.memory:
-                            vx = (current_pos[0] - bot.position_list[-self.memory][0]) * (self.fps.get_fps()/self.memory) / self.pix2metric
-                            vy = (current_pos[1] - bot.position_list[-self.memory][1]) * (self.fps.get_fps()/self.memory) / self.pix2metric
+                            vx = (current_pos[0] - bot.position_list[-self.memory][0]) * (self.fps.get_fps()/self.memory) * self.um2pixel
+                            vy = (current_pos[1] - bot.position_list[-self.memory][1]) * (self.fps.get_fps()/self.memory) * self.um2pixel
+
+                            #vx = (current_pos[0] - bot.position_list[-1][0]) * (self.fps.get_fps()) / self.um2pixel
+                            #vy = (current_pos[1] - bot.position_list[-1][1]) * (self.fps.get_fps()) / self.um2pixel
                             magnitude = np.sqrt(vx**2 + vy**2)
 
                             velocity = [vx,vy,magnitude]
@@ -226,14 +229,7 @@ class VideoThread(QThread):
                         bot.add_area(area)
                         bot.add_blur(blur)
                         bot.set_avg_area(np.mean(bot.area_list))
-
-
-                        #stuck condition
-                        if len(bot.position_list) > self.memory and velocity[2] < 20 and self.parent.freq > 0:
-                            stuck_status = 1
-                        else:
-                            stuck_status = 0
-                        bot.add_stuck_status(stuck_status)
+                        bot.add_um2pixel(self.um2pixel)
 
                         #this will toggle between the cropped frame display being the masked version and the original
                         if self.croppedmask_flag == False:
@@ -298,7 +294,7 @@ class VideoThread(QThread):
                         for contour in contours:
                             if cv2.contourArea(contour) > cv2.contourArea(max_cnt): 
                                 max_cnt = contour
-                        area = cv2.contourArea(max_cnt)* (1/self.pix2metric**2)
+                        area = cv2.contourArea(max_cnt)* (self.um2pixel**2)
                     
                         
                         #find the center of mass from the mask
@@ -319,8 +315,8 @@ class VideoThread(QThread):
 
                         #find velocity:
                         if len(cell.position_list) > self.memory:
-                            vx = (current_pos[0] - cell.position_list[-self.memory][0]) * (self.fps.get_fps()/self.memory) / self.pix2metric
-                            vy = (current_pos[1] - cell.position_list[-self.memory][1]) * (self.fps.get_fps()/self.memory) / self.pix2metric
+                            vx = (current_pos[0] - cell.position_list[-self.memory][0]) * (self.fps.get_fps()/self.memory) * self.um2pixel
+                            vy = (current_pos[1] - cell.position_list[-self.memory][1]) * (self.fps.get_fps()/self.memory) * self.um2pixel
                             magnitude = np.sqrt(vx**2 + vy**2)
 
                             velocity = [vx,vy,magnitude]
@@ -341,13 +337,7 @@ class VideoThread(QThread):
                         cell.add_area(area)
                         cell.add_blur(blur)
                         cell.set_avg_area(np.mean(cell.area_list))
-                    
-                        #stuck condition
-                        if len(cell.position_list) > self.memory and velocity[2] < 20 and self.parent.freq > 0:
-                            stuck_status = 1
-                        else:
-                            stuck_status = 0
-                        cell.add_stuck_status(stuck_status)
+                        cell.add_um2pixel(self.um2pixel)
                         
                         #this will toggle between the cropped frame display being the masked version and the original
                         if self.croppedmask_flag == False:
@@ -374,66 +364,71 @@ class VideoThread(QThread):
 
 
     def display_hud(self, frame):
-        
         display_frame = frame.copy()
-        if len(self.robot_list) > 0:
-            color = plt.cm.rainbow(np.linspace(1, 0.2, len(self.robot_list))) * 255
+        if self.parent.ui.toggledisplayvisualscheckbox.isChecked():
+            
+            if len(self.robot_list) > 0:
+                color = plt.cm.rainbow(np.linspace(1, 0.2, len(self.robot_list))) * 255
+        
+                for (botnum,botcolor) in zip(range(len(self.robot_list)), color):
+                    try:
+                        bot  = self.robot_list[botnum]
+                        x1, y1, w, h = bot.cropped_frame[-1]
+
+                        cv2.rectangle(display_frame, (x1, y1), (x1 + w, y1 + h), botcolor, 4)
+                        cv2.putText(display_frame,str(botnum+1),(x1 + w,y1 + h),cv2.FONT_HERSHEY_SIMPLEX, fontScale=1.5, thickness=3,color = (255, 255, 255))
+                        
+                        pts = np.array(bot.position_list, np.int32)
+                        cv2.polylines(display_frame, [pts], False, botcolor, 5)
+
+                        targets = bot.trajectory
+                        if len(targets) > 0:
+                            pts = np.array(bot.trajectory, np.int32)
+                            cv2.polylines(display_frame, [pts], False, (0, 0, 255), 5)
+                            tar = targets[-1]
+                            cv2.circle(display_frame,(int(tar[0]), int(tar[1])),10,(0,0,0), -1,)
+                    except Exception:
+                        pass
+            
+            if len(self.cell_list) > 0:
+                color = plt.cm.rainbow(np.linspace(0.5, 0, len(self.cell_list))) *0
+                for (cellnum,cellcolor) in zip(range(len(self.cell_list)),color):
+                    cell  = self.cell_list[cellnum]
+                    x1, y1, w, h = cell.cropped_frame[-1]
+
+                    cv2.rectangle(display_frame, (x1, y1), (x1 + w, y1 + h), (0,255,0), 5)
+                    cv2.putText(display_frame,str(cellnum+1),(x1 + w, y1 + h),cv2.FONT_HERSHEY_SIMPLEX, fontScale=1.5, thickness=3,color = (255, 255, 255))
+                    
+                    pts = np.array(cell.position_list, np.int32)
+                    cv2.polylines(display_frame, [pts], False, cellcolor, 5)
+
+            
+            cv2.putText(display_frame,"fps:"+str(int(self.fps.get_fps())),
+                        (int(self.width  / 80),int(self.height / 14)),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        fontScale=1.5, 
+                        thickness=3,
+                        color = (255, 255, 255))
+            
+            
+            
+            cv2.putText(display_frame,"100 um",
+                (int(self.width / 80),int(self.height / 30)),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                fontScale=1.5, 
+                thickness=3,
+                color = (255, 255, 255),
+            
+            )
+            cv2.line(
+                display_frame, 
+                (int(self.width / 8),int(self.height /40)),
+                (int(self.width / 8) + int(100 / (self.um2pixel)),int(self.height / 40)), 
+                (255, 255, 255), 
+                thickness=5
+            )
+            
     
-            for (botnum,botcolor) in zip(range(len(self.robot_list)), color):
-               
-                bot  = self.robot_list[botnum]
-                x1, y1, w, h = bot.cropped_frame[-1]
-
-                cv2.rectangle(display_frame, (x1, y1), (x1 + w, y1 + h), botcolor, 4)
-                cv2.putText(display_frame,str(botnum+1),(x1 + w,y1 + h),cv2.FONT_HERSHEY_SIMPLEX, fontScale=1.5, thickness=3,color = (255, 255, 255))
-                
-                pts = np.array(bot.position_list, np.int32)
-                cv2.polylines(display_frame, [pts], False, botcolor, 5)
-
-                targets = bot.trajectory
-                if len(targets) > 0:
-                    pts = np.array(bot.trajectory, np.int32)
-                    cv2.polylines(display_frame, [pts], False, (0, 0, 255), 5)
-                    tar = targets[-1]
-                    cv2.circle(display_frame,(int(tar[0]), int(tar[1])),10,(0,0,0), -1,)
-        
-        if len(self.cell_list) > 0:
-            color = plt.cm.rainbow(np.linspace(0.5, 0, len(self.cell_list))) *0
-            for (cellnum,cellcolor) in zip(range(len(self.cell_list)),color):
-                cell  = self.cell_list[cellnum]
-                x1, y1, w, h = cell.cropped_frame[-1]
-
-                cv2.rectangle(display_frame, (x1, y1), (x1 + w, y1 + h), (0,255,0), 5)
-                cv2.putText(display_frame,str(cellnum+1),(x1 + w, y1 + h),cv2.FONT_HERSHEY_SIMPLEX, fontScale=1.5, thickness=3,color = (255, 255, 255))
-                
-                pts = np.array(cell.position_list, np.int32)
-                cv2.polylines(display_frame, [pts], False, cellcolor, 5)
-
-        
-        cv2.putText(display_frame,"fps:"+str(int(self.fps.get_fps())),
-                    (int(self.width  / 80),int(self.height / 14)),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    fontScale=1.5, 
-                    thickness=3,
-                    color = (255, 255, 255))
-        
-        
-        
-        cv2.putText(display_frame,"100 um",
-            (int(self.width / 80),int(self.height / 30)),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            fontScale=1.5, 
-            thickness=3,
-            color = (255, 255, 255),
-          
-        )
-        cv2.line(
-            display_frame, 
-            (int(self.width / 8),int(self.height /40)),
-            (int(self.width / 8) + int(100 * (self.pix2metric)),int(self.height / 40)), 
-            (255, 255, 255), 
-            thickness=5
-        )
 
         return display_frame
 
@@ -464,7 +459,7 @@ class VideoThread(QThread):
             if ret:       
                 if self.totalnumframes ==0:         
                     self.cap.set(cv2.CAP_PROP_EXPOSURE, self.exposure)
-                    self.pix2metric =  0.28985 * self.objective
+                    self.um2pixel =   3.35 / self.objective
                     
 
                 #step 1 track robot
@@ -503,6 +498,8 @@ class VideoThread(QThread):
                 else:
                     actions = [0,0,0,0,0,0,0,0]
                     stopped = True    
+                
+                
                     
                 #gather most recent robot params
                 

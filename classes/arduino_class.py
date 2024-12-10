@@ -41,25 +41,27 @@ class ArduinoHandler:
         else:
             self.printer(f"Connection already initialized at port {self.port}, new port {port} ignored")
 
-    def send(self, Bx, By, Bz, alpha, gamma, freq, psi, gradient_status, acoustic_freq) -> None:
+    def send(self, Bx, By, Bz, alpha, gamma, freq, psi, gradient_status, equal_field_status, acoustic_freq) -> None:
         """
         sends action commands to arduino
 
          Args:
             actions = [Bx, By, Bz, alpha, gamma, freq]
         """
+        
         alpha = round(alpha,3)
         gamma = round(gamma,3)
         psi = round(psi,3)
+        freq = round(freq,3)
         Bx = round(Bx,3)
         By = round(By,3)
         Bz = round(Bz,3)
 
-        data = [float(Bx), float(By), float(Bz), float(alpha), float(gamma), float(freq),float(psi), float(gradient_status), float(acoustic_freq)]
+        data = [float(Bx), float(By), float(Bz), float(alpha), float(gamma), float(freq),float(psi), float(gradient_status), float(equal_field_status), float(acoustic_freq)]
         if self.conn is None:
             #self.printer("Connection not initialized..."+ str(data))  
             #self.printer("No Connection:  "+ "Bx: {},    By: {},    Bz: {},    alpha: {},    gamma: {},    freq: {},    psi: {}".format(Bx,By,Bz,alpha,gamma,freq,psi)) 
-            self.printer("No Connection:  "+ "[Bx, By, Bz, alpha, gamma, freq, psi, gradient, acoustic_freq] = "+str(data)) 
+            self.printer("No Connection:  "+ "[Bx, By, Bz, alpha, gamma, freq, psi, gradient, equal_field, acoustic_freq] = "+str(data)) 
             #pass
         else:
             #Bx = round(Bx,3)
@@ -82,7 +84,7 @@ class ArduinoHandler:
         if self.conn is not None:
          
             self.printer(f"Closing connection at port {self.port}")
-            self.send(0,0,0,0,0,0,0,0,0)
+            self.send(0,0,0,0,0,0,0,0,0,0)
             self.conn.close()
    
             
@@ -100,7 +102,7 @@ if __name__ == "__main__":
     arduino.connect(PORT)
     time.sleep(1)
 
-    arduino.send(1,0,0,0,0,0,0,0,0)
+    arduino.send(0,0,0,0,0,0,0,0,0)
     print("sending")
     time.sleep(5)
     arduino.send(0,0,0,0,0,0,0,0,0)
