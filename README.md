@@ -37,6 +37,8 @@ a) Model Predictive Control (MPC) of a magnetiized sender cell bot following an 
 
 
 # Instructions for initial installation of system components on Nvidia Jetson AGX Orin:
+Note*** Software and system also works on Windows and MAC-OS. Jetson Orin System not neccesary.
+
 1) need to configure nvme ssd using nvidia sdkmanager:  
     - https://developer.nvidia.com/embedded/learn-get-started-jetson-agx-orin-devkit
 
