@@ -190,15 +190,15 @@ class Windows_Controller:
 
                     elif rx == 0 and ry > 0:
                         self.alpha = np.pi/2
-                        self.freq = int(np.sqrt((rx)**2 + (ry)**2)*20)
+                        self.freq = 1 #int(np.sqrt((rx)**2 + (ry)**2)*20)
                         
                     elif rx == 0 and ry < 0:
                         self.alpha = -np.pi/2
-                        self.freq = int(np.sqrt((rx)**2 + (ry)**2)*20)
+                        self.freq = 1 #int(np.sqrt((rx)**2 + (ry)**2)*20)
                     else:
                         angle = np.arctan2(ry,rx) 
                         self.alpha = round(angle,3)
-                        self.freq = int(np.sqrt((rx)**2 + (ry)**2)*20)
+                        self.freq = 1 #int(np.sqrt((rx)**2 + (ry)**2)*20)
 
 
                 if event.axis == 4: #LT
@@ -216,17 +216,26 @@ class Windows_Controller:
             elif event.type == pygame.JOYBUTTONDOWN:
                 # Joystick button press event
                 button = event.button
+                
                 if button == 0: #X
-                    self.acoustic_status = 1
-                if button == 3: #triangle
                     pass
-
+                   
+                
+                
                 if button == 2: #square
                     self.typ = 1 #spin clockwise
                     self.freq = 1
+
+
                 if button == 1: #circle
                     self.typ = 2 #spin counter clockwise
                     self.freq = 1
+
+                if button == 3: #triangle
+                    pass
+
+                
+                
                 if button == 10: #rb
                     self.Bz = 1
                 if button == 9: #lb
@@ -264,6 +273,7 @@ class Windows_Controller:
                         self.freq,
                         self.psi,
                         self.acoustic_frequency]
+        
 
         return self.actions
 

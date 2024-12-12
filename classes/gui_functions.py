@@ -314,6 +314,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.gamma = np.radians(self.ui.gammadial.value())
                 if self.freq != 0:
                     self.freq = self.ui.magneticfrequencydial.value()
+                    
+                        
         
         
         elif self.manual_status == True:
