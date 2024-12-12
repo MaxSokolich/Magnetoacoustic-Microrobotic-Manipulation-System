@@ -31,12 +31,14 @@ A predefined excel file with desired action commands can be imported into the sy
 <img width="259" alt="Screenshot 2024-12-06 at 11 27 47 AM" src="https://github.com/user-attachments/assets/9a6c4148-71ba-4c54-972f-bc68fefd5a64">
 <img width="775" alt="Screenshot 2024-12-06 at 11 25 11 AM" src="https://github.com/user-attachments/assets/9ce89367-d93f-425e-b5c2-988ce568c746">
 
-# Variations of System fo Custom Experiments
+# Variations of System for Custom Experiments
 a) Model Predictive Control (MPC) of a magnetiized sender cell bot following an infinity path. b) Novel analytical geometry based path planning algorithm for navigating a microrobot around obstacles.
 ![magscopeUIs](https://github.com/user-attachments/assets/6281b193-272a-4e1b-8e32-efe0712b9729)
 
 
 # Instructions for initial installation of system components on Nvidia Jetson AGX Orin:
+Note*** Software and system also works on Windows and MAC-OS. Jetson Orin System not neccesary.
+
 1) need to configure nvme ssd using nvidia sdkmanager:  
     - https://developer.nvidia.com/embedded/learn-get-started-jetson-agx-orin-devkit
 
