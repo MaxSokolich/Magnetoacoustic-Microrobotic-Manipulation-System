@@ -73,6 +73,7 @@ Note*** Software and system also works on Windows and MAC-OS. Jetson Orin System
 11) optional: install arduino using jetsonhacks github and upload main.ino from src/arduino
 
 pyuic5 uis/GUI.ui -o gui_widgets.py
+/opt/homebrew/bin/python3.9 -m PyQt5.uic.pyuic uis/GUI.ui -o gui_widgets.py
 
 /opt/homebrew/bin/python3.10 -m PyInstaller --onedir --windowed --icon MagScopeBox.icns --name MagScope main.py
 

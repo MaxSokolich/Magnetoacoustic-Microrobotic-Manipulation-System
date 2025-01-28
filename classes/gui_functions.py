@@ -135,7 +135,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #connect to arduino
         if "mac" in platform.platform():
             self.tbprint("Detected OS: macos")
-            PORT = "/dev/cu.usbmodem11401"
+            PORT = "/dev/cu.usbmodem1401"
             self.controller_actions = Mac_Controller()
         elif "Linux" in platform.platform():
             self.tbprint("Detected OS: Linux")
@@ -225,6 +225,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.resetdefaultbutton.clicked.connect(self.resetparams)
         self.ui.simulationbutton.clicked.connect(self.toggle_simulation)
         self.ui.orientradio.toggled.connect(self.checkorient)
+        self.ui.pushradio.toggled.connect(self.checkpush)
         self.ui.objectivebox.valueChanged.connect(self.get_objective)
         self.ui.exposurebox.valueChanged.connect(self.get_exposure)
         self.ui.joystickbutton.clicked.connect(self.toggle_joystick_status)
@@ -283,18 +284,22 @@ class MainWindow(QtWidgets.QMainWindow):
             self.acoustic_frequency  = actions[-1]   
         
         if self.control_status == True:
-            self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, _  = actions    
-           
-             
-            self.gamma = np.radians(self.ui.gammadial.value())
-            self.psi = np.radians(self.ui.psidial.value())
-            if self.ui.orientradio.isChecked():
-                self.freq = 0
-            else:
-                self.freq = self.ui.magneticfrequencydial.value()
 
-            if stopped == True:
-                self.apply_actions(False)
+            if not self.ui.pushradio.isChecked():
+                self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, _  = actions    
+            
+                
+                self.gamma = np.radians(self.ui.gammadial.value())
+                self.psi = np.radians(self.ui.psidial.value())
+                if self.ui.orientradio.isChecked():
+                    self.freq = 0
+                else:
+                    self.freq = self.ui.magneticfrequencydial.value()
+
+                if stopped == True:
+                    self.apply_actions(False)
+            else:
+                print("pushing")
 
             
         #if joystick is on use the joystick though
@@ -1115,7 +1120,12 @@ class MainWindow(QtWidgets.QMainWindow):
     def get_exposure(self):
         if self.tracker is not None:
             self.tracker.exposure = self.ui.exposurebox.value()
-            
+    
+    def checkpush(self):
+        if self.tracker is not None:
+            self.tracker.pushstatus = self.ui.pushradio.isChecked()
+
+
     def checkorient(self):
         if self.tracker is not None:
             self.tracker.orientstatus = self.ui.orientradio.isChecked()

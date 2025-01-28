@@ -39,6 +39,9 @@ class algorithm:
 
     def run(self, frame, mask, robot_list, stepsize, arrivialthresh, orientstatus, autoacoustic_status):
         
+        
+
+        
         if len(robot_list[-1].trajectory) > 0:
             if self.count == 0: #% 10
             
@@ -59,7 +62,7 @@ class algorithm:
             
         
                 #record robot list trajectory
-                robot_list[-1].trajectory= trajectory
+                robot_list[-1].trajectory = trajectory
 
 
             #logic for arrival condition
@@ -86,10 +89,11 @@ class algorithm:
                 
                 if orientstatus == True:
                     #self.Bx, self.By, self.Bz, self.alpha = self.orient(robot_list[-1], direction_vec)
-                    
                     self.Bx, self.By, self.Bz, self.alpha = direction_vec[0]/np.linalg.norm(direction_vec), -(direction_vec[1]/np.linalg.norm(direction_vec)), 0,0
                 else:
                     self.Bx, self.By, self.Bz = 0,0,0
+                
+                
 
                 #draw error arrow
                 cv2.arrowedLine(
@@ -108,6 +112,8 @@ class algorithm:
 
         if autoacoustic_status == True:
             self.acoustic_frequency = self.find_optimal_acoustic_freq(robot_list)
+
+      
         
   
         self.actions = [self.Bx,self.By,self.Bz,self.alpha, self.gamma, self.freq, self.psi, self.acoustic_frequency]
@@ -115,6 +121,9 @@ class algorithm:
 
     
         return frame, self.actions, self.stopped
+
+    def push(self, bot, frame):
+        print("pushing")
 
 
     def find_optimal_acoustic_freq(self, robot_list):
@@ -249,10 +258,6 @@ class algorithm:
         print("B", [Bx, By])
         return Bx,By,Bz,alpha
 
-
-
-
-    
 
 
 class Nodes:

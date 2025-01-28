@@ -38,6 +38,7 @@ class VideoThread(QThread):
         self.framenum = 0
 
         self.orientstatus = False
+        self.pushstatus = False
         self.autoacousticstatus = False
         
         #robot mask attributes
@@ -498,6 +499,8 @@ class VideoThread(QThread):
                 else:
                     actions = [0,0,0,0,0,0,0,0]
                     stopped = True    
+
+                
                 
                 
                     
