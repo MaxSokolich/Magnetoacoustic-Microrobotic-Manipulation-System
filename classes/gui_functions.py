@@ -135,7 +135,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #connect to arduino
         if "mac" in platform.platform():
             self.tbprint("Detected OS: macos")
-            PORT = "/dev/cu.usbmodem1401"
+            PORT = "/dev/cu.usbmodem11401"
             self.controller_actions = Mac_Controller()
         elif "Linux" in platform.platform():
             self.tbprint("Detected OS: Linux")
@@ -825,7 +825,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     cv2.FONT_HERSHEY_SIMPLEX,
                     fontScale=1.5, 
                     thickness=3,
-                    color = (255, 255, 255),
+                    color = (0, 0, 0),
                 )
             
             acousticfreq = f'{self.acoustic_frequency:,} Hz'
@@ -834,7 +834,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 cv2.FONT_HERSHEY_SIMPLEX,
                 fontScale=1.5, 
                 thickness=3,
-                color = (255, 255, 255),
+                color = (0, 0, 0),
             )
 
             

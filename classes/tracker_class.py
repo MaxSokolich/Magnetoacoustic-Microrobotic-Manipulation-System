@@ -409,7 +409,7 @@ class VideoThread(QThread):
                         cv2.FONT_HERSHEY_SIMPLEX,
                         fontScale=1.5, 
                         thickness=3,
-                        color = (255, 255, 255))
+                        color = (0, 0, 0))
             
             
             
@@ -418,14 +418,14 @@ class VideoThread(QThread):
                 cv2.FONT_HERSHEY_SIMPLEX,
                 fontScale=1.5, 
                 thickness=3,
-                color = (255, 255, 255),
+                color = (0, 0, 0),
             
             )
             cv2.line(
                 display_frame, 
                 (int(self.width / 8),int(self.height /40)),
                 (int(self.width / 8) + int(100 / (self.um2pixel)),int(self.height / 40)), 
-                (255, 255, 255), 
+                (0, 0, 0), 
                 thickness=5
             )
             
