@@ -26,7 +26,7 @@ class AxisProjection:
             z = rho * np.cos(phi)
             return x, y, z
 
-        scaleline = 1.2
+        scaleline = 1.3
         #projection from rotating field
         if [Bx, By, Bz] != [0,0,0]:
             x2,y2,z2 = Bx*scaleline,By*scaleline,Bz*scaleline
@@ -64,20 +64,20 @@ class AxisProjection:
         vec2 = tuple(image_points[4].reshape(2).astype(int))
     
         #draw axis
-        cv2.line(window, origin, x_axis, (0, 0, 255), thickness=5)  # Draw x-axis (red)
-        cv2.line(window, origin, y_axis, (0, 255, 0), thickness=5)  # Draw y-axis (green)
-        cv2.line(window, origin, z_axis, (255, 0, 0), thickness=5)  # Draw z-axis (blue)
-        cv2.arrowedLine(window, origin, vec2, (255, 255, 255), thickness=5)  # Draw second vector (white)
+        cv2.line(window, origin, x_axis, (0, 0, 255), thickness=6)  # Draw x-axis (red)
+        cv2.line(window, origin, y_axis, (0, 255, 0), thickness=6)  # Draw y-axis (green)
+        cv2.line(window, origin, z_axis, (255, 0, 0), thickness=6)  # Draw z-axis (blue)
+        cv2.arrowedLine(window, origin, vec2, (0, 0, 0), thickness=6)  # Draw second vector (white)
 
         title_loc = (int(w//2+offsetx), int(h//2+offsety*(9.5/10)))
         
         # Add labels to each axis
     
-        cv2.putText(window, 'X', x_axis, cv2.FONT_HERSHEY_SIMPLEX,fontScale=1, thickness=2, color = (0, 0, 255))
-        cv2.putText(window, 'Y', y_axis, cv2.FONT_HERSHEY_SIMPLEX,fontScale=1, thickness=2, color = (0, 255, 0))
-        cv2.putText(window, 'Z', z_axis, cv2.FONT_HERSHEY_SIMPLEX,fontScale=1, thickness=2, color = (255, 0, 0))
-        cv2.putText(window, 'B', vec2, cv2.FONT_HERSHEY_SIMPLEX,fontScale=1, thickness=2, color = (255, 255, 255))
-        cv2.putText(window, title, title_loc, cv2.FONT_HERSHEY_SIMPLEX,fontScale=1, thickness=2, color = (0, 255, 255))
+        cv2.putText(window, 'X', x_axis, cv2.FONT_HERSHEY_SIMPLEX,fontScale=1.2, thickness=3, color = (0, 0, 255))
+        cv2.putText(window, 'Y', y_axis, cv2.FONT_HERSHEY_SIMPLEX,fontScale=1.2, thickness=3, color = (0, 255, 0))
+        cv2.putText(window, 'Z', z_axis, cv2.FONT_HERSHEY_SIMPLEX,fontScale=1.2, thickness=3, color = (255, 0, 0))
+        cv2.putText(window, 'B', vec2, cv2.FONT_HERSHEY_SIMPLEX,fontScale=1.2, thickness=3, color = (255, 255, 255))
+        cv2.putText(window, title, title_loc, cv2.FONT_HERSHEY_SIMPLEX,fontScale=1.2, thickness=3, color = (0, 255, 255))
         
 
         return window

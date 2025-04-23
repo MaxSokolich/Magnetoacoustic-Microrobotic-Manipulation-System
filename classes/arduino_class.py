@@ -61,7 +61,7 @@ class ArduinoHandler:
         if self.conn is None:
             #self.printer("Connection not initialized..."+ str(data))  
             #self.printer("No Connection:  "+ "Bx: {},    By: {},    Bz: {},    alpha: {},    gamma: {},    freq: {},    psi: {}".format(Bx,By,Bz,alpha,gamma,freq,psi)) 
-            self.printer("No Connection:  "+ "[Bx, By, Bz, alpha, gamma, freq, psi, gradient, equal_field, acoustic_freq] = "+str(data)) 
+            self.printer("No Connection:  "+ "[Bx, By, Bz, alpha, gamma, freq, psi, acoust_freq, gradient, e_field] = "+str(data)) 
             #pass
         else:
             #Bx = round(Bx,3)
@@ -69,8 +69,8 @@ class ArduinoHandler:
             self.conn.send(message)
             #self.printer("Data sent:"+ str(data))
             #self.printer("Data sent:  "+ "Bx: {},    By: {},    Bz: {},    alpha: {},    gamma: {},    freq: {},    psi: {}".format(Bx,By,Bz,alpha,gamma,freq,psi))
-            self.printer("Data Sent:  "+ "[Bx, By, Bz, alpha, gamma, freq, psi, gradient, acoustic_freq] = "+str(data)) 
-    
+            self.printer("Data Sent:  "+ "[Bx, By, Bz, alpha, gamma, freq, psi, acoust_freq, gradient, e_field] = "+str(data)) 
+
     
     def close(self) -> None:
         """
