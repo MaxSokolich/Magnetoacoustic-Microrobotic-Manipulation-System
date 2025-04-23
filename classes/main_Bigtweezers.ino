@@ -26,6 +26,9 @@ float gradient_status;
 float equal_field_status;
 float acoustic_frequency;
 
+float T_switch;
+float phase_switch;
+float t2;
 
 
 
@@ -57,6 +60,9 @@ float omega;
 float Bx_final;
 float By_final;
 float Bz_final;
+
+float z0;
+float x0;
 
 
 
@@ -363,11 +369,47 @@ void loop()
        Bz_roll = 0;
       }
    else {
-      //correct equations 7/8/23 //have to flip the sign of omega to maintain right handed chirality
-      Bx_roll = (-sin(alpha) * sin(-omega*t)) + (-cos(alpha) * cos(gamma)  * cos(-omega*t)); 
-      By_roll =  (cos(alpha) * sin(-omega*t)) + (-sin(alpha) * cos(gamma) *  cos(-omega*t)); 
-      Bz_roll = sin(gamma) * cos(-omega*t);
+      //correct equations 7/8/23
+      //Bx_roll = (-sin(alpha) * sin(omega*t)) + (-cos(alpha) * cos(gamma)  * cos(omega*t)); 
+      //By_roll =  (cos(alpha) * sin(omega*t)) + (-sin(alpha) * cos(gamma) *  cos(omega*t)); 
+      //Bz_roll = sin(gamma) * cos(omega*t);
+      
+      T_switch = 1/(4*omega/(2*PI));
 
+      phase_switch = (sin(2*PI*t/T_switch )>= 0)? 1 : -1;
+      float modTime = fmod(t,T_switch);
+      t2 = abs(modTime  - T_switch/2)*2;
+      //if (sin(2*PI*omega*t/T_switch) < 0 ){
+         // phase_switch = -1;
+
+        // }
+      //else{
+       // phase_switch =1;
+       // }
+      //t2 = phase_switch*t;
+
+      //Bx_roll = (-sin(alpha) * sin(omega*t2))+ (-cos(alpha) * cos(gamma)  * cos(omega*t2));  
+      //By_roll =  (cos(alpha) * sin(omega*t2))+ (-sin(alpha) * cos(gamma) *  cos(omega*t2)); 
+      //Bz_roll = sin(gamma) * cos(omega*t2);
+
+      //Bx_roll = (sin(omega*t2));  
+      //By_roll =  0.5*(cos(omega*t2)); 
+      //Bz_roll = 0.25;
+
+      //this one is just like rolling but there's a constant field applied perpendicularly to the rotation axis and a tilt field applied along one direction
+      // (takes a vector ((1-x0)*sin(wt)+x0, cos(wt), z0) and rotates it in 3D)
+      z0 = 1;
+      x0 = 0;
+      Bx_roll = (-sin(alpha+(PI/2)*sin(omega*t2)) * (x0 + (1-x0)*sin(omega*t2))) + (-cos(alpha+(PI/2)*sin(omega*t2)) * cos(gamma)  * cos(omega*t2)) + z0*cos(alpha+(PI/2)*sin(omega*t2))*sin(gamma); 
+      By_roll =  (cos(alpha+(PI/2)*sin(omega*t2)) * (x0 + (1-x0)*sin(omega*t2))) + (-sin(alpha+(PI/2)*sin(omega*t2)) * cos(gamma) *  cos(omega*t2)) + z0*sin(alpha+(PI/2)*sin(omega*t2))*sin(gamma); 
+      Bz_roll = sin(gamma) * cos(omega*t2) + z0*cos(gamma);
+
+      //this is for tilting back and forth (takes a vector (0, cos(wt),sin(wt)) and rotates it in 3D)
+      //Bx_roll = -cos(alpha) * cos(gamma)  * cos(omega*t2) + cos(alpha)*sin(gamma)*sin(omega*t2); 
+      //By_roll =  -sin(alpha) * cos(gamma) *  cos(omega*t2) + sin(alpha)*sin(gamma)*sin(omega*t2); 
+      //Bz_roll = sin(gamma) * cos(omega*t2) + cos(gamma)* sin(omega*t2);
+      
+      
        // condition for perpendicular field (psi cannot be 90)
        // condition for perpendicular field (psi cannot be 90)
       if (psi < PI/2){
@@ -427,10 +469,12 @@ void loop()
       //y gradient
       if (By_final > 0){
         set1(By_final);
+        set3(-0.3*By_final);
         
       }
       else if (By_final < 0){
         set3(By_final);
+        set1(-0.3*By_final);
       }
       else{ //if By==0
         set1(0);
@@ -440,9 +484,11 @@ void loop()
       //x gradient
       if (Bx_final > 0){
         set2(Bx_final);
+        set4(-0.3*Bx_final);
       }
       else if (Bx_final < 0){
         set4(Bx_final);
+        set2(-0.3*Bx_final);
       }
       else{ //if Bx==0
         set2(0);

@@ -143,7 +143,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.controller_actions = Linux_Controller()
         elif "Windows" in platform.platform():
             self.tbprint("Detected OS:  Windows")
-            PORT = "COM3" #use 3 for one of them
+            PORT = "COM4" #use 3 for one of them
             self.controller_actions = Windows_Controller()
         else:
             self.tbprint("undetected operating system")
@@ -462,7 +462,7 @@ class MainWindow(QtWidgets.QMainWindow):
             if self.ui.swimradio.isChecked():
                 self.simulator.roll = False
             elif self.ui.rollradio.isChecked():
-                self.alpha = self.alpha - np.pi/2
+                self.alpha = self.alpha + np.pi/2
                 self.simulator.roll = True
 
         #zero output
@@ -813,7 +813,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 frame, self.projection.draw_sideview(frame,self.Bx,self.By,self.Bz,self.alpha,self.gamma,self.video_width,self.video_height)
                 frame, self.projection.draw_topview(frame,self.Bx,self.By,self.Bz,self.alpha,self.gamma,self.video_width,self.video_height)
                 
-                rotatingfield = "alpha: {:.0f}, gamma: {:.0f}, psi: {:.0f}, freq: {:.0f}".format(np.degrees(self.alpha)+90, np.degrees(self.gamma), np.degrees(self.psi), self.freq) #adding 90 to alpha for display purposes only
+
+                rotatingfield = "alpha: {:.0f}, gamma: {:.0f}, psi: {:.0f}, freq: {:.0f}".format(np.degrees(self.alpha), np.degrees(self.gamma), np.degrees(self.psi), self.freq) #adding 90 to alpha for display purposes only
                 
                 cv2.putText(frame, rotatingfield,
                     (int(self.video_width / 1.8),int(self.video_height / 20)),

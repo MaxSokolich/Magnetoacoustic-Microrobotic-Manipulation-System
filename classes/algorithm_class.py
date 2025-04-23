@@ -3,7 +3,7 @@ import numpy as np
 import cv2
 import random
 import math
-
+from classes.mpc.rrtstar import RrtStar
 
 class algorithm:
    
@@ -41,7 +41,7 @@ class algorithm:
         
         if len(robot_list[-1].trajectory) > 0:
             if self.count == 0: #% 10
-            
+              
                 #define start end
                 startpos = robot_list[-1].position_list[-1] #the most recent position at the time of clicking run algo
                 endpos = robot_list[-1].trajectory[-1]
@@ -50,16 +50,25 @@ class algorithm:
                 #remove robot so that itself is not mistaken for an obstacle
                 x,y,w,h = robot_list[-1].cropped_frame[-1]
                 cv2.rectangle(mask, (x, y), (x + w, y + h), (0, 0, 0), -1)
-            
+
+
+                #RRT STAR planner
+                """rrt_star = RrtStar(img = mask, x_start = startpos, x_goal=endpos, step_len=50,
+                                         goal_sample_rate=.1, search_radius=2, iter_max=3000,plotting_flag=True)
+                
+                robot_list[-1].trajectory = rrt_star.planning()"""
+                
+                
+                #RRT planner
+                
                 pathplanner = RRT(mask, startpos, endpos, stepsize)
-                
-                
                 trajectory = pathplanner.run()
                 trajectory.append(endpos)    
-            
+                robot_list[-1].trajectory= trajectory
+                
         
                 #record robot list trajectory
-                robot_list[-1].trajectory= trajectory
+                
 
 
             #logic for arrival condition

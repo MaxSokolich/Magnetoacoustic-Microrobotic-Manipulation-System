@@ -1,3 +1,4 @@
+This is the arduino code from max original ine
 
 
   //This is working without the need to open the serial monitor. However, I am not sure i am able to adjust 
@@ -363,10 +364,10 @@ void loop()
        Bz_roll = 0;
       }
    else {
-      //correct equations 7/8/23 //have to flip the sign of omega to maintain right handed chirality
-      Bx_roll = (-sin(alpha) * sin(-omega*t)) + (-cos(alpha) * cos(gamma)  * cos(-omega*t)); 
-      By_roll =  (cos(alpha) * sin(-omega*t)) + (-sin(alpha) * cos(gamma) *  cos(-omega*t)); 
-      Bz_roll = sin(gamma) * cos(-omega*t);
+      //correct equations 7/8/23
+      Bx_roll = (-sin(alpha) * sin(omega*t)) + (-cos(alpha) * cos(gamma)  * cos(omega*t)); 
+      By_roll =  (cos(alpha) * sin(omega*t)) + (-sin(alpha) * cos(gamma) *  cos(omega*t)); 
+      Bz_roll = sin(gamma) * cos(omega*t);
 
        // condition for perpendicular field (psi cannot be 90)
        // condition for perpendicular field (psi cannot be 90)

@@ -15,8 +15,9 @@ class AxisProjection:
 
     def projection(self, window, Bx,By,Bz,alpha, gamma, pitch, yaw, roll, w, h, offsetx, offsety,title):
         
-        if self.roll == False:
+        if self.roll == True:
             alpha = alpha - np.pi/2
+        
             
 
         def spherical_to_cartesian(rho, theta, phi):
@@ -37,7 +38,7 @@ class AxisProjection:
         
         
         else:
-            alpha = alpha + np.pi/2
+    
             x2, y2, z2 = spherical_to_cartesian(scaleline, alpha, gamma)
             title = title + "(rotating)"
         

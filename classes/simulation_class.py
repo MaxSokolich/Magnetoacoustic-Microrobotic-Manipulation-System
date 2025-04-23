@@ -109,9 +109,9 @@ class HelmholtzSimulator(FigureCanvas):
                 Brolly = 0
                 Brollz = 0
             else:
-                Brollx =  ((-np.sin(self.alpha) * np.sin(self.omega*tp)) + (-np.cos(self.alpha) * np.cos(self.gamma)  * np.cos(self.omega*tp))) 
-                Brolly =  ((np.cos(self.alpha) * np.sin(self.omega*tp)) + (-np.sin(self.alpha) * np.cos(self.gamma) *  np.cos(self.omega*tp))) 
-                Brollz =  np.sin(self.gamma) * np.cos(self.omega*tp)
+                Brollx =  ((-np.sin(self.alpha) * np.sin(-self.omega*tp)) + (-np.cos(self.alpha) * np.cos(self.gamma)  * np.cos(-self.omega*tp))) 
+                Brolly =  ((np.cos(self.alpha) * np.sin(-self.omega*tp)) + (-np.sin(self.alpha) * np.cos(self.gamma) *  np.cos(-self.omega*tp))) 
+                Brollz =  np.sin(self.gamma) * np.cos(-self.omega*tp)
         
 
             if self.psi < np.pi/2 and self.psi !=0:
@@ -164,9 +164,10 @@ class HelmholtzSimulator(FigureCanvas):
     def show_axis_rotation(self, ax, length):
         #plot rotation axis
         if self.roll == True:
-            alpha = self.alpha + np.pi/2
+            alpha = self.alpha - np.pi/2
         else:
             alpha = self.alpha
+ 
         x = 1 * np.sin(self.gamma) * np.cos(alpha)
         y = 1 * np.sin(self.gamma) * np.sin(alpha)  
         z = 1 * np.cos(self.gamma)

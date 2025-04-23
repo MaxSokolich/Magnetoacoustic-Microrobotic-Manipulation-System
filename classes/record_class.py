@@ -21,7 +21,7 @@ class RecordThread(QThread):
         self.width = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         self.height = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.videofps = int(self.cap.get(cv2.CAP_PROP_FPS))
-       
+        print(self.videofps)
       
         file_path  = os.path.join(self.parent.new_dir_path, date+".mp4")
         self.result = cv2.VideoWriter(

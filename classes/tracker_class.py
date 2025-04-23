@@ -510,10 +510,7 @@ class VideoThread(QThread):
                 
                 
 
-                #step 4: delay based on fps
-                if self.totalnumframes !=0:
-                    interval = 1/self.videofps  #use original fps used to record the video if not live
-                    time.sleep(interval)
+      
 
     
             

@@ -40,7 +40,7 @@ class ArduinoHandler:
                 self.port = None
         else:
             self.printer(f"Connection already initialized at port {self.port}, new port {port} ignored")
-
+   
     def send(self, Bx, By, Bz, alpha, gamma, freq, psi, gradient_status, equal_field_status, acoustic_freq) -> None:
         """
         sends action commands to arduino
