@@ -76,7 +76,7 @@ class AxisProjection:
         cv2.putText(window, 'X', x_axis, cv2.FONT_HERSHEY_SIMPLEX,fontScale=1.2, thickness=3, color = (0, 0, 255))
         cv2.putText(window, 'Y', y_axis, cv2.FONT_HERSHEY_SIMPLEX,fontScale=1.2, thickness=3, color = (0, 255, 0))
         cv2.putText(window, 'Z', z_axis, cv2.FONT_HERSHEY_SIMPLEX,fontScale=1.2, thickness=3, color = (255, 0, 0))
-        cv2.putText(window, 'B', vec2, cv2.FONT_HERSHEY_SIMPLEX,fontScale=1.2, thickness=3, color = (255, 255, 255))
+        cv2.putText(window, 'motion', vec2, cv2.FONT_HERSHEY_SIMPLEX,fontScale=1.2, thickness=3, color = (255, 255, 255))
         cv2.putText(window, title, title_loc, cv2.FONT_HERSHEY_SIMPLEX,fontScale=1.2, thickness=3, color = (0, 255, 255))
         
 
