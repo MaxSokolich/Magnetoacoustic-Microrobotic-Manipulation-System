@@ -8,9 +8,28 @@
 // - may need a better way to toggle the enable pin on all 6 drivers
 // - there is no hard zero option as I got rid of typ
 #include <AD9850.h>
+#include <Wire.h>
+#include "Adafruit_ADS1X15.h"
 #include "SerialTransfer.h"
+
+
+Adafruit_ADS1115 ads;  // Create ADS1115 object
+
 SerialTransfer myTransfer;
+
+
 float action[9]; //an array to store incoming data from python
+
+
+//Store data from arduino to send to python
+struct send_class {
+  float Bx_sensor;
+  float By_sensor;
+  float Bz_sensor;
+
+} send_data;
+
+
 
 #define PI 3.1415926535897932384626433832795
 
@@ -108,11 +127,10 @@ const int RESET_PIN = 40;
   
 void setup()
 {
-  DDS.begin(W_CLK_PIN, FQ_UD_PIN, DATA_PIN, RESET_PIN);
-  DDS.calibrate(124999500);
+
 
   cli();
-  TCCR0B = (TCCR0B & 0b11111000) | 0x02; //7.81250[kHz] pin 13,4
+  //TCCR0B = (TCCR0B & 0b11111000) | 0x01; //7.81250[kHz] pin 13,4  62.5[kHz]  dont change this one actually. its too complicated to try and compensate the millis and micros functions.
   TCCR1B = (TCCR1B & 0b11111000) | 0x01; //31.37255 [kHz] pin 12,11
   TCCR2B = (TCCR2B & 0b11111000) | 0x01; //31.37255 [kHz] pin 10,9
   TCCR3B = (TCCR3B & 0b11111000) | 0x01; //31.37255 [kHz] pin 5,3,2
@@ -121,6 +139,13 @@ void setup()
   
   Serial.begin(115200);
   myTransfer.begin(Serial);
+
+    //start acoustic module
+  DDS.begin(W_CLK_PIN, FQ_UD_PIN, DATA_PIN, RESET_PIN);
+  DDS.calibrate(124999500);
+
+  //start ads1115 module
+  ads.begin();  // Start I2C and ADS1115
 
 
    //Coil1 Ouptut
@@ -311,9 +336,7 @@ void set6(float DC6){
     analogWrite(Coil6_PWML,0);
 
   }
-  
  
-
 }
 
 
@@ -324,10 +347,50 @@ void set6(float DC6){
 
 void loop()
 {
-    if  (myTransfer.available()){ // THIS IF STATEMENT MIGHT MESS UP EVERYTHING BELOW
+    if  (myTransfer.available()){ 
       
               uint16_t message = 0;
-              message = myTransfer.rxObj(action,message);               
+              message = myTransfer.rxObj(action,message);  
+
+                  float zeroFieldVoltagex = 1.97;   // Measured V with no field
+                  float sensitivityx = 0.0023;      
+                
+                  float zeroFieldVoltagey = 1.99;   // Measured V with no field
+                  float sensitivityy = 0.0021;      
+                
+                  float zeroFieldVoltagez = 2.05;   // Measured V with no field
+                  float sensitivityz = 0.0017;      
+                
+                  int16_t hall1 = ads.readADC_SingleEnded(1);  // Sensor 2 on A1  ---> purple wire goes to Pin 9 on the connector terminal which is connected to the Z hall sensor
+                  int16_t hall2 = ads.readADC_SingleEnded(2);  // Sensor 3 on A2 ---> blue wire goes to Pin 7 on the connector terminal which is connected to the Y hall sensor
+                  int16_t hall3 = ads.readADC_SingleEnded(3);  // Sensor 3 on A3 ---> blue wire goes to Pin 5 on the connector terminal which is connected to the X hall sensor
+                
+                  // Convert raw reading to voltage if needed:
+                  float voltage1 = hall1 * 0.1875 / 1000;  // Default gain = ±6.144V, LSB = 0.1875mV
+                  float voltage2 = hall2 * 0.1875 / 1000;
+                  float voltage3 = hall3 * 0.1875 / 1000;
+                
+                  float magneticField_Gx = (voltage3 - zeroFieldVoltagex) / sensitivityx;
+                  float magneticField_Gy = (voltage2 - zeroFieldVoltagey) / sensitivityy;
+                  float magneticField_Gz = (voltage1 - zeroFieldVoltagez) / sensitivityz;
+                
+                  float magneticField_mTx = magneticField_Gx *.1;
+                  float magneticField_mTy = magneticField_Gy *.1;
+                  float magneticField_mTz = magneticField_Gz *.1;
+              
+                  
+                 
+                  send_data.Bx_sensor = magneticField_mTx;
+                  send_data.By_sensor = magneticField_mTy;
+                  send_data.Bz_sensor = magneticField_mTz;
+              
+              
+                  
+              uint16_t sendSize = 0;
+              sendSize = myTransfer.txObj(send_data, sendSize);
+              myTransfer.sendData(sendSize);  
+
+
     }
 
    
@@ -339,9 +402,11 @@ void loop()
    gamma = action[4];
    rolling_frequency = action[5]; 
    psi = action[6]; 
-   gradient_status = action[7];
-   equal_field_status = action[8];
-   acoustic_frequency = action[9];
+   acoustic_frequency = action[7];
+   gradient_status = action[8];
+   equal_field_status = action[9];
+
+   
    
 
    if (acoustic_frequency != 0){
@@ -354,8 +419,9 @@ void loop()
    
    omega = 2*PI*rolling_frequency;
    
-   tim = micros() % 7812500;
-   t = tim / 7812500;
+
+ 
+   t = micros() / 1e6;
    
    if (omega == 0){
        Bx_roll = 0;
@@ -425,11 +491,11 @@ void loop()
   // if gradient status = 1: output the the corresponding gradient field
    if (gradient_status != 0){
       //y gradient
-      if (By_final > 0){
+      if (By_final < 0){
         set1(By_final);
         
       }
-      else if (By_final < 0){
+      else if (By_final > 0){
         set3(By_final);
       }
       else{ //if By==0
@@ -471,6 +537,11 @@ void loop()
       set5(Bz_final);
       set6(-Bz_final);
    }
+
+
+    
+
+
 
 
     }

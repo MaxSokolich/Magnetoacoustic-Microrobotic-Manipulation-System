@@ -35,7 +35,9 @@ class VideoThread(QThread):
         self.mask_flag = False
     
         self.croppedmask_flag = True
-        self.framenum = 0
+        self.framenum = 1
+        self.time_stamp = 0
+        self.start_time = time.time()
 
         self.orientstatus = False
         self.pushstatus = False
@@ -77,7 +79,7 @@ class VideoThread(QThread):
         else:
             self.totalnumframes = 0
            
-        self.um2pixel =  3.35 / self.objective # each pixel is 3.35 um in size at 1x. [um] / [px]
+        self.um2pixel =  3.45 / self.objective # each pixel is 3.35 um in size at 1x. [um] / [px]
         
             #at 10x objective
             #width_in_pixels = 2448 #pixels
@@ -185,7 +187,7 @@ class VideoThread(QThread):
                         for contour in contours:
                             if cv2.contourArea(contour) > cv2.contourArea(max_cnt): 
                                 max_cnt = contour
-                        area = cv2.contourArea(max_cnt)* (self.um2pixel**2)
+                        area = cv2.contourArea(max_cnt)#* (self.um2pixel**2)
                         
                         #find the center of mass from the mask
                         szsorted=np.argsort(sizes)
@@ -205,11 +207,10 @@ class VideoThread(QThread):
 
                         #find velocity:
                         if len(bot.position_list) > self.memory:
-                            vx = (current_pos[0] - bot.position_list[-self.memory][0]) * (self.fps.get_fps()/self.memory) * self.um2pixel
-                            vy = (current_pos[1] - bot.position_list[-self.memory][1]) * (self.fps.get_fps()/self.memory) * self.um2pixel
+                            vx = (current_pos[0] - bot.position_list[-self.memory][0]) * (self.fps.get_fps()/self.memory) #* self.um2pixel
+                            vy = (current_pos[1] - bot.position_list[-self.memory][1]) * (self.fps.get_fps()/self.memory) #* self.um2pixel
 
-                            #vx = (current_pos[0] - bot.position_list[-1][0]) * (self.fps.get_fps()) / self.um2pixel
-                            #vy = (current_pos[1] - bot.position_list[-1][1]) * (self.fps.get_fps()) / self.um2pixel
+               
                             magnitude = np.sqrt(vx**2 + vy**2)
 
                             velocity = [vx,vy,magnitude]
@@ -223,7 +224,7 @@ class VideoThread(QThread):
                         
                         #store the data in the instance of RobotClasss
                         bot.add_frame(self.framenum)
-                        bot.add_time(1/self.fps.get_fps()) #original in ms
+                        bot.add_time(self.time_stamp) #original in ms
                         bot.add_position([current_pos[0], current_pos[1]])
                         bot.add_velocity(velocity)
                         bot.add_crop(new_crop)
@@ -295,7 +296,7 @@ class VideoThread(QThread):
                         for contour in contours:
                             if cv2.contourArea(contour) > cv2.contourArea(max_cnt): 
                                 max_cnt = contour
-                        area = cv2.contourArea(max_cnt)* (self.um2pixel**2)
+                        area = cv2.contourArea(max_cnt)#* (self.um2pixel**2)
                     
                         
                         #find the center of mass from the mask
@@ -316,8 +317,8 @@ class VideoThread(QThread):
 
                         #find velocity:
                         if len(cell.position_list) > self.memory:
-                            vx = (current_pos[0] - cell.position_list[-self.memory][0]) * (self.fps.get_fps()/self.memory) * self.um2pixel
-                            vy = (current_pos[1] - cell.position_list[-self.memory][1]) * (self.fps.get_fps()/self.memory) * self.um2pixel
+                            vx = (current_pos[0] - cell.position_list[-self.memory][0]) * (self.fps.get_fps()/self.memory) #* self.um2pixel
+                            vy = (current_pos[1] - cell.position_list[-self.memory][1]) * (self.fps.get_fps()/self.memory) #* self.um2pixel
                             magnitude = np.sqrt(vx**2 + vy**2)
 
                             velocity = [vx,vy,magnitude]
@@ -331,7 +332,7 @@ class VideoThread(QThread):
                         
                         #store the data in the instance of RobotClasss
                         cell.add_frame(self.framenum)
-                        cell.add_time(1/self.fps.get_fps()) #original in ms
+                        cell.add_time(self.time_stamp) #original in ms
                         cell.add_position([current_pos[0], current_pos[1]])
                         cell.add_velocity(velocity)
                         cell.add_crop(new_crop)
@@ -445,6 +446,7 @@ class VideoThread(QThread):
             #set and read frame
             if self._play_flag == True:
                 self.framenum +=1
+                self.time_stamp = time.time() - self.start_time
             
             
             if self.totalnumframes !=0:
@@ -460,7 +462,7 @@ class VideoThread(QThread):
             if ret:       
                 if self.totalnumframes ==0:         
                     self.cap.set(cv2.CAP_PROP_EXPOSURE, self.exposure)
-                    self.um2pixel =   3.35 / self.objective
+                    self.um2pixel =   3.45 / self.objective
                     
 
                 #step 1 track robot
@@ -513,7 +515,7 @@ class VideoThread(QThread):
                 
                 
 
-      
+                
 
     
             

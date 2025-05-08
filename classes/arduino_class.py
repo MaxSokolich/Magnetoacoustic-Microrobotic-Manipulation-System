@@ -1,6 +1,8 @@
 from pySerialTransfer import pySerialTransfer as txfer
 from pySerialTransfer.pySerialTransfer import InvalidSerialPort
 import time
+import numpy as np
+
 
 class ArduinoHandler:
     """
@@ -24,8 +26,6 @@ class ArduinoHandler:
         """
         Initializes a connection to an arduino at a specified port. If successful,
         the conn and port attributes are updated
-
-       
         """
         if self.conn is None:
             try:
@@ -57,35 +57,70 @@ class ArduinoHandler:
         By = round(By,3)
         Bz = round(Bz,3)
 
-        data = [float(Bx), float(By), float(Bz), float(alpha), float(gamma), float(freq),float(psi), float(gradient_status), float(equal_field_status), float(acoustic_freq)]
+        data = [float(Bx), float(By), float(Bz), float(alpha), float(gamma), float(freq),float(psi), float(acoustic_freq), float(gradient_status), float(equal_field_status), ]
         if self.conn is None:
             #self.printer("Connection not initialized..."+ str(data))  
             #self.printer("No Connection:  "+ "Bx: {},    By: {},    Bz: {},    alpha: {},    gamma: {},    freq: {},    psi: {}".format(Bx,By,Bz,alpha,gamma,freq,psi)) 
             self.printer("No Connection:  "+ "[Bx, By, Bz, alpha, gamma, freq, psi, acoust_freq, gradient, e_field] = "+str(data)) 
             #pass
         else:
-            #Bx = round(Bx,3)
+
+            
             message = self.conn.tx_obj(data)
             self.conn.send(message)
             #self.printer("Data sent:"+ str(data))
             #self.printer("Data sent:  "+ "Bx: {},    By: {},    Bz: {},    alpha: {},    gamma: {},    freq: {},    psi: {}".format(Bx,By,Bz,alpha,gamma,freq,psi))
             self.printer("Data Sent:  "+ "[Bx, By, Bz, alpha, gamma, freq, psi, acoust_freq, gradient, e_field] = "+str(data)) 
 
-    
+
+
+    def receive(self):
+        """
+        receive information from arduino and store it in self.recieve class 
+        return the values in the class self.receive
+        """
+        #recv
+        if self.conn.available():
+        
+            recSize = 0
+            Bx_sensor = self.conn.rx_obj(obj_type='f',start_pos=recSize)
+            recSize += txfer.STRUCT_FORMAT_LENGTHS['f']
+
+            By_sensor = self.conn.rx_obj(obj_type='f',start_pos=recSize)
+            recSize += txfer.STRUCT_FORMAT_LENGTHS['f']
+
+            Bz_sensor = self.conn.rx_obj(obj_type='f',start_pos=recSize)
+            recSize += txfer.STRUCT_FORMAT_LENGTHS['f']
+            
+
+            
+            
+
+
+            return [Bx_sensor,By_sensor,Bz_sensor]
+
+
+        else:
+            return [0,0,0]
+
+
     def close(self) -> None:
         """
         Closes the current connection, if applicable
 
         Args:
+        
+        struct My_Sensor {
+        
             None
         Returns:
             None
         """
         if self.conn is not None:
          
-            self.printer(f"Closing connection at port {self.port}")
             self.send(0,0,0,0,0,0,0,0,0,0)
             self.conn.close()
+            self.printer(f"Closing connection at port {self.port}")
    
             
 
@@ -97,15 +132,29 @@ if __name__ == "__main__":
         print(text)
 
 
-    PORT = "/dev/cu.usbmodem11301"
+    PORT = "/dev/cu.usbmodem21101"
     arduino = ArduinoHandler(tbprint)
     arduino.connect(PORT)
     time.sleep(1)
-
-    arduino.send(0,0,0,0,0,0,0,0,0)
+    
+    
+    #send
+    Bx = 0.0
+    By = 0.0
+    Bz = 0.0
+    alpha = np.pi/2
+    gamma = 0.0
+    rolling_frequency = 0
+    psi = 0
+    gradient_status = 0.0
+    equal_field_status = 0.0
+    acoustic_frequency = 10000.0
+    arduino.send(Bx, By, Bz, alpha, gamma, psi, rolling_frequency, gradient_status, equal_field_status, acoustic_frequency)
     print("sending")
+    
     time.sleep(5)
-    arduino.send(0,0,0,0,0,0,0,0,0)
+    
+    
     print("zeroing")
     arduino.close()
     

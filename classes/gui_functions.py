@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import QPixmap,QIcon
 from PyQt5.QtCore import Qt, QTimer, PYQT_VERSION_STR, QEvent
 from PyQt5 import QtWidgets, QtGui, QtCore
-
+import queue
 import cv2
 import os
 from os.path import expanduser
@@ -21,6 +21,7 @@ import cv2
 import matplotlib.pyplot as plt 
 import time
 import platform
+from serial.tools import list_ports
 os.environ["SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS"] = "1"
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
@@ -38,8 +39,8 @@ from classes.arduino_class import ArduinoHandler
 from classes.joystick_class import Mac_Controller,Linux_Controller,Windows_Controller
 from classes.simulation_class import HelmholtzSimulator
 from classes.projection_class import AxisProjection
-from classes.acoustic_class import AcousticClass
-from classes.halleffect_class import HallEffect
+from old.acoustic_class import AcousticClass
+
 from classes.record_class import RecordThread
 
 
@@ -98,14 +99,18 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.zoom_x, self.zoom_y, self.zoomscale, self.scrollamount = 1,0,0,0
         self.croppedresult = None
-        self.currentframe = None
         self.frame_number = 0
         self.robots = []
         self.cells = []
         self.videopath = 0
         self.cap = None
         self.tracker = None
+        self.populate_serial_ports()
+
+        #record variables
         self.recorder = None
+        self.frame_queue = queue.Queue(maxsize=100)  # make a queue to store frames in for the recording feature
+        self.output_file_name = "output"
 
         self.save_status = False
         self.output_workbook = None
@@ -123,44 +128,38 @@ class MainWindow(QtWidgets.QMainWindow):
         self.Bx, self.By, self.Bz = 0,0,0
         self.Mx, self.My, self.Mz = 0,0,0
         self.alpha, self.gamma, self.psi, self.freq = 0,0,0,0
-        self.sensorBx, self.sensorBy, self.sensorBz = 0,0,0
         self.field_magnitude = 100
 
+      
         #control tab functions
         self.control_status = False
         self.joystick_status = False
         self.manual_status = False
 
 
-        #connect to arduino
+  
         if "mac" in platform.platform():
             self.tbprint("Detected OS: macos")
-            PORT = "/dev/cu.usbmodem11401"
             self.controller_actions = Mac_Controller()
         elif "Linux" in platform.platform():
             self.tbprint("Detected OS: Linux")
-            PORT = "/dev/ttyACM0"
             self.controller_actions = Linux_Controller()
         elif "Windows" in platform.platform():
             self.tbprint("Detected OS:  Windows")
-            PORT = "COM4" #use 3 for one of them
             self.controller_actions = Windows_Controller()
         else:
             self.tbprint("undetected operating system")
-            PORT = None
         
-        self.arduino = ArduinoHandler(self.tbprint)
-        self.arduino.connect(PORT)
+
         
         
         #define, simulator class, pojection class, and acoustic class
         self.simulator = HelmholtzSimulator(self.ui.magneticfieldsimlabel, width=310, height=310, dpi=200)
         self.projection = AxisProjection()
         self.acoustic_module = AcousticClass()
-        self.halleffect = HallEffect(self)
-        self.halleffect.sensor_signal.connect(self.update_halleffect_sensor)
-        self.halleffect.start()
         
+        
+
         self.setFile()
         
         pygame.init()
@@ -181,34 +180,28 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.pausebutton.hide()
         self.ui.leftbutton.hide()
         self.ui.rightbutton.hide()
-        
         self.ui.choosevideobutton.clicked.connect(self.selectFile)
-        self.ui.trackbutton.clicked.connect(self.track)
+        self.ui.startbutton.clicked.connect(self.start)
         self.ui.pausebutton.clicked.connect(self.pause)
         self.ui.rightbutton.clicked.connect(self.frameright)
         self.ui.leftbutton.clicked.connect(self.frameleft)
         self.ui.maskbutton.clicked.connect(self.showmask)
         self.ui.maskinvert_checkBox.toggled.connect(self.invertmaskcommand)
-    
         self.ui.robotmasklowerbox.valueChanged.connect(self.get_slider_vals)
         self.ui.robotmaskupperbox.valueChanged.connect(self.get_slider_vals)
         self.ui.robotmaskdilationbox.valueChanged.connect(self.get_slider_vals)
         self.ui.robotmaskblurbox.valueChanged.connect(self.get_slider_vals)
         self.ui.robotcroplengthbox.valueChanged.connect(self.get_slider_vals)
-      
-
         self.ui.cellmasklowerbox.valueChanged.connect(self.get_slider_vals)
         self.ui.cellmaskupperbox.valueChanged.connect(self.get_slider_vals)
         self.ui.cellmaskdilationbox.valueChanged.connect(self.get_slider_vals)
         self.ui.cellmaskblurbox.valueChanged.connect(self.get_slider_vals)
         self.ui.cellcroplengthbox.valueChanged.connect(self.get_slider_vals)
-        
-
         self.ui.gradient_status_checkbox.toggled.connect(self.gradientcommand)
         self.ui.equal_field_checkbox.toggled.connect(self.equalfieldcommand)
         self.ui.savedatabutton.clicked.connect(self.savedata)
         self.ui.VideoFeedLabel.installEventFilter(self)
-        self.ui.recordbutton.clicked.connect(self.recordfunction_class)
+        self.ui.recordbutton.clicked.connect(self.toggle_recording)
         self.ui.controlbutton.clicked.connect(self.toggle_control_status)
         self.ui.memorybox.valueChanged.connect(self.get_slider_vals)
         self.ui.RRTtreesizebox.valueChanged.connect(self.get_slider_vals)
@@ -218,10 +211,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.psidial.valueChanged.connect(self.get_slider_vals)
         self.ui.applyacousticbutton.clicked.connect(self.apply_acoustic)
         self.ui.acousticfreq_spinBox.valueChanged.connect(self.get_acoustic_frequency)
-
         self.ui.alphaspinBox.valueChanged.connect(self.spinbox_alphachanged)
         self.ui.alphadial.valueChanged.connect(self.dial_alphachanged)
-        
         self.ui.resetdefaultbutton.clicked.connect(self.resetparams)
         self.ui.simulationbutton.clicked.connect(self.toggle_simulation)
         self.ui.orientradio.toggled.connect(self.checkorient)
@@ -236,9 +227,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.manualfieldBz.valueChanged.connect(self.get_slider_vals)
         self.ui.croppedmasktoggle.clicked.connect(self.showcroppedoriginal)
         self.ui.croppedrecordbutton.clicked.connect(self.croppedrecordfunction)
-
         self.ui.import_excel_actions.clicked.connect(self.read_excel_actions)
         self.ui.apply_actions.clicked.connect(self.apply_excel_actions)
+        self.ui.arduino_portbox.currentTextChanged.connect(self.handle_port_change)
 
         self.excel_file_name = None
         self.excel_actions_df = None
@@ -246,6 +237,13 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
         self.ui.makeshapebutton.clicked.connect(self.makeshape_trajectory)
+
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.update_sensor_label)
+        self.timer.start(25)  # Update every 500 ms
+        self.bx_sensor = 0
+        self.by_sensor = 0 
+        self.bz_sensor = 0
 
 
 
@@ -270,18 +268,36 @@ class MainWindow(QtWidgets.QMainWindow):
                 
                 self.tracker.robot_list[-1].trajectory = coordinates 
         
-        
+    
 
+    def update_sensor_label(self):
+        # Replace this with your actual value source
+        self.ui.bxlabel.setText("Bx: "+str(self.bx_sensor))
+        self.ui.bylabel.setText("By: "+str(self.by_sensor))
+        self.ui.bzlabel.setText("Bz: "+str(self.bz_sensor))
 
+    
 
     def update_actions(self, actions, stopped, robot_list, cell_list):
+
+
+        #read hall effect sensor data from arduino
+        sensor = self.arduino.receive()
+        self.bx_sensor = -1 * round(sensor[0], 1)   #Bx sensor sign is switched
+        self.by_sensor = round(sensor[1], 1)
+        self.bz_sensor = round(sensor[2], 1)
+
+
+   
+
+
         self.frame_number+=1
         #toggle between alpha and orient
         
 
         #output actions if control status is on
         if self.ui.autoacousticbutton.isChecked():
-            self.acoustic_frequency  = actions[-1]   
+            self.acoustic_frequency = actions[-1]   
         
         if self.control_status == True:
 
@@ -407,14 +423,15 @@ class MainWindow(QtWidgets.QMainWindow):
             for bot in robot_list:
                 currentbot_params = [bot.frame_list[-1],
                                      bot.times[-1],
-                                     bot.position_list[-1][0],bot.position_list[-1][1], 
-                                     bot.velocity_list[-1][0], bot.velocity_list[-1][1],bot.velocity_list[-1][2],
+                                     bot.position_list[-1][0]* self.tracker.um2pixel,
+                                     bot.position_list[-1][1]* self.tracker.um2pixel, 
+                                     bot.velocity_list[-1][0]* self.tracker.um2pixel, 
+                                     bot.velocity_list[-1][1]* self.tracker.um2pixel,
+                                     bot.velocity_list[-1][2]* self.tracker.um2pixel,
                                      bot.blur_list[-1],
-                                     bot.area_list[-1],
-                                     bot.avg_area,
-                                     bot.cropped_frame[-1][0],bot.cropped_frame[-1][1],bot.cropped_frame[-1][2],bot.cropped_frame[-1][3],
+                                     bot.area_list[-1]* (self.tracker.um2pixel**2),
                                      bot.um2pixel,
-                                     bot.trajectory,
+                                     [[x * self.tracker.um2pixel, y * self.tracker.um2pixel] for x, y in bot.trajectory]
                                     ]
                 
                 self.robots.append(currentbot_params)
@@ -426,12 +443,13 @@ class MainWindow(QtWidgets.QMainWindow):
             for cell in cell_list:
                 currentcell_params = [cell.frame_list[-1],
                                      cell.times[-1],
-                                     cell.position_list[-1][0],cell.position_list[-1][1], 
-                                     cell.velocity_list[-1][0], cell.velocity_list[-1][1],cell.velocity_list[-1][2],
+                                     cell.position_list[-1][0]* self.tracker.um2pixel,
+                                     cell.position_list[-1][1]* self.tracker.um2pixel, 
+                                     cell.velocity_list[-1][0]* self.tracker.um2pixel, 
+                                     cell.velocity_list[-1][1]* self.tracker.um2pixel,
+                                     cell.velocity_list[-1][2]* self.tracker.um2pixel,
                                      cell.blur_list[-1],
-                                     cell.area_list[-1],
-                                     cell.avg_area,
-                                     cell.cropped_frame[-1][0],cell.cropped_frame[-1][1], cell.cropped_frame[-1][2],cell.cropped_frame[-1][3],
+                                     cell.area_list[-1]* (self.tracker.um2pixel**2),
                                      cell.um2pixel
                                     ]
                 
@@ -440,7 +458,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #DEFINE CURRENT MAGNETIC FIELD OUTPUT TO A LIST 
         
         self.actions = [self.frame_number, self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.gradient_status,self.equal_field_status,
-                        self.acoustic_frequency, self.sensorBx, self.sensorBy, self.sensorBz] 
+                        self.acoustic_frequency, self.bx_sensor, self.by_sensor, self.bz_sensor] 
        
         self.magnetic_field_list.append(self.actions)
         self.apply_actions(True)
@@ -454,6 +472,9 @@ class MainWindow(QtWidgets.QMainWindow):
                 sheet.append(bot[:-1])
             for (sheet, cell) in zip(self.cell_params_sheets,self.cells):
                 sheet.append(cell[:-1])
+
+
+        
 
 
 
@@ -490,9 +511,36 @@ class MainWindow(QtWidgets.QMainWindow):
         self.arduino.send(self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.gradient_status, self.equal_field_status, self.acoustic_frequency)
 
 
+    def toggle_recording(self):
+        if self.cap is not None:
+            if self.recorder and self.recorder.running:
+                self.recorder.stop()
+                self.recorder = None
+                self.stop_data_record()
+                self.ui.recordbutton.setText("Record Video")
+                self.tbprint("Recording Stopped")
+            else:
+                self.frame_queue.queue.clear()
+                 # set filename
+                self.output_file_name = self.ui.videoNameLineEdit.text().strip()
+                if not self.output_file_name:
+                    self.output_file_name = "output"
+
+                file_path  = os.path.join(self.new_dir_path, self.output_file_name+".mp4")
+                self.recorder = RecordThread(self.frame_queue, file_path, self.videofps)
+                self.recorder.start()
+                self.start_data_record()
+                self.ui.recordbutton.setText("Stop Record")
+                self.tbprint("Recording Video...")
+
 
 
     def start_data_record(self):
+        self.frame_number = 0
+        self.tracker.framenum = 1
+        self.tracker.start_time = time.time()
+        self.tracker.time_stamp = 0
+        
         self.output_workbook = openpyxl.Workbook()
             
         #create sheet for magneti field actions
@@ -503,14 +551,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.robot_params_sheets = []
         for i in range(len(self.robots)):
             robot_sheet = self.output_workbook.create_sheet(title= "Robot {}".format(i+1))
-            robot_sheet.append(["Frame","Time(s)","Pos X (px)", "Pos Y (px)", "Vel X (um/s)", "Vel Y (um/s)", "Vel Mag (um/s)", "Blur", "Area (um^2)", "Avg Area (um^2)", "Cropped X (px)","Cropped Y (px)","Cropped W (px)","Cropped H (px)","um2pixel","Path X (px)", "Path Y (px)"])
+            robot_sheet.append(["Frame","Time(s)","Pos X (um)", "Pos Y (um)", "Vel X (um/s)", "Vel Y (um/s)", "Vel Mag (um/s)", "Blur", "Area (um^2)","um2pixel","Path X (um)", "Path Y (um)"])
             self.robot_params_sheets.append(robot_sheet)
         
         #create sheet for robot data
         self.cell_params_sheets = []
         for i in range(len(self.cells)):
             cell_sheet = self.output_workbook.create_sheet(title= "Cell {}".format(i+1))
-            cell_sheet.append(["Frame","Time(s)","Pos X (px)", "Pos Y (px)", "Vel X (um/s)", "Vel Y (um/s)", "Vel Mag (um/s)", "Blur", "Area (um^2)", "Avg Area (um^2)", "Cropped X (px)","Cropped Y (px)","Cropped W (px)","Cropped H (px)","um2pixel"])
+            cell_sheet.append(["Frame","Time(s)","Pos X (um)", "Pos Y (um)", "Vel X (um/s)", "Vel Y (um/s)", "Vel Mag (um/s)", "Blur", "Area (um^2)","um2pixel"])
             self.cell_params_sheets.append(cell_sheet)
 
         #tell update_actions function to start appending data to the sheets
@@ -518,10 +566,17 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
 
+
+    
+
+
+
+
     def stop_data_record(self):
         #tell update_actions function to stop appending data to the sheets
+        
         self.save_status = False
-        file_path  = os.path.join(self.new_dir_path, self.date+".xlsx")
+        file_path  = os.path.join(self.new_dir_path, self.output_file_name+".xlsx")
         
         #add trajectory to file after the fact
         if self.output_workbook is not None:
@@ -552,11 +607,16 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.ui.savedatabutton.isChecked():
             self.ui.savedatabutton.setText("Stop")
             self.start_data_record()
+            self.output_file_name = self.ui.videoNameLineEdit.text().strip()
+            if not self.output_file_name:
+                self.output_file_name = "output"
         else:
             self.ui.savedatabutton.setText("Save Data")
-            self.date = datetime.now().strftime('%Y.%m.%d-%H.%M.%S')
             self.stop_data_record()
             
+
+
+
     def read_excel_actions(self):
         options = QFileDialog.Options()
         self.excel_file_name, _ = QFileDialog.getOpenFileName(self, "Open Excel File", "", "Excel Files (*.xlsx *.xls)", options=options)
@@ -845,7 +905,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         frame = self.handle_zoom(frame)
     
-        self.currentframe = frame
+
         rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         h, w, ch = rgb_image.shape
       
@@ -861,13 +921,22 @@ class MainWindow(QtWidgets.QMainWindow):
         
         #also update robot info
         if len(self.robots) > 0:
-            robot_diameter = round(np.sqrt(4*self.robots[-1][8]/np.pi),1)
+            area = self.robots[-1][8] 
+            robot_diameter = round(np.sqrt(4*area/np.pi),1)
             self.ui.vellcdnum.display(int(self.robots[-1][6]))
             self.ui.blurlcdnum.display(int(self.robots[-1][7]))
             self.ui.sizelcdnum.display(robot_diameter)
                 
        
         self.ui.VideoFeedLabel.setPixmap(qt_img)
+
+
+        #add frame to recording queue if record button is pressed
+        if self.recorder and self.recorder.running:
+            try:
+                self.frame_queue.put_nowait(frame)
+            except queue.Full:
+                pass
         
         
 
@@ -916,23 +985,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.stop_data_record()
     
          
-    def recordfunction_class(self):
-        if self.cap is not None:
-            if self.ui.recordbutton.isChecked():
-                self.date = datetime.now().strftime('%Y.%m.%d-%H.%M.%S')
-                self.recorder = RecordThread(self, self.date)
-                self.recorder.recordstatus = True
-                self.recorder.start()
-                self.ui.recordbutton.setText("Stop")
-                self.tbprint("Start Record")
-                self.start_data_record()
-                
-            else:
-                self.recorder.stop()
-                self.ui.recordbutton.setText("Record")
-                self.tbprint("End Record, Data Saved")
-                self.stop_data_record()
-
+    
 
     
     def setFile(self):
@@ -987,7 +1040,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #if self.ui.recordbutton.isChecked():
             #self.recordfunction()
 
-        #if not self.ui.trackbutton.isChecked(): #clear the pixmap
+        #if not self.ui.startbutton.isChecked(): #clear the pixmap
         self.ui.VideoFeedLabel.setPixmap(QtGui.QPixmap())
         
 
@@ -1012,12 +1065,21 @@ class MainWindow(QtWidgets.QMainWindow):
         
     
     
+    def populate_serial_ports(self):
+        ports = list_ports.comports()
+        self.ui.arduino_portbox.clear()
+        for port in ports:
+            self.ui.arduino_portbox.addItem(port.device)
+        self.arduino_port = port
         
 
+    def handle_port_change(self, selected_port):
+        self.arduino_port = selected_port
 
-    def track(self):
+
+    def start(self):
         if self.videopath is not None:
-            if self.ui.trackbutton.isChecked():
+            if self.ui.startbutton.isChecked():
                 self.frame_number = 0
                 self.setFile()
                 
@@ -1027,7 +1089,13 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.tracker.actions_signal.connect(self.update_actions)
                 self.tracker.start()
 
-                self.ui.trackbutton.setText("Stop")
+                #connect to arduino
+                self.arduino = ArduinoHandler(self.tbprint)
+                self.arduino.connect(self.arduino_port)
+
+                
+
+                self.ui.startbutton.setText("Stop")
                 self.ui.VideoFeedLabel.setStyleSheet("background-color: rgb(0,0,0); border:2px solid rgb(0, 255, 0); ")
                 self.ui.CroppedVideoFeedLabel.setStyleSheet("background-color: rgb(0,0,0); border:2px solid rgb(0, 255, 0); ")
         
@@ -1037,7 +1105,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.ui.CroppedVideoFeedLabel.setStyleSheet("background-color: rgb(0,0,0); border:2px solid rgb(255, 0, 0); ")
         
                 if self.tracker is not None:
-                    self.ui.trackbutton.setText("Track")
+                    self.ui.startbutton.setText("Start")
                     self.tracker.stop()
                     
                     #reset control button
@@ -1160,14 +1228,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
     
     
-    def update_halleffect_sensor(self, vals):
-        sensorBx, sensorBy, sensorBz = vals
-        self.ui.bxlabel.setText("Bx:{}".format(sensorBx))
-        self.ui.bylabel.setText("By:{}".format(sensorBy))
-        self.ui.bzlabel.setText("Bz:{}".format(sensorBz))
-        self.sensorBx = sensorBx
-        self.sensorBy = sensorBy
-        self.sensorBz = sensorBz
     
     def get_manual_bfieldbuttons(self):
         if self.ui.manualapplybutton.isChecked():
@@ -1337,5 +1397,4 @@ class MainWindow(QtWidgets.QMainWindow):
         
         self.simulator.stop()
         self.apply_actions(False)
-        self.halleffect.stop()
         self.arduino.close()
