@@ -378,7 +378,7 @@ class VideoThread(QThread):
                         x1, y1, w, h = bot.cropped_frame[-1]
 
                         cv2.rectangle(display_frame, (x1, y1), (x1 + w, y1 + h), botcolor, 4)
-                        cv2.putText(display_frame,str(botnum+1),(x1 + w,y1 + h),cv2.FONT_HERSHEY_SIMPLEX, fontScale=1.5, thickness=3,color = (255, 255, 255))
+                        cv2.putText(display_frame,str(botnum+1),(x1 + w,y1 + h),cv2.FONT_HERSHEY_SIMPLEX, fontScale=1.5, thickness=4,color = (255, 255, 255))
                         
                         pts = np.array(bot.position_list, np.int32)
                         cv2.polylines(display_frame, [pts], False, botcolor, 5)
@@ -399,7 +399,7 @@ class VideoThread(QThread):
                     x1, y1, w, h = cell.cropped_frame[-1]
 
                     cv2.rectangle(display_frame, (x1, y1), (x1 + w, y1 + h), (0,255,0), 5)
-                    cv2.putText(display_frame,str(cellnum+1),(x1 + w, y1 + h),cv2.FONT_HERSHEY_SIMPLEX, fontScale=1.5, thickness=3,color = (255, 255, 255))
+                    cv2.putText(display_frame,str(cellnum+1),(x1 + w, y1 + h),cv2.FONT_HERSHEY_SIMPLEX, fontScale=1.5, thickness=5,color = (255, 255, 255))
                     
                     pts = np.array(cell.position_list, np.int32)
                     cv2.polylines(display_frame, [pts], False, cellcolor, 5)
@@ -409,7 +409,7 @@ class VideoThread(QThread):
                         (int(self.width  / 80),int(self.height / 14)),
                         cv2.FONT_HERSHEY_SIMPLEX,
                         fontScale=1.5, 
-                        thickness=3,
+                        thickness=5,
                         color = (0, 0, 0))
             
             
@@ -418,7 +418,7 @@ class VideoThread(QThread):
                 (int(self.width / 80),int(self.height / 30)),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 fontScale=1.5, 
-                thickness=3,
+                thickness=5,
                 color = (0, 0, 0),
             
             )
@@ -427,7 +427,7 @@ class VideoThread(QThread):
                 (int(self.width / 8),int(self.height /40)),
                 (int(self.width / 8) + int(100 / (self.um2pixel)),int(self.height / 40)), 
                 (0, 0, 0), 
-                thickness=5
+                thickness=20
             )
             
     

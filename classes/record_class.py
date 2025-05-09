@@ -32,7 +32,7 @@ class RecordThread(QThread):
                 
                 font = cv2.FONT_HERSHEY_SIMPLEX
                 scale = 1.5
-                thickness = 4
+                thickness = 5
                 color = (0, 0, 0)
 
                 (text_width, text_height), _ = cv2.getTextSize(timestamp, font, scale, thickness)

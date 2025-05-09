@@ -15,31 +15,33 @@ class ArduinoHandler:
                 no successful port has been used
     """
 
-    def __init__(self, printer):
+    def __init__(self, printer, port):
         self.conn = None
-        self.port = None
+        self.port = port
         self.printer = printer
+        self.connect()
 
         
 
-    def connect(self, port: str) -> None:
+    def connect(self):
         """
         Initializes a connection to an arduino at a specified port. If successful,
         the conn and port attributes are updated
         """
         if self.conn is None:
             try:
-                self.conn = txfer.SerialTransfer(port)
-                self.port = port
+                self.conn = txfer.SerialTransfer(self.port)
+                self.port = self.port
                 self.conn.open()
                 time.sleep(1)
-                self.printer(f"Arduino Connection initialized using port {port}")
+                self.printer(f"Arduino Connection initialized using port {self.port}")
             except InvalidSerialPort:
                 self.printer("Could not connect to arduino, disabling")
                 self.conn = None
                 self.port = None
         else:
-            self.printer(f"Connection already initialized at port {self.port}, new port {port} ignored")
+            self.printer(f"Connection already initialized at port {self.port}, new port {self.port} ignored")
+   
    
     def send(self, Bx, By, Bz, alpha, gamma, freq, psi, gradient_status, equal_field_status, acoustic_freq) -> None:
         """
@@ -57,7 +59,7 @@ class ArduinoHandler:
         By = round(By,3)
         Bz = round(Bz,3)
 
-        data = [float(Bx), float(By), float(Bz), float(alpha), float(gamma), float(freq),float(psi), float(acoustic_freq), float(gradient_status), float(equal_field_status), ]
+        data = [float(Bx), float(By), float(Bz), float(alpha), float(gamma), float(freq),float(psi), float(gradient_status), float(equal_field_status), float(acoustic_freq)]
         if self.conn is None:
             #self.printer("Connection not initialized..."+ str(data))  
             #self.printer("No Connection:  "+ "Bx: {},    By: {},    Bz: {},    alpha: {},    gamma: {},    freq: {},    psi: {}".format(Bx,By,Bz,alpha,gamma,freq,psi)) 
@@ -80,6 +82,7 @@ class ArduinoHandler:
         return the values in the class self.receive
         """
         #recv
+
         if self.conn.available():
         
             recSize = 0
@@ -102,6 +105,8 @@ class ArduinoHandler:
 
         else:
             return [0,0,0]
+      
+
 
 
     def close(self) -> None:
@@ -120,6 +125,7 @@ class ArduinoHandler:
          
             self.send(0,0,0,0,0,0,0,0,0,0)
             self.conn.close()
+
             self.printer(f"Closing connection at port {self.port}")
    
             

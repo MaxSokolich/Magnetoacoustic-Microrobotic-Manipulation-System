@@ -898,7 +898,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     (int(self.video_width / 1.8),int(self.video_height / 20)),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     fontScale=1.5, 
-                    thickness=3,
+                    thickness=5,
                     color = (0, 0, 0),
                 )
             
@@ -907,7 +907,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 (int(self.video_width / 8),int(self.video_height / 14)),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 fontScale=1.5, 
-                thickness=3,
+                thickness=5,
                 color = (0, 0, 0),
             )
 
@@ -1083,7 +1083,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.arduino_portbox.clear()
         for port in ports:
             self.ui.arduino_portbox.addItem(port.device)
-        self.arduino_port = port
+        self.arduino_port = port.device
         
 
     def handle_port_change(self, selected_port):
@@ -1091,8 +1091,15 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
     def start(self):
-        if self.videopath is not None:
-            if self.ui.startbutton.isChecked():
+
+        if self.ui.startbutton.isChecked():
+            #connect to arduino
+            self.arduino = ArduinoHandler(self.tbprint, self.arduino_port)
+            self.arduino.connect()
+  
+
+            if self.videopath is not None:
+
                 self.frame_number = 0
                 self.setFile()
                 
@@ -1101,11 +1108,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.tracker.cropped_frame_signal.connect(self.update_croppedimage)
                 self.tracker.actions_signal.connect(self.update_actions)
                 self.tracker.start()
-
-                #connect to arduino
-                self.arduino = ArduinoHandler(self.tbprint)
-                self.arduino.connect(self.arduino_port)
-
+               
+                
                 
 
                 self.ui.startbutton.setText("Stop")
@@ -1113,54 +1117,60 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.ui.CroppedVideoFeedLabel.setStyleSheet("background-color: rgb(0,0,0); border:2px solid rgb(0, 255, 0); ")
         
                 
-            else:
-                self.ui.VideoFeedLabel.setStyleSheet("background-color: rgb(0,0,0); border:2px solid rgb(255, 0, 0); ")
-                self.ui.CroppedVideoFeedLabel.setStyleSheet("background-color: rgb(0,0,0); border:2px solid rgb(255, 0, 0); ")
-        
-                if self.tracker is not None:
-                    self.ui.startbutton.setText("Start")
-                    self.tracker.stop()
-                    
-                    #reset control button
-                    self.control_status = False
-                    self.ui.controlbutton.setText("Control")
-                    self.tbprint("Control Off")
-                    self.ui.controlbutton.setChecked(False)
+        else:
+            self.ui.VideoFeedLabel.setStyleSheet("background-color: rgb(0,0,0); border:2px solid rgb(255, 0, 0); ")
+            self.ui.CroppedVideoFeedLabel.setStyleSheet("background-color: rgb(0,0,0); border:2px solid rgb(255, 0, 0); ")
+            
+            if self.arduino is not None:
+                self.arduino.close()
+          
 
-                    #reset joystick button
-                    self.joystick_status = False
-                    self.ui.joystickbutton.setText("Joystick")
-                    self.tbprint("Joystick Off")
-                    self.ui.joystickbutton.setChecked(False)
 
-                    #reset mask button
-                    self.tracker.mask_flag = False
-                    self.ui.maskbutton.setText("Mask")
-                    self.ui.maskbutton.setChecked(False)
-
-                    #also reset pause button
-                    self.ui.pausebutton.setChecked(False)
-                    self.ui.pausebutton.setText("Pause")
-
-                    self.ui.pausebutton.hide()
-                    self.ui.leftbutton.hide()
-                    self.ui.rightbutton.hide()
+            if self.tracker is not None:
+                self.ui.startbutton.setText("Start")
+                self.tracker.stop()
                 
+                
+                #reset control button
+                self.control_status = False
+                self.ui.controlbutton.setText("Control")
+                self.tbprint("Control Off")
+                self.ui.controlbutton.setChecked(False)
 
-                    #zero arduino commands
-                    self.apply_actions(False)
-                    del self.tracker.robot_list[:]
-                    del self.magnetic_field_list[:]
+                #reset joystick button
+                self.joystick_status = False
+                self.ui.joystickbutton.setText("Joystick")
+                self.tbprint("Joystick Off")
+                self.ui.joystickbutton.setChecked(False)
 
-                    self.ui.applyacousticbutton.setChecked(False)
-                    self.ui.led.setStyleSheet("\n"
-                    "                background-color: rgb(255, 0, 0);\n"
-                    "                border-style: outset;\n"
-                    "                border-width: 3px;\n"
-                    "                border-radius: 12px;\n"
-                    "                border-color: rgb(255, 0, 0);\n"
-                    "         \n"
-                    "                padding: 6px;")
+                #reset mask button
+                self.tracker.mask_flag = False
+                self.ui.maskbutton.setText("Mask")
+                self.ui.maskbutton.setChecked(False)
+
+                #also reset pause button
+                self.ui.pausebutton.setChecked(False)
+                self.ui.pausebutton.setText("Pause")
+
+                self.ui.pausebutton.hide()
+                self.ui.leftbutton.hide()
+                self.ui.rightbutton.hide()
+            
+
+                #zero arduino commands
+                self.apply_actions(False)
+                del self.tracker.robot_list[:]
+                del self.magnetic_field_list[:]
+
+                self.ui.applyacousticbutton.setChecked(False)
+                self.ui.led.setStyleSheet("\n"
+                "                background-color: rgb(255, 0, 0);\n"
+                "                border-style: outset;\n"
+                "                border-width: 3px;\n"
+                "                border-radius: 12px;\n"
+                "                border-color: rgb(255, 0, 0);\n"
+                "         \n"
+                "                padding: 6px;")
 
             
 
