@@ -872,8 +872,8 @@ QPushButton {
      <widget class="QPushButton" name="maskbutton">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>10</y>
+        <x>5</x>
+        <y>8</y>
         <width>101</width>
         <height>31</height>
        </rect>
@@ -938,7 +938,7 @@ QPushButton {
      <widget class="QCheckBox" name="maskinvert_checkBox">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>150</x>
         <y>10</y>
         <width>131</width>
         <height>30</height>
@@ -1078,7 +1078,7 @@ QPushButton {
       <property name="geometry">
        <rect>
         <x>210</x>
-        <y>50</y>
+        <y>45</y>
         <width>2</width>
         <height>231</height>
        </rect>
@@ -1094,7 +1094,7 @@ QPushButton {
       <property name="geometry">
        <rect>
         <x>110</x>
-        <y>50</y>
+        <y>45</y>
         <width>2</width>
         <height>231</height>
        </rect>
@@ -1126,7 +1126,7 @@ QPushButton {
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>50</y>
+        <y>45</y>
         <width>311</width>
         <height>2</height>
        </rect>
@@ -1221,6 +1221,48 @@ QPushButton {
       </property>
       <property name="text">
        <string>Upper Thresh</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="cleartrackingbutton">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>51</y>
+        <width>71</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>21</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+                color: rgb(255, 255, 255);
+                background-color: rgb(0, 0, 0);
+                border-style: outset;
+                border-width: 3px;
+                border-radius: 10px;
+                border-color: rgb(0, 0, 0);
+                min-width: 1em;
+      
+            }
+      
+
+            QPushButton:hover {
+                background-color: rgb(100, 100, 100);
+                color: rgb(255, 255, 255);
+                border-color: rgb(100, 100, 100);
+
+            }</string>
+      </property>
+      <property name="text">
+       <string>Clear</string>
+      </property>
+      <property name="checkable">
+       <bool>false</bool>
       </property>
      </widget>
     </widget>

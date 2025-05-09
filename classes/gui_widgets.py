@@ -398,7 +398,7 @@ class Ui_MainWindow(object):
         self.maskblurlabel.setMaximumSize(QtCore.QSize(150, 25))
         self.maskblurlabel.setObjectName("maskblurlabel")
         self.maskbutton = QtWidgets.QPushButton(self.trackerparamsframe)
-        self.maskbutton.setGeometry(QtCore.QRect(20, 10, 101, 31))
+        self.maskbutton.setGeometry(QtCore.QRect(5, 8, 101, 31))
         self.maskbutton.setStyleSheet("QPushButton {\n"
 "                color: rgb(255, 255, 255);\n"
 "                background-color: rgb(0, 0, 0);\n"
@@ -426,7 +426,7 @@ class Ui_MainWindow(object):
         self.cellmask_radio.setGeometry(QtCore.QRect(220, 50, 81, 30))
         self.cellmask_radio.setObjectName("cellmask_radio")
         self.maskinvert_checkBox = QtWidgets.QCheckBox(self.trackerparamsframe)
-        self.maskinvert_checkBox.setGeometry(QtCore.QRect(140, 10, 131, 30))
+        self.maskinvert_checkBox.setGeometry(QtCore.QRect(150, 10, 131, 30))
         self.maskinvert_checkBox.setChecked(False)
         self.maskinvert_checkBox.setObjectName("maskinvert_checkBox")
         self.cellmaskblurbox = QtWidgets.QSpinBox(self.trackerparamsframe)
@@ -483,11 +483,11 @@ class Ui_MainWindow(object):
         self.cellcroplengthbox.setProperty("value", 40)
         self.cellcroplengthbox.setObjectName("cellcroplengthbox")
         self.label = QtWidgets.QLabel(self.trackerparamsframe)
-        self.label.setGeometry(QtCore.QRect(210, 50, 2, 231))
+        self.label.setGeometry(QtCore.QRect(210, 45, 2, 231))
         self.label.setStyleSheet("background-color: rgb(0,0,0); ")
         self.label.setObjectName("label")
         self.label_10 = QtWidgets.QLabel(self.trackerparamsframe)
-        self.label_10.setGeometry(QtCore.QRect(110, 50, 2, 231))
+        self.label_10.setGeometry(QtCore.QRect(110, 45, 2, 231))
         self.label_10.setStyleSheet("background-color: rgb(0,0,0); ")
         self.label_10.setObjectName("label_10")
         self.label_11 = QtWidgets.QLabel(self.trackerparamsframe)
@@ -495,7 +495,7 @@ class Ui_MainWindow(object):
         self.label_11.setStyleSheet("background-color: rgb(0,0,0); ")
         self.label_11.setObjectName("label_11")
         self.label_12 = QtWidgets.QLabel(self.trackerparamsframe)
-        self.label_12.setGeometry(QtCore.QRect(0, 50, 311, 2))
+        self.label_12.setGeometry(QtCore.QRect(0, 45, 311, 2))
         self.label_12.setStyleSheet("background-color: rgb(0,0,0); ")
         self.label_12.setObjectName("label_12")
         self.robotmaskupperbox = QtWidgets.QSpinBox(self.trackerparamsframe)
@@ -530,6 +530,29 @@ class Ui_MainWindow(object):
         self.maskthreshlabel_2.setGeometry(QtCore.QRect(10, 170, 81, 16))
         self.maskthreshlabel_2.setMaximumSize(QtCore.QSize(150, 25))
         self.maskthreshlabel_2.setObjectName("maskthreshlabel_2")
+        self.cleartrackingbutton = QtWidgets.QPushButton(self.trackerparamsframe)
+        self.cleartrackingbutton.setGeometry(QtCore.QRect(20, 51, 71, 20))
+        self.cleartrackingbutton.setMinimumSize(QtCore.QSize(21, 0))
+        self.cleartrackingbutton.setStyleSheet("QPushButton {\n"
+"                color: rgb(255, 255, 255);\n"
+"                background-color: rgb(0, 0, 0);\n"
+"                border-style: outset;\n"
+"                border-width: 3px;\n"
+"                border-radius: 10px;\n"
+"                border-color: rgb(0, 0, 0);\n"
+"                min-width: 1em;\n"
+"      \n"
+"            }\n"
+"      \n"
+"\n"
+"            QPushButton:hover {\n"
+"                background-color: rgb(100, 100, 100);\n"
+"                color: rgb(255, 255, 255);\n"
+"                border-color: rgb(100, 100, 100);\n"
+"\n"
+"            }")
+        self.cleartrackingbutton.setCheckable(False)
+        self.cleartrackingbutton.setObjectName("cleartrackingbutton")
         self.robotparamsframe = QtWidgets.QFrame(self.dockWidgetContents)
         self.robotparamsframe.setGeometry(QtCore.QRect(10, 549, 311, 61))
         self.robotparamsframe.setStyleSheet(" color: rgb(255, 255, 255);\n"
@@ -1290,6 +1313,7 @@ class Ui_MainWindow(object):
         self.label_11.setText(_translate("MainWindow", "TextLabel"))
         self.label_12.setText(_translate("MainWindow", "TextLabel"))
         self.maskthreshlabel_2.setText(_translate("MainWindow", "Upper Thresh"))
+        self.cleartrackingbutton.setText(_translate("MainWindow", "Clear"))
         self.robotsizelabel.setText(_translate("MainWindow", "Size:   "))
         self.robotvelocitylabel.setText(_translate("MainWindow", "Velocity: "))
         self.robotblurlabel.setText(_translate("MainWindow", "Blur:"))

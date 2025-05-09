@@ -172,7 +172,12 @@ class MainWindow(QtWidgets.QMainWindow):
             self.tbprint("Connected to: "+str(self.joystick.get_name()))
         
       
-
+        self.sensorupdatetimer = QTimer(self)
+        self.sensorupdatetimer.timeout.connect(self.update_sensor_label)
+        self.sensorupdatetimer.start(25)  # Update every 500 ms
+        self.bx_sensor = 0
+        self.by_sensor = 0 
+        self.bz_sensor = 0
 
      
 
@@ -231,6 +236,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.apply_actions.clicked.connect(self.apply_excel_actions)
         self.ui.arduino_portbox.currentTextChanged.connect(self.handle_port_change)
 
+        self.ui.cleartrackingbutton.clicked.connect(self.clear_tracking)
+
         self.excel_file_name = None
         self.excel_actions_df = None
         self.excel_actions_status = False
@@ -238,12 +245,17 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.ui.makeshapebutton.clicked.connect(self.makeshape_trajectory)
 
-        self.timer = QTimer(self)
-        self.timer.timeout.connect(self.update_sensor_label)
-        self.timer.start(25)  # Update every 500 ms
-        self.bx_sensor = 0
-        self.by_sensor = 0 
-        self.bz_sensor = 0
+        
+
+    def clear_tracking(self):
+        if self.tracker is not None:
+            del self.tracker.robot_list[:]
+            del self.tracker.cell_list[:]
+            del self.magnetic_field_list[:]
+            del self.robots[:]
+            del self.cells[:]
+            self.apply_actions(False)
+    
 
 
 
