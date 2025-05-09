@@ -106,6 +106,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.cap = None
         self.tracker = None
         self.populate_serial_ports()
+        self.arduino = None
 
         #record variables
         self.recorder = None
@@ -1409,4 +1410,5 @@ class MainWindow(QtWidgets.QMainWindow):
         
         self.simulator.stop()
         self.apply_actions(False)
-        self.arduino.close()
+        if self.arduino is not None:
+            self.arduino.close()
