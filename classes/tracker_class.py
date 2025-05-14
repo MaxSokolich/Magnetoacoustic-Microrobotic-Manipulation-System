@@ -79,7 +79,7 @@ class VideoThread(QThread):
         else:
             self.totalnumframes = 0
            
-        self.um2pixel =  3.45 / self.objective # each pixel is 3.35 um in size at 1x. [um] / [px]
+        self.pixel2um =  3.45 / self.objective # each pixel is 3.35 um in size at 1x. [um] / [px]
         
             #at 10x objective
             #width_in_pixels = 2448 #pixels
@@ -187,7 +187,7 @@ class VideoThread(QThread):
                         for contour in contours:
                             if cv2.contourArea(contour) > cv2.contourArea(max_cnt): 
                                 max_cnt = contour
-                        area = cv2.contourArea(max_cnt)#* (self.um2pixel**2)
+                        area = cv2.contourArea(max_cnt)#* (self.pixel2um**2)
                         
                         #find the center of mass from the mask
                         szsorted=np.argsort(sizes)
@@ -207,8 +207,8 @@ class VideoThread(QThread):
 
                         #find velocity:
                         if len(bot.position_list) > self.memory:
-                            vx = (current_pos[0] - bot.position_list[-self.memory][0]) * (self.fps.get_fps()/self.memory) #* self.um2pixel
-                            vy = (current_pos[1] - bot.position_list[-self.memory][1]) * (self.fps.get_fps()/self.memory) #* self.um2pixel
+                            vx = (current_pos[0] - bot.position_list[-self.memory][0]) * (self.fps.get_fps()/self.memory) #* self.pixel2um
+                            vy = (current_pos[1] - bot.position_list[-self.memory][1]) * (self.fps.get_fps()/self.memory) #* self.pixel2um
 
                
                             magnitude = np.sqrt(vx**2 + vy**2)
@@ -231,7 +231,7 @@ class VideoThread(QThread):
                         bot.add_area(area)
                         bot.add_blur(blur)
                         bot.set_avg_area(np.mean(bot.area_list))
-                        bot.add_um2pixel(self.um2pixel)
+                        bot.add_um2pixel(self.pixel2um)
 
                         #this will toggle between the cropped frame display being the masked version and the original
                         if self.croppedmask_flag == False:
@@ -296,7 +296,7 @@ class VideoThread(QThread):
                         for contour in contours:
                             if cv2.contourArea(contour) > cv2.contourArea(max_cnt): 
                                 max_cnt = contour
-                        area = cv2.contourArea(max_cnt)#* (self.um2pixel**2)
+                        area = cv2.contourArea(max_cnt)#* (self.pixel2um**2)
                     
                         
                         #find the center of mass from the mask
@@ -317,8 +317,8 @@ class VideoThread(QThread):
 
                         #find velocity:
                         if len(cell.position_list) > self.memory:
-                            vx = (current_pos[0] - cell.position_list[-self.memory][0]) * (self.fps.get_fps()/self.memory) #* self.um2pixel
-                            vy = (current_pos[1] - cell.position_list[-self.memory][1]) * (self.fps.get_fps()/self.memory) #* self.um2pixel
+                            vx = (current_pos[0] - cell.position_list[-self.memory][0]) * (self.fps.get_fps()/self.memory) #* self.pixel2um
+                            vy = (current_pos[1] - cell.position_list[-self.memory][1]) * (self.fps.get_fps()/self.memory) #* self.pixel2um
                             magnitude = np.sqrt(vx**2 + vy**2)
 
                             velocity = [vx,vy,magnitude]
@@ -339,7 +339,7 @@ class VideoThread(QThread):
                         cell.add_area(area)
                         cell.add_blur(blur)
                         cell.set_avg_area(np.mean(cell.area_list))
-                        cell.add_um2pixel(self.um2pixel)
+                        cell.add_um2pixel(self.pixel2um)
                         
                         #this will toggle between the cropped frame display being the masked version and the original
                         if self.croppedmask_flag == False:
@@ -425,7 +425,7 @@ class VideoThread(QThread):
             cv2.line(
                 display_frame, 
                 (int(self.width / 8),int(self.height /40)),
-                (int(self.width / 8) + int(100 / (self.um2pixel)),int(self.height / 40)), 
+                (int(self.width / 8) + int(100 / (self.pixel2um)),int(self.height / 40)), 
                 (0, 0, 0), 
                 thickness=20
             )
@@ -462,7 +462,7 @@ class VideoThread(QThread):
             if ret:       
                 if self.totalnumframes ==0:         
                     self.cap.set(cv2.CAP_PROP_EXPOSURE, self.exposure)
-                    self.um2pixel =   3.45 / self.objective
+                    self.pixel2um =   3.45 / self.objective
                     
 
                 #step 1 track robot

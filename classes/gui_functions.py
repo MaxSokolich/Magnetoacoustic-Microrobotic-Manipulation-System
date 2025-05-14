@@ -436,15 +436,15 @@ class MainWindow(QtWidgets.QMainWindow):
             for bot in robot_list:
                 currentbot_params = [bot.frame_list[-1],
                                      bot.times[-1],
-                                     bot.position_list[-1][0]* self.tracker.um2pixel,
-                                     bot.position_list[-1][1]* self.tracker.um2pixel, 
-                                     bot.velocity_list[-1][0]* self.tracker.um2pixel, 
-                                     bot.velocity_list[-1][1]* self.tracker.um2pixel,
-                                     bot.velocity_list[-1][2]* self.tracker.um2pixel,
+                                     bot.position_list[-1][0]* self.tracker.pixel2um,
+                                     bot.position_list[-1][1]* self.tracker.pixel2um, 
+                                     bot.velocity_list[-1][0]* self.tracker.pixel2um, 
+                                     bot.velocity_list[-1][1]* self.tracker.pixel2um,
+                                     bot.velocity_list[-1][2]* self.tracker.pixel2um,
                                      bot.blur_list[-1],
-                                     bot.area_list[-1]* (self.tracker.um2pixel**2),
-                                     bot.um2pixel,
-                                     [[x * self.tracker.um2pixel, y * self.tracker.um2pixel] for x, y in bot.trajectory]
+                                     bot.area_list[-1]* (self.tracker.pixel2um**2),
+                                     bot.pixel2um,
+                                     [[x * self.tracker.pixel2um, y * self.tracker.pixel2um] for x, y in bot.trajectory]
                                     ]
                 
                 self.robots.append(currentbot_params)
@@ -456,14 +456,14 @@ class MainWindow(QtWidgets.QMainWindow):
             for cell in cell_list:
                 currentcell_params = [cell.frame_list[-1],
                                      cell.times[-1],
-                                     cell.position_list[-1][0]* self.tracker.um2pixel,
-                                     cell.position_list[-1][1]* self.tracker.um2pixel, 
-                                     cell.velocity_list[-1][0]* self.tracker.um2pixel, 
-                                     cell.velocity_list[-1][1]* self.tracker.um2pixel,
-                                     cell.velocity_list[-1][2]* self.tracker.um2pixel,
+                                     cell.position_list[-1][0]* self.tracker.pixel2um,
+                                     cell.position_list[-1][1]* self.tracker.pixel2um, 
+                                     cell.velocity_list[-1][0]* self.tracker.pixel2um, 
+                                     cell.velocity_list[-1][1]* self.tracker.pixel2um,
+                                     cell.velocity_list[-1][2]* self.tracker.pixel2um,
                                      cell.blur_list[-1],
-                                     cell.area_list[-1]* (self.tracker.um2pixel**2),
-                                     cell.um2pixel
+                                     cell.area_list[-1]* (self.tracker.pixel2um**2),
+                                     cell.pixel2um
                                     ]
                 
                 self.cells.append(currentcell_params)
@@ -564,14 +564,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.robot_params_sheets = []
         for i in range(len(self.robots)):
             robot_sheet = self.output_workbook.create_sheet(title= "Robot {}".format(i+1))
-            robot_sheet.append(["Frame","Time(s)","Pos X (um)", "Pos Y (um)", "Vel X (um/s)", "Vel Y (um/s)", "Vel Mag (um/s)", "Blur", "Area (um^2)","um2pixel","Path X (um)", "Path Y (um)"])
+            robot_sheet.append(["Frame","Time(s)","Pos X (um)", "Pos Y (um)", "Vel X (um/s)", "Vel Y (um/s)", "Vel Mag (um/s)", "Blur", "Area (um^2)","pixel2um","Path X (um)", "Path Y (um)"])
             self.robot_params_sheets.append(robot_sheet)
         
         #create sheet for robot data
         self.cell_params_sheets = []
         for i in range(len(self.cells)):
             cell_sheet = self.output_workbook.create_sheet(title= "Cell {}".format(i+1))
-            cell_sheet.append(["Frame","Time(s)","Pos X (um)", "Pos Y (um)", "Vel X (um/s)", "Vel Y (um/s)", "Vel Mag (um/s)", "Blur", "Area (um^2)","um2pixel"])
+            cell_sheet.append(["Frame","Time(s)","Pos X (um)", "Pos Y (um)", "Vel X (um/s)", "Vel Y (um/s)", "Vel Mag (um/s)", "Blur", "Area (um^2)","pixel2um"])
             self.cell_params_sheets.append(cell_sheet)
 
         #tell update_actions function to start appending data to the sheets
