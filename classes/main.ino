@@ -18,7 +18,7 @@ Adafruit_ADS1115 ads;  // Create ADS1115 object
 SerialTransfer myTransfer;
 
 
-float action[9]; //an array to store incoming data from python
+float action[10]; //an array to store incoming data from python
 
 
 //Store data from arduino to send to python
@@ -44,6 +44,7 @@ float psi;
 float gradient_status;
 float equal_field_status;
 float acoustic_frequency;
+float null;
 
 
 
@@ -367,6 +368,7 @@ void loop()
    acoustic_frequency = action[7];
    gradient_status = action[8];
    equal_field_status = action[9];
+   null =action[10];
 
    
    

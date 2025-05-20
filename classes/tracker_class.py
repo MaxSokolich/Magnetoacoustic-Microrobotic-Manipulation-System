@@ -232,10 +232,7 @@ class VideoThread(QThread):
                         bot.add_blur(blur)
                         bot.set_avg_area(np.mean(bot.area_list))
                         bot.add_um2pixel(self.pixel2um)
-
-                        #this will toggle between the cropped frame display being the masked version and the original
-                        if self.croppedmask_flag == False:
-                            croppedmask = croppedframe
+        
 
                     else:
                         if len(self.robot_list) > 0:
@@ -255,6 +252,12 @@ class VideoThread(QThread):
                 bot.crop_length = self.robot_crop_length
             else:
                 recorded_cropped_frame = np.zeros((self.crop_length_record, self.crop_length_record, 3), dtype=np.uint8) 
+            
+            
+            #this will toggle between the cropped frame display being the masked version and the original
+            if self.croppedmask_flag == False:
+                croppedmask = croppedframe
+
 
         else:
             recorded_cropped_frame = np.zeros((self.crop_length_record, self.crop_length_record, 3), dtype=np.uint8) 
@@ -353,7 +356,10 @@ class VideoThread(QThread):
                 
             #adjust most recent bot crop_length 
             cell.crop_length = self.cell_crop_length
-
+            
+            #this will toggle between the cropped frame display being the masked version and the original
+            if self.croppedmask_flag == False:
+                croppedmask = croppedframe
         else:
             croppedmask = np.zeros((310, 310, 3), dtype=np.uint8)
 
@@ -497,7 +503,7 @@ class VideoThread(QThread):
 
                 #step 2 control robot
                 if len(self.robot_list)>0:
-                    self.control_robot.pix2metric = self.pix
+                    self.control_robot.pix2metric = self.pixel2um
                     displayframe, actions, stopped = self.control_robot.run(displayframe, cell_mask, self.robot_list, self.RRTtreesize, self.arrivalthresh, self.orientstatus, self.autoacousticstatus)
                 else:
                     actions = [0,0,0,0,0,0,0,0]

@@ -9,6 +9,7 @@ class algorithm:
    
     def __init__(self):
         self.reset()
+        self.pixel2um =   3.45 / 10  #um/s
 
     def reset(self):
         self.node = 0
@@ -28,10 +29,9 @@ class algorithm:
         self.increment = 10000   #increment to step frequency by
         self.optimal_freq = None
         self.resistance = 0
-        self.vmag_min = 2
-        self.vmag_max = 5
+        self.vmag_min = 5   #um/s
+        self.vmag_max = 10   #um/s
 
-        self.pix2metric = 0
 
 
         self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.acoustic_frequency = 0,0,0,0,0,0,0,0
@@ -41,9 +41,7 @@ class algorithm:
 
     def run(self, frame, mask, robot_list, stepsize, arrivialthresh, orientstatus, autoacoustic_status):
         
-        
-
-        
+    
         if len(robot_list[-1].trajectory) > 0:
             if self.count == 0: #% 10
               
@@ -98,8 +96,8 @@ class algorithm:
                 self.alpha = np.arctan2(-direction_vec[1], direction_vec[0])
                 
                 if orientstatus == True:
-                    #self.Bx, self.By, self.Bz, self.alpha = self.orient(robot_list[-1], direction_vec)
-                    self.Bx, self.By, self.Bz, self.alpha = direction_vec[0]/np.linalg.norm(direction_vec), -(direction_vec[1]/np.linalg.norm(direction_vec)), 0,0
+                    self.Bx, self.By, self.Bz, self.alpha = self.orient(robot_list[-1], direction_vec)
+                    #self.Bx, self.By, self.Bz, self.alpha = direction_vec[0]/np.linalg.norm(direction_vec), -(direction_vec[1]/np.linalg.norm(direction_vec)), 0,0
                 else:
                     self.Bx, self.By, self.Bz = 0,0,0
                 
@@ -139,8 +137,8 @@ class algorithm:
     def find_optimal_acoustic_freq(self, robot_list):
         #take a rolling average of the velocity from past 10 frames and average
         if len(robot_list[-1].velocity_list) > 0:
-            vmag_avg = robot_list[-1].velocity_list[-1][2]
-            print(vmag_avg)
+            vmag_avg = robot_list[-1].velocity_list[-1][2] * self.pixel2um
+
             
             ## CASE #1
             if vmag_avg < self.vmag_min: 
@@ -184,8 +182,8 @@ class algorithm:
         if len(bot.velocity_list) >= 0:
             
             #find the velocity avearge over the last memory number of frames to mitigate noise: 
-            vx = bot.velocity_list[-1][0]
-            vy = bot.velocity_list[-1][1]
+            vx = bot.velocity_list[-1][0] * self.pixel2um
+            vy = bot.velocity_list[-1][1] * self.pixel2um
             
             vel_bot = np.array([vx, vy])  # current velocity of self propelled robot
             vd = np.linalg.norm(vel_bot)
@@ -235,10 +233,10 @@ class algorithm:
             bnorm = np.sqrt(self.B_vec[0]**2+self.B_vec[1]**2)
             vdotb = vx * self.B_vec[0]+vy*self.B_vec[1]
              
-            self.theta =  np.arccos(vdotb / (vnorm*bnorm))
+            #self.theta =  np.arccos(vdotb / (vnorm*bnorm))
 
             #self.theta = math.atan2(vy- self.B_vec[1],  vx - self.B_vec[0])
-            #self.theta = np.arctan2(np.cross(vel_bot, self.B_vec), np.dot(vel_bot, self.B_vec))
+            self.theta = np.arctan2(np.cross(vel_bot, self.B_vec), np.dot(vel_bot, self.B_vec))
 
 
             print("\ntheta",np.degrees(self.theta))

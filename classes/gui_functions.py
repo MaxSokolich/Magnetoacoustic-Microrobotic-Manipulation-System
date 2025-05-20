@@ -39,7 +39,7 @@ from classes.arduino_class import ArduinoHandler
 from classes.joystick_class import Mac_Controller,Linux_Controller,Windows_Controller
 from classes.simulation_class import HelmholtzSimulator
 from classes.projection_class import AxisProjection
-from old.acoustic_class import AcousticClass
+
 
 from classes.record_class import RecordThread
 
@@ -157,7 +157,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #define, simulator class, pojection class, and acoustic class
         self.simulator = HelmholtzSimulator(self.ui.magneticfieldsimlabel, width=310, height=310, dpi=200)
         self.projection = AxisProjection()
-        self.acoustic_module = AcousticClass()
+     
         
         
 
@@ -268,7 +268,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
                 center_x = self.video_width // 2
                 center_y = self.video_height // 2
-                radius = min(self.video_width, self.video_height) // 4  # Assume circle fits within a quarter of the image
+                radius = min(self.video_width, self.video_height) // 6  # Assume circle fits within a quarter of the image
                 
                 coordinates = []
                 for i in range(node_number):
@@ -417,8 +417,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.gamma = float(filtered_row["Gamma"])
                 self.freq = float(filtered_row["Rolling Frequency"])
                 self.psi = float(filtered_row["Psi"])
-                self.gradient = float(filtered_row["Gradient?"])
-                self.equal_field_status = float(filtered_row["Equal Field?"])
                 self.acoustic_freq = float(filtered_row["Acoustic Frequency"])
             
             else:
@@ -730,7 +728,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.applyacousticbutton.setText("Stop")
             #self.tbprint("Control On: {} Hz".format(self.acoustic_frequency))
             self.acoustic_frequency = self.ui.acousticfreq_spinBox.value()
-            #self.acoustic_module.start(self.acoustic_frequency, 0)
             #self.apply_actions(True)
             self.ui.led.setStyleSheet("\n"
 "                background-color: rgb(0, 255, 0);\n"
@@ -744,7 +741,6 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.ui.applyacousticbutton.setText("Apply")
             #self.tbprint("Acoustic Module Off")
-            #self.acoustic_module.stop()
             self.acoustic_frequency = 0
             self.ui.led.setStyleSheet("\n"
 "                background-color: rgb(255, 0, 0);\n"
