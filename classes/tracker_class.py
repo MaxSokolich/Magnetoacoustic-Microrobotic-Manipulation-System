@@ -497,6 +497,7 @@ class VideoThread(QThread):
 
                 #step 2 control robot
                 if len(self.robot_list)>0:
+                    self.control_robot.pix2metric = self.pix
                     displayframe, actions, stopped = self.control_robot.run(displayframe, cell_mask, self.robot_list, self.RRTtreesize, self.arrivalthresh, self.orientstatus, self.autoacousticstatus)
                 else:
                     actions = [0,0,0,0,0,0,0,0]

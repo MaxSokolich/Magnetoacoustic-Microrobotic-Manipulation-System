@@ -31,6 +31,8 @@ class algorithm:
         self.vmag_min = 2
         self.vmag_max = 5
 
+        self.pix2metric = 0
+
 
         self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.acoustic_frequency = 0,0,0,0,0,0,0,0
 
@@ -138,6 +140,7 @@ class algorithm:
         #take a rolling average of the velocity from past 10 frames and average
         if len(robot_list[-1].velocity_list) > 0:
             vmag_avg = robot_list[-1].velocity_list[-1][2]
+            print(vmag_avg)
             
             ## CASE #1
             if vmag_avg < self.vmag_min: 

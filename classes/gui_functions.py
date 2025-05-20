@@ -714,6 +714,9 @@ class MainWindow(QtWidgets.QMainWindow):
 "                border-color: rgb(255, 0, 0);\n"
 "         \n"
 "                padding: 6px;")
+                
+
+                
 
     def get_acoustic_frequency(self):
         if self.ui.applyacousticbutton.isChecked():
@@ -1080,10 +1083,14 @@ class MainWindow(QtWidgets.QMainWindow):
     
     def populate_serial_ports(self):
         ports = list_ports.comports()
-        self.ui.arduino_portbox.clear()
-        for port in ports:
-            self.ui.arduino_portbox.addItem(port.device)
-        self.arduino_port = port.device
+        if len(ports) > 0:
+            self.ui.arduino_portbox.clear()
+            for port in ports:
+                self.ui.arduino_portbox.addItem(port.device)
+            self.arduino_port = port.device
+        else:
+            self.arduino_port = None
+
         
 
     def handle_port_change(self, selected_port):
