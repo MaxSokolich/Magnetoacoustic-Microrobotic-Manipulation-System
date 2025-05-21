@@ -18,7 +18,7 @@ Adafruit_ADS1115 ads;  // Create ADS1115 object
 SerialTransfer myTransfer;
 
 
-float action[9]; //an array to store incoming data from python
+float action[10]; //an array to store incoming data from python
 
 
 //Store data from arduino to send to python
@@ -44,6 +44,7 @@ float psi;
 float gradient_status;
 float equal_field_status;
 float acoustic_frequency;
+float null;
 
 
 
@@ -352,44 +353,6 @@ void loop()
               uint16_t message = 0;
               message = myTransfer.rxObj(action,message);  
 
-                  float zeroFieldVoltagex = 1.97;   // Measured V with no field
-                  float sensitivityx = 0.0023;      
-                
-                  float zeroFieldVoltagey = 1.99;   // Measured V with no field
-                  float sensitivityy = 0.0021;      
-                
-                  float zeroFieldVoltagez = 2.05;   // Measured V with no field
-                  float sensitivityz = 0.0017;      
-                
-                  int16_t hall1 = ads.readADC_SingleEnded(1);  // Sensor 2 on A1  ---> purple wire goes to Pin 9 on the connector terminal which is connected to the Z hall sensor
-                  int16_t hall2 = ads.readADC_SingleEnded(2);  // Sensor 3 on A2 ---> blue wire goes to Pin 7 on the connector terminal which is connected to the Y hall sensor
-                  int16_t hall3 = ads.readADC_SingleEnded(3);  // Sensor 3 on A3 ---> blue wire goes to Pin 5 on the connector terminal which is connected to the X hall sensor
-                
-                  // Convert raw reading to voltage if needed:
-                  float voltage1 = hall1 * 0.1875 / 1000;  // Default gain = ±6.144V, LSB = 0.1875mV
-                  float voltage2 = hall2 * 0.1875 / 1000;
-                  float voltage3 = hall3 * 0.1875 / 1000;
-                
-                  float magneticField_Gx = (voltage3 - zeroFieldVoltagex) / sensitivityx;
-                  float magneticField_Gy = (voltage2 - zeroFieldVoltagey) / sensitivityy;
-                  float magneticField_Gz = (voltage1 - zeroFieldVoltagez) / sensitivityz;
-                
-                  float magneticField_mTx = magneticField_Gx *.1;
-                  float magneticField_mTy = magneticField_Gy *.1;
-                  float magneticField_mTz = magneticField_Gz *.1;
-              
-                  
-                 
-                  send_data.Bx_sensor = magneticField_mTx;
-                  send_data.By_sensor = magneticField_mTy;
-                  send_data.Bz_sensor = magneticField_mTz;
-              
-              
-                  
-              uint16_t sendSize = 0;
-              sendSize = myTransfer.txObj(send_data, sendSize);
-              myTransfer.sendData(sendSize);  
-
 
     }
 
@@ -405,6 +368,7 @@ void loop()
    acoustic_frequency = action[7];
    gradient_status = action[8];
    equal_field_status = action[9];
+   null =action[10];
 
    
    

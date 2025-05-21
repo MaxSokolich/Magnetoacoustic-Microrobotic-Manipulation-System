@@ -9,6 +9,7 @@ class algorithm:
    
     def __init__(self):
         self.reset()
+        self.pixel2um =   3.45 / 10  #um/s
 
     def reset(self):
         self.node = 0
@@ -28,8 +29,10 @@ class algorithm:
         self.increment = 10000   #increment to step frequency by
         self.optimal_freq = None
         self.resistance = 0
-        self.vmag_min = 2
-        self.vmag_max = 5
+        self.vmag_min = 3   #um/s
+        self.vmag_max = 20   #um/s
+        self.iter = 0
+
 
 
         self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.acoustic_frequency = 0,0,0,0,0,0,0,0
@@ -37,11 +40,10 @@ class algorithm:
     
 
 
-    def run(self, frame, mask, robot_list, stepsize, arrivialthresh, orientstatus, autoacoustic_status):
+    def run(self, frame, mask, robot_list, stepsize, arrivialthresh, orientstatus, autoacoustic_status, pixel2um):
+        self.pixel2um = pixel2um
         
-        
-
-        
+    
         if len(robot_list[-1].trajectory) > 0:
             if self.count == 0: #% 10
               
@@ -96,8 +98,7 @@ class algorithm:
                 self.alpha = np.arctan2(-direction_vec[1], direction_vec[0])
                 
                 if orientstatus == True:
-                    #self.Bx, self.By, self.Bz, self.alpha = self.orient(robot_list[-1], direction_vec)
-                    self.Bx, self.By, self.Bz, self.alpha = direction_vec[0]/np.linalg.norm(direction_vec), -(direction_vec[1]/np.linalg.norm(direction_vec)), 0,0
+                    self.Bx, self.By, self.Bz, self.alpha = self.orient(robot_list[-1], direction_vec)
                 else:
                     self.Bx, self.By, self.Bz = 0,0,0
                 
@@ -137,7 +138,11 @@ class algorithm:
     def find_optimal_acoustic_freq(self, robot_list):
         #take a rolling average of the velocity from past 10 frames and average
         if len(robot_list[-1].velocity_list) > 0:
-            vmag_avg = robot_list[-1].velocity_list[-1][2]
+            vmag_avg = robot_list[-1].velocity_list[-1][2] * self.pixel2um
+
+
+            
+
             
             ## CASE #1
             if vmag_avg < self.vmag_min: 
@@ -181,14 +186,16 @@ class algorithm:
         if len(bot.velocity_list) >= 0:
             
             #find the velocity avearge over the last memory number of frames to mitigate noise: 
-            vx = bot.velocity_list[-1][0]
-            vy = bot.velocity_list[-1][1]
+            vx = bot.velocity_list[-1][0] * self.pixel2um
+            vy = bot.velocity_list[-1][1] * self.pixel2um
             
             vel_bot = np.array([vx, vy])  # current velocity of self propelled robot
             vd = np.linalg.norm(vel_bot)
             bd = np.linalg.norm(self.B_vec)
+            self.iter = self.iter +1
             
-            if vd != 0 and bd != 0:
+            #if vd != 0 and bd != 0:
+            if vd > 1 and bd != 0: #changed it so that the velocity needs to be greater than 1um/s for it to start recording theta maps
                 costheta = np.dot(vel_bot, self.B_vec) / (vd * bd)
                 sintheta = (vel_bot[0] * self.B_vec[1] - vel_bot[1] * self.B_vec[0]) / (vd * bd)
                 self.theta =  np.arctan2(sintheta, costheta)   
@@ -199,10 +206,11 @@ class algorithm:
                 
                 self.theta_maps = np.append(self.theta_maps,self.theta)
         
-                if len(self.theta_maps) > 150:
-                    self.theta_maps = self.theta_maps[-150:len(self.theta_maps)]#this makes sure that we only look at the latest 150 frames of data to keep it adaptable. It should be bigger if there's a lot of noise (slow bot) and smaller if its traj is well defined (fast bot) 
-                thetaNew = np.median(self.theta_maps)#take the average, or median, so that the mapped angle is robust to noise                        
-                self.T_R = np.array([[np.cos(thetaNew), -np.sin(thetaNew)], [np.sin(thetaNew), np.cos(thetaNew)]])
+                if len(self.theta_maps) > 40:
+                    self.theta_maps = self.theta_maps[-40:len(self.theta_maps)]#this makes sure that we only look at the latest 150 frames of data to keep it adaptable. It should be bigger if there's a lot of noise (slow bot) and smaller if its traj is well defined (fast bot) 
+                if self.iter % 40 == 0:
+                    thetaNew = np.mean(self.theta_maps)#take the average, or median, so that the mapped angle is robust to noise                        
+                    self.T_R = np.array([[np.cos(thetaNew), -np.sin(thetaNew)], [np.sin(thetaNew), np.cos(thetaNew)]])#only update the mapping every 40 frames
                 
                 #self.T_R = np.array([[costhetaNew, -sinthetaNew], [sinthetaNew, costhetaNew]])
             
@@ -210,61 +218,13 @@ class algorithm:
 
         
         Bx = self.B_vec[0] / np.sqrt(self.B_vec[0] ** 2 + self.B_vec[1] ** 2)
-        By = self.B_vec[1] / np.sqrt(self.B_vec[0] ** 2 + self.B_vec[1] ** 2)
+        By = -self.B_vec[1] / np.sqrt(self.B_vec[0] ** 2 + self.B_vec[1] ** 2)  #needs to be negative because of coordinate system flip in the y direction
         Bz = 0
         alpha = np.arctan2(By, Bx)
 
         return Bx,By,Bz,alpha
     
     
-
-    def orient2(self, bot, direction_vec):
-        if len(bot.velocity_list) >= 0:
-            
-            #find the velocity avearge over the last memory number of frames to mitigate noise: 
-            vx = bot.velocity_list[-1][0]
-            vy = bot.velocity_list[-1][1]
-            
-            vel_bot = np.array([vx, vy])  # current velocity of self propelled robot
-            #vd = np.linalg.norm(vel_bot)
-            #bd = np.linalg.norm(self.B_vec)
-            vnorm = np.sqrt(vx**2+vy**2)
-            bnorm = np.sqrt(self.B_vec[0]**2+self.B_vec[1]**2)
-            vdotb = vx * self.B_vec[0]+vy*self.B_vec[1]
-             
-            self.theta =  np.arccos(vdotb / (vnorm*bnorm))
-
-            #self.theta = math.atan2(vy- self.B_vec[1],  vx - self.B_vec[0])
-            #self.theta = np.arctan2(np.cross(vel_bot, self.B_vec), np.dot(vel_bot, self.B_vec))
-
-
-            print("\ntheta",np.degrees(self.theta))
-            
-            target_vec = direction_vec
-            xfield_new = (target_vec[0]*np.cos(self.theta)-target_vec[1]*np.sin(self.theta))/np.sqrt(target_vec[0]**2+target_vec[1]**2)
-            yfield_new = (target_vec[0]*np.sin(self.theta)+target_vec[1]*np.cos(self.theta))/np.sqrt(target_vec[0]**2+target_vec[1]**2)
-            print("velbot",vel_bot)
-            print("field", [xfield_new, yfield_new])
-            #if vd != 0 and bd != 0:
-                #costheta = np.dot(vel_bot, self.B_vec) / (vd * bd)
-                #sintheta = (vel_bot[0] * self.B_vec[1] - vel_bot[1] * self.B_vec[0]) / (vd * bd)
-                #self.theta =  np.arctan2(sintheta, costheta)   
-                
-            #self.T_R = np.array([[np.cos(self.theta), -np.sin(self.theta)], [np.sin(self.theta), np.cos(self.theta)]])
-                
-                #self.T_R = np.array([[costhetaNew, -sinthetaNew], [sinthetaNew, costhetaNew]])
-            
-        self.B_vec = np.array([xfield_new, yfield_new])
-
-        #OUTPUT SIGNAL      
-        
-        Bx = self.B_vec[0] / np.sqrt(self.B_vec[0] ** 2 + self.B_vec[1] ** 2)
-        By = self.B_vec[1] / np.sqrt(self.B_vec[0] ** 2 + self.B_vec[1] ** 2)
-        Bz = 0
-        alpha = np.arctan2(By, Bx)
-
-        print("B", [Bx, By])
-        return Bx,By,Bz,alpha
 
 
 

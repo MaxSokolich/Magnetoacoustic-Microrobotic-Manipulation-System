@@ -41,7 +41,8 @@ fps = count_fps()
 cam = EasyPySpin.VideoCapture(0)
 width = int(cam.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cam.get(cv2.CAP_PROP_FRAME_HEIGHT))
-#cam.set(cv2.CAP_PROP_FPS,25)
+cam.set(cv2.CAP_PROP_FPS,300)
+fps_cam = int(cam.get(cv2.CAP_PROP_FPS))
 print(cam.get(cv2.CAP_PROP_FPS))
 
 
@@ -65,7 +66,9 @@ while True:
             )
     
     x,y = b[0], b[1]
-    frame = cv2.resize(frame, resize_ratio, interpolation=cv2.INTER_AREA)
+    #rame = cv2.resize(frame, resize_ratio, interpolation=cv2.INTER_AREA)
+    
+    #print(width,height, fps_cam)
     cv2.circle(frame,(x,y),10, (255,255,0),-1)
 
 

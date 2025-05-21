@@ -89,8 +89,8 @@ class VideoThread(QThread):
             #scale = 2448/820
 
             #according to website pixel size is Pixel Size, H x V (μm): 3.45 x 3.45
-            #1/(pixelSize/magnification)
-            #1/(3.45/10) = 2.89
+            #(pixelSize/magnification)
+            #(3.45/10) = 2.89
 
  
     
@@ -231,11 +231,8 @@ class VideoThread(QThread):
                         bot.add_area(area)
                         bot.add_blur(blur)
                         bot.set_avg_area(np.mean(bot.area_list))
-                        bot.add_um2pixel(self.pixel2um)
-
-                        #this will toggle between the cropped frame display being the masked version and the original
-                        if self.croppedmask_flag == False:
-                            croppedmask = croppedframe
+            
+        
 
                     else:
                         if len(self.robot_list) > 0:
@@ -255,6 +252,12 @@ class VideoThread(QThread):
                 bot.crop_length = self.robot_crop_length
             else:
                 recorded_cropped_frame = np.zeros((self.crop_length_record, self.crop_length_record, 3), dtype=np.uint8) 
+            
+            
+            #this will toggle between the cropped frame display being the masked version and the original
+            if self.croppedmask_flag == False:
+                croppedmask = croppedframe
+
 
         else:
             recorded_cropped_frame = np.zeros((self.crop_length_record, self.crop_length_record, 3), dtype=np.uint8) 
@@ -339,7 +342,7 @@ class VideoThread(QThread):
                         cell.add_area(area)
                         cell.add_blur(blur)
                         cell.set_avg_area(np.mean(cell.area_list))
-                        cell.add_um2pixel(self.pixel2um)
+
                         
                         #this will toggle between the cropped frame display being the masked version and the original
                         if self.croppedmask_flag == False:
@@ -353,7 +356,10 @@ class VideoThread(QThread):
                 
             #adjust most recent bot crop_length 
             cell.crop_length = self.cell_crop_length
-
+            
+            #this will toggle between the cropped frame display being the masked version and the original
+            if self.croppedmask_flag == False:
+                croppedmask = croppedframe
         else:
             croppedmask = np.zeros((310, 310, 3), dtype=np.uint8)
 
@@ -460,7 +466,7 @@ class VideoThread(QThread):
         
             #control_mask = None
             if ret:       
-                if self.totalnumframes ==0:         
+                if self.totalnumframes == 0:         
                     self.cap.set(cv2.CAP_PROP_EXPOSURE, self.exposure)
                     self.pixel2um =   3.45 / self.objective
                     
@@ -497,7 +503,7 @@ class VideoThread(QThread):
 
                 #step 2 control robot
                 if len(self.robot_list)>0:
-                    displayframe, actions, stopped = self.control_robot.run(displayframe, cell_mask, self.robot_list, self.RRTtreesize, self.arrivalthresh, self.orientstatus, self.autoacousticstatus)
+                    displayframe, actions, stopped = self.control_robot.run(displayframe, cell_mask, self.robot_list, self.RRTtreesize, self.arrivalthresh, self.orientstatus, self.autoacousticstatus, self.pixel2um)
                 else:
                     actions = [0,0,0,0,0,0,0,0]
                     stopped = True    
@@ -505,8 +511,7 @@ class VideoThread(QThread):
                 
                 
                 
-                    
-                #gather most recent robot params
+
                 
                 #step 3: emit croppedframe, frame from this thread to the main thread
                 self.cropped_frame_signal.emit(croppedmask, recorded_cropped_frame)

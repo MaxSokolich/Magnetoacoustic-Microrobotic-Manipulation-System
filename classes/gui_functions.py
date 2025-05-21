@@ -39,7 +39,7 @@ from classes.arduino_class import ArduinoHandler
 from classes.joystick_class import Mac_Controller,Linux_Controller,Windows_Controller
 from classes.simulation_class import HelmholtzSimulator
 from classes.projection_class import AxisProjection
-from old.acoustic_class import AcousticClass
+
 
 from classes.record_class import RecordThread
 
@@ -157,7 +157,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #define, simulator class, pojection class, and acoustic class
         self.simulator = HelmholtzSimulator(self.ui.magneticfieldsimlabel, width=310, height=310, dpi=200)
         self.projection = AxisProjection()
-        self.acoustic_module = AcousticClass()
+     
         
         
 
@@ -268,7 +268,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
                 center_x = self.video_width // 2
                 center_y = self.video_height // 2
-                radius = min(self.video_width, self.video_height) // 4  # Assume circle fits within a quarter of the image
+                radius = min(self.video_width, self.video_height) // 6  # Assume circle fits within a quarter of the image
                 
                 coordinates = []
                 for i in range(node_number):
@@ -417,8 +417,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.gamma = float(filtered_row["Gamma"])
                 self.freq = float(filtered_row["Rolling Frequency"])
                 self.psi = float(filtered_row["Psi"])
-                self.gradient = float(filtered_row["Gradient?"])
-                self.equal_field_status = float(filtered_row["Equal Field?"])
                 self.acoustic_freq = float(filtered_row["Acoustic Frequency"])
             
             else:
@@ -429,9 +427,10 @@ class MainWindow(QtWidgets.QMainWindow):
             
         
 
-    
+        
         #DEFINE CURRENT ROBOT PARAMS TO A LIST
         if len(robot_list) > 0:
+            
             self.robots = []
             for bot in robot_list:
                 currentbot_params = [bot.frame_list[-1],
@@ -443,9 +442,10 @@ class MainWindow(QtWidgets.QMainWindow):
                                      bot.velocity_list[-1][2]* self.tracker.pixel2um,
                                      bot.blur_list[-1],
                                      bot.area_list[-1]* (self.tracker.pixel2um**2),
-                                     bot.pixel2um,
+                                     self.tracker.pixel2um,
                                      [[x * self.tracker.pixel2um, y * self.tracker.pixel2um] for x, y in bot.trajectory]
                                     ]
+            
                 
                 self.robots.append(currentbot_params)
            
@@ -463,7 +463,7 @@ class MainWindow(QtWidgets.QMainWindow):
                                      cell.velocity_list[-1][2]* self.tracker.pixel2um,
                                      cell.blur_list[-1],
                                      cell.area_list[-1]* (self.tracker.pixel2um**2),
-                                     cell.pixel2um
+                                     self.tracker.pixel2um
                                     ]
                 
                 self.cells.append(currentcell_params)
@@ -597,17 +597,11 @@ class MainWindow(QtWidgets.QMainWindow):
                 try:
                     for i in range(len((self.robot_params_sheets))):
                         for idx,(x,y) in enumerate(self.robots[i][-1]):
-                            self.robot_params_sheets[i].cell(row=idx+2, column=16).value = x
-                            self.robot_params_sheets[i].cell(row=idx+2, column=17).value = y
+                            self.robot_params_sheets[i].cell(row=idx+2, column=11).value = x
+                            self.robot_params_sheets[i].cell(row=idx+2, column=12).value = y
                 except Exception:
                     pass
-                try:
-                    for i in range(len((self.robot_params_sheets))):
-                        for idx,(x,y) in enumerate(self.robots[i][-1]):
-                            self.robot_params_sheets[i].cell(row=idx+2, column=16).value = x
-                            self.robot_params_sheets[i].cell(row=idx+2, column=17).value = y
-                except Exception:
-                    pass
+            
             #save and close workbook
             self.output_workbook.remove(self.output_workbook["Sheet"])
             self.output_workbook.save(file_path)
@@ -714,6 +708,9 @@ class MainWindow(QtWidgets.QMainWindow):
 "                border-color: rgb(255, 0, 0);\n"
 "         \n"
 "                padding: 6px;")
+                
+
+                
 
     def get_acoustic_frequency(self):
         if self.ui.applyacousticbutton.isChecked():
@@ -727,7 +724,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.applyacousticbutton.setText("Stop")
             #self.tbprint("Control On: {} Hz".format(self.acoustic_frequency))
             self.acoustic_frequency = self.ui.acousticfreq_spinBox.value()
-            #self.acoustic_module.start(self.acoustic_frequency, 0)
             #self.apply_actions(True)
             self.ui.led.setStyleSheet("\n"
 "                background-color: rgb(0, 255, 0);\n"
@@ -741,7 +737,6 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.ui.applyacousticbutton.setText("Apply")
             #self.tbprint("Acoustic Module Off")
-            #self.acoustic_module.stop()
             self.acoustic_frequency = 0
             self.ui.led.setStyleSheet("\n"
 "                background-color: rgb(255, 0, 0);\n"
@@ -1080,10 +1075,14 @@ class MainWindow(QtWidgets.QMainWindow):
     
     def populate_serial_ports(self):
         ports = list_ports.comports()
-        self.ui.arduino_portbox.clear()
-        for port in ports:
-            self.ui.arduino_portbox.addItem(port.device)
-        self.arduino_port = port.device
+        if len(ports) > 0:
+            self.ui.arduino_portbox.clear()
+            for port in ports:
+                self.ui.arduino_portbox.addItem(port.device)
+            self.arduino_port = port.device
+        else:
+            self.arduino_port = None
+
         
 
     def handle_port_change(self, selected_port):
@@ -1121,8 +1120,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.VideoFeedLabel.setStyleSheet("background-color: rgb(0,0,0); border:2px solid rgb(255, 0, 0); ")
             self.ui.CroppedVideoFeedLabel.setStyleSheet("background-color: rgb(0,0,0); border:2px solid rgb(255, 0, 0); ")
             
-            if self.arduino is not None:
-                self.arduino.close()
+            
           
 
 
@@ -1171,6 +1169,9 @@ class MainWindow(QtWidgets.QMainWindow):
                 "                border-color: rgb(255, 0, 0);\n"
                 "         \n"
                 "                padding: 6px;")
+
+            if self.arduino is not None:
+                self.arduino.close()
 
             
 

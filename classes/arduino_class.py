@@ -59,19 +59,15 @@ class ArduinoHandler:
         By = round(By,3)
         Bz = round(Bz,3)
 
-        data = [float(Bx), float(By), float(Bz), float(alpha), float(gamma), float(freq),float(psi), float(acoustic_freq),float(gradient_status), float(equal_field_status)]
+        data = [float(Bx), float(By), float(Bz), float(alpha), float(gamma), float(freq),float(psi), float(acoustic_freq), float(gradient_status), float(equal_field_status), 0.0]
         if self.conn is None:
             #self.printer("Connection not initialized..."+ str(data))  
             #self.printer("No Connection:  "+ "Bx: {},    By: {},    Bz: {},    alpha: {},    gamma: {},    freq: {},    psi: {}".format(Bx,By,Bz,alpha,gamma,freq,psi)) 
-            self.printer("No Connection:  "+ "[Bx, By, Bz, alpha, gamma, freq, psi, acoust_freq, gradient, e_field] = "+str(data)) 
+            self.printer("No Arduino Connection")
             #pass
         else:
-
-            
             message = self.conn.tx_obj(data)
             self.conn.send(message)
-            #self.printer("Data sent:"+ str(data))
-            #self.printer("Data sent:  "+ "Bx: {},    By: {},    Bz: {},    alpha: {},    gamma: {},    freq: {},    psi: {}".format(Bx,By,Bz,alpha,gamma,freq,psi))
             self.printer("Data Sent:  "+ "[Bx, By, Bz, alpha, gamma, freq, psi, acoust_freq, gradient, e_field] = "+str(data)) 
 
 
@@ -82,30 +78,31 @@ class ArduinoHandler:
         return the values in the class self.receive
         """
         #recv
-
-        if self.conn.available():
-        
-            recSize = 0
-            Bx_sensor = self.conn.rx_obj(obj_type='f',start_pos=recSize)
-            recSize += txfer.STRUCT_FORMAT_LENGTHS['f']
-
-            By_sensor = self.conn.rx_obj(obj_type='f',start_pos=recSize)
-            recSize += txfer.STRUCT_FORMAT_LENGTHS['f']
-
-            Bz_sensor = self.conn.rx_obj(obj_type='f',start_pos=recSize)
-            recSize += txfer.STRUCT_FORMAT_LENGTHS['f']
+        if self.conn is not None:
+            if self.conn.available():
             
+                recSize = 0
+                Bx_sensor = self.conn.rx_obj(obj_type='f',start_pos=recSize)
+                recSize += txfer.STRUCT_FORMAT_LENGTHS['f']
 
-            
-            
+                By_sensor = self.conn.rx_obj(obj_type='f',start_pos=recSize)
+                recSize += txfer.STRUCT_FORMAT_LENGTHS['f']
+
+                Bz_sensor = self.conn.rx_obj(obj_type='f',start_pos=recSize)
+                recSize += txfer.STRUCT_FORMAT_LENGTHS['f']
+                
+
+                
+                
 
 
-            return [Bx_sensor,By_sensor,Bz_sensor]
+                return [Bx_sensor,By_sensor,Bz_sensor]
 
 
+            else:
+                return [0,0,0]
         else:
             return [0,0,0]
-      
 
 
 
