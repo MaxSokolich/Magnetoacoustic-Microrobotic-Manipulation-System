@@ -427,9 +427,10 @@ class MainWindow(QtWidgets.QMainWindow):
             
         
 
-    
+        
         #DEFINE CURRENT ROBOT PARAMS TO A LIST
         if len(robot_list) > 0:
+            
             self.robots = []
             for bot in robot_list:
                 currentbot_params = [bot.frame_list[-1],
@@ -441,9 +442,10 @@ class MainWindow(QtWidgets.QMainWindow):
                                      bot.velocity_list[-1][2]* self.tracker.pixel2um,
                                      bot.blur_list[-1],
                                      bot.area_list[-1]* (self.tracker.pixel2um**2),
-                                     bot.pixel2um,
+                                     self.tracker.pixel2um,
                                      [[x * self.tracker.pixel2um, y * self.tracker.pixel2um] for x, y in bot.trajectory]
                                     ]
+            
                 
                 self.robots.append(currentbot_params)
            
@@ -461,7 +463,7 @@ class MainWindow(QtWidgets.QMainWindow):
                                      cell.velocity_list[-1][2]* self.tracker.pixel2um,
                                      cell.blur_list[-1],
                                      cell.area_list[-1]* (self.tracker.pixel2um**2),
-                                     cell.pixel2um
+                                     self.tracker.pixel2um
                                     ]
                 
                 self.cells.append(currentcell_params)
@@ -595,17 +597,11 @@ class MainWindow(QtWidgets.QMainWindow):
                 try:
                     for i in range(len((self.robot_params_sheets))):
                         for idx,(x,y) in enumerate(self.robots[i][-1]):
-                            self.robot_params_sheets[i].cell(row=idx+2, column=16).value = x
-                            self.robot_params_sheets[i].cell(row=idx+2, column=17).value = y
+                            self.robot_params_sheets[i].cell(row=idx+2, column=11).value = x
+                            self.robot_params_sheets[i].cell(row=idx+2, column=12).value = y
                 except Exception:
                     pass
-                try:
-                    for i in range(len((self.robot_params_sheets))):
-                        for idx,(x,y) in enumerate(self.robots[i][-1]):
-                            self.robot_params_sheets[i].cell(row=idx+2, column=16).value = x
-                            self.robot_params_sheets[i].cell(row=idx+2, column=17).value = y
-                except Exception:
-                    pass
+            
             #save and close workbook
             self.output_workbook.remove(self.output_workbook["Sheet"])
             self.output_workbook.save(file_path)
@@ -1124,8 +1120,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.VideoFeedLabel.setStyleSheet("background-color: rgb(0,0,0); border:2px solid rgb(255, 0, 0); ")
             self.ui.CroppedVideoFeedLabel.setStyleSheet("background-color: rgb(0,0,0); border:2px solid rgb(255, 0, 0); ")
             
-            if self.arduino is not None:
-                self.arduino.close()
+            
           
 
 
@@ -1174,6 +1169,9 @@ class MainWindow(QtWidgets.QMainWindow):
                 "                border-color: rgb(255, 0, 0);\n"
                 "         \n"
                 "                padding: 6px;")
+
+            if self.arduino is not None:
+                self.arduino.close()
 
             
 
