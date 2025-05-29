@@ -1024,23 +1024,24 @@ class Ui_MainWindow(object):
         self.arrivalthreshbox.setProperty("value", 100)
         self.arrivalthreshbox.setObjectName("arrivalthreshbox")
         self.RRTtreesizelabel = QtWidgets.QLabel(self.controlparamsframe)
-        self.RRTtreesizelabel.setGeometry(QtCore.QRect(180, 10, 121, 31))
+        self.RRTtreesizelabel.setGeometry(QtCore.QRect(170, 10, 121, 31))
         self.RRTtreesizelabel.setObjectName("RRTtreesizelabel")
         self.RRTtreesizebox = QtWidgets.QSpinBox(self.controlparamsframe)
-        self.RRTtreesizebox.setGeometry(QtCore.QRect(180, 40, 51, 21))
+        self.RRTtreesizebox.setGeometry(QtCore.QRect(170, 40, 51, 21))
         self.RRTtreesizebox.setMinimum(1)
         self.RRTtreesizebox.setMaximum(100)
         self.RRTtreesizebox.setProperty("value", 25)
         self.RRTtreesizebox.setObjectName("RRTtreesizebox")
-        self.shapemaker_nodes = QtWidgets.QSpinBox(self.controlparamsframe)
-        self.shapemaker_nodes.setGeometry(QtCore.QRect(310, 40, 51, 21))
-        self.shapemaker_nodes.setMinimum(1)
-        self.shapemaker_nodes.setMaximum(400)
-        self.shapemaker_nodes.setProperty("value", 100)
-        self.shapemaker_nodes.setObjectName("shapemaker_nodes")
-        self.makeshapebutton = QtWidgets.QPushButton(self.controlparamsframe)
-        self.makeshapebutton.setGeometry(QtCore.QRect(280, 10, 101, 21))
-        self.makeshapebutton.setStyleSheet("QPushButton {\n"
+        self.infinity_size = QtWidgets.QSpinBox(self.controlparamsframe)
+        self.infinity_size.setGeometry(QtCore.QRect(300, 40, 61, 21))
+        self.infinity_size.setMinimum(1)
+        self.infinity_size.setMaximum(1000)
+        self.infinity_size.setSingleStep(100)
+        self.infinity_size.setProperty("value", 1000)
+        self.infinity_size.setObjectName("infinity_size")
+        self.make_inf_path = QtWidgets.QPushButton(self.controlparamsframe)
+        self.make_inf_path.setGeometry(QtCore.QRect(270, 10, 121, 21))
+        self.make_inf_path.setStyleSheet("QPushButton {\n"
 "                color: rgb(255, 255, 255);\n"
 "                background-color: rgb(0, 0, 0);\n"
 "                border-style: outset;\n"
@@ -1056,9 +1057,9 @@ class Ui_MainWindow(object):
 "                border-style: inset;\n"
 "              border-color: rgb(0, 255, 0);\n"
 "            }")
-        self.makeshapebutton.setCheckable(True)
-        self.makeshapebutton.setChecked(False)
-        self.makeshapebutton.setObjectName("makeshapebutton")
+        self.make_inf_path.setCheckable(True)
+        self.make_inf_path.setChecked(False)
+        self.make_inf_path.setObjectName("make_inf_path")
         self.magneticfieldsimlabel = QtWidgets.QLabel(self.dockWidgetContents_4)
         self.magneticfieldsimlabel.setGeometry(QtCore.QRect(40, 620, 310, 310))
         self.magneticfieldsimlabel.setStyleSheet("background-color: rgb(0,0,0); border:2px solid rgb(255, 0, 0); ")
@@ -1358,7 +1359,7 @@ class Ui_MainWindow(object):
 "(px)"))
         self.RRTtreesizelabel.setText(_translate("MainWindow", "RRT Tree Size \n"
 "(px)"))
-        self.makeshapebutton.setText(_translate("MainWindow", "Make Shape"))
+        self.make_inf_path.setText(_translate("MainWindow", "Make Infinity Path"))
         self.simulationbutton.setText(_translate("MainWindow", "Simulation On"))
         self.label_6.setText(_translate("MainWindow", "Manual (%)"))
         self.manualapplybutton.setText(_translate("MainWindow", "Apply"))

@@ -244,7 +244,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.excel_actions_status = False
 
 
-        self.ui.makeshapebutton.clicked.connect(self.makeshape_trajectory)
+        self.ui.make_inf_path.clicked.connect(self.makeinf_trajectory)
 
         
 
@@ -261,25 +261,32 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
         
-    def makeshape_trajectory(self):
+    def makeinf_trajectory(self):
         if self.tracker is not None:
             if len(self.tracker.robot_list)>0:
-                node_number = self.ui.shapemaker_nodes.value()
+             
 
+
+                a = self.ui.infinity_size.value()  # Controls the size
                 center_x = self.video_width // 2
                 center_y = self.video_height // 2
-                radius = min(self.video_width, self.video_height) // 6  # Assume circle fits within a quarter of the image
-                
-                coordinates = []
-                for i in range(node_number):
-                    theta = 2 * np.pi * i / node_number
-                    x = center_x + int(radius * np.cos(theta))
-                    y = center_y + int(radius * np.sin(theta))
-                    coordinates.append((x, y))
-                
-                coordinates.append(coordinates[0])
-                
-                self.tracker.robot_list[-1].trajectory = coordinates 
+
+                # Generate points using parametric equations for a lemniscate
+                points = []
+                for t in np.linspace(0, 2 * np.pi, 500):
+                    denom = 1 + np.sin(t)**2
+                    if denom == 0:
+                        continue  # avoid division by zero
+                    x = (a * np.cos(t)) / denom
+                    y = (a * np.cos(t) * np.sin(t)) / denom
+
+                    # Convert to image coordinates
+                    img_x = int(center_x + x)
+                    img_y = int(center_y + y)
+                    points.append((img_x, img_y))
+
+                points.append(points[0])
+                self.tracker.robot_list[-1].trajectory = points 
         
     
 
@@ -667,6 +674,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.controlbutton.setText("Control")
             self.tbprint("Control Off")
             self.apply_actions(False)
+         
             
             
     
@@ -1420,6 +1428,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #self.recorder.stop()
         
         self.simulator.stop()
-        self.apply_actions(False)
+        
         if self.arduino is not None:
             self.arduino.close()
+            self.apply_actions(False)

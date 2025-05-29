@@ -10,6 +10,7 @@ class algorithm:
     def __init__(self):
         self.reset()
         self.pixel2um =   3.45 / 10  #um/s
+        self.continue_status = False
 
     def reset(self):
         self.node = 0
@@ -80,6 +81,8 @@ class algorithm:
                 #weve arrived
                 self.stopped = True
                 self.Bx,self.By,self.Bz,self.alpha, self.gamma, self.freq, self.psi, self.acoustic_frequency = 0,0,0,0,0,0,0,0
+                if self.continue_status == True:
+                    self.reset()
 
 
             #closed loop algorithm 
