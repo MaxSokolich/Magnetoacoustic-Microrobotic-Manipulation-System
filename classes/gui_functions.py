@@ -360,14 +360,56 @@ class MainWindow(QtWidgets.QMainWindow):
         
         
         elif self.manual_status == True:
-            self.Bx = self.ui.manualfieldBx.value()/100
-            self.By = self.ui.manualfieldBy.value()/100
-            self.Bz = self.ui.manualfieldBz.value()/100
+            
+
+            # X coil calibration
+            if self.ui.manualfieldBx.value() == 0:  #0 mT
+                self.Bx = 0  #0%  
+            else:
+                if self.ui.manualfieldBx.value() > 0:
+                    self.Bx = 0.0511 * self.ui.manualfieldBx.value() **3    -    .2302   * self.ui.manualfieldBx.value() **2      +    .5577 *  self.ui.manualfieldBx.value()  + .0216
+                elif self.ui.manualfieldBx.value() < 0:
+
+                    self.Bx = -(0.0511 * (-self.ui.manualfieldBx.value()) **3    -    .2302   * (-self.ui.manualfieldBx.value()) **2      +    .5577 *  (-self.ui.manualfieldBx.value())  + .0216)
+
+
+            # Y coil calibration
+            if self.ui.manualfieldBy.value() == 0:  #0 mT
+                self.By = 0  #0%  
+            else:
+                if self.ui.manualfieldBy.value() > 0:
+                    self.By = .1863 *  self.ui.manualfieldBy.value()  + .0769
+                elif self.ui.manualfieldBy.value() < 0:
+                    self.By = -(.1863 *  -self.ui.manualfieldBy.value()  + .0769)
+
+
+            # Z coil calibration
+            if self.ui.manualfieldBz.value() == 0:  #0 mT
+                self.Bz = 0  #0%  
+            else:
+                if self.ui.manualfieldBz.value() > 0:
+                    self.Bz = 0.0003 * self.ui.manualfieldBz.value() **3    -    .0067   * self.ui.manualfieldBz.value() **2      +    .1027 *  self.ui.manualfieldBz.value()  + .023
+                elif self.ui.manualfieldBz.value() < 0:
+                    self.Bz = -(0.0003 * (-self.ui.manualfieldBz.value()) **3    -    .0067   * (-self.ui.manualfieldBz.value()) **2      +    .1027 *  (-self.ui.manualfieldBz.value())  + .023)
+
+            
+
+
             self.freq = self.ui.magneticfrequencydial.value()
             self.gamma = np.radians(self.ui.gammadial.value())
             self.psi = np.radians(self.ui.psidial.value())
             self.alpha = np.radians(self.ui.alphadial.value())
+
+
+
+
             
+
+
+
+
+
+
             #ricochet conditions, too close to the x or y borders flip the conditions
             if self.ui.ricochet_effect_checkbox.isChecked():
                 if len(self.tracker.robot_list) > 0:
