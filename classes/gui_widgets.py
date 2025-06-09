@@ -306,7 +306,7 @@ class Ui_MainWindow(object):
         self.exposurelabel.setMaximumSize(QtCore.QSize(150, 25))
         self.exposurelabel.setObjectName("exposurelabel")
         self.exposurebox = QtWidgets.QSpinBox(self.frame_3)
-        self.exposurebox.setGeometry(QtCore.QRect(10, 230, 81, 31))
+        self.exposurebox.setGeometry(QtCore.QRect(10, 250, 81, 21))
         self.exposurebox.setMinimum(100)
         self.exposurebox.setMaximum(100000)
         self.exposurebox.setSingleStep(100)
@@ -318,7 +318,7 @@ class Ui_MainWindow(object):
         self.objectivelabel.setMaximumSize(QtCore.QSize(150, 25))
         self.objectivelabel.setObjectName("objectivelabel")
         self.objectivebox = QtWidgets.QSpinBox(self.frame_3)
-        self.objectivebox.setGeometry(QtCore.QRect(120, 230, 61, 31))
+        self.objectivebox.setGeometry(QtCore.QRect(120, 250, 61, 21))
         self.objectivebox.setMinimum(1)
         self.objectivebox.setMaximum(100)
         self.objectivebox.setSingleStep(5)
@@ -326,7 +326,7 @@ class Ui_MainWindow(object):
         self.objectivebox.setDisplayIntegerBase(10)
         self.objectivebox.setObjectName("objectivebox")
         self.toggledisplayvisualscheckbox = QtWidgets.QCheckBox(self.frame_3)
-        self.toggledisplayvisualscheckbox.setGeometry(QtCore.QRect(10, 270, 191, 21))
+        self.toggledisplayvisualscheckbox.setGeometry(QtCore.QRect(10, 280, 191, 21))
         self.toggledisplayvisualscheckbox.setChecked(True)
         self.toggledisplayvisualscheckbox.setObjectName("toggledisplayvisualscheckbox")
         self.exposurelabel_3 = QtWidgets.QLabel(self.frame_3)
@@ -341,10 +341,10 @@ class Ui_MainWindow(object):
         self.exposurelabel_2.setMaximumSize(QtCore.QSize(150, 25))
         self.exposurelabel_2.setObjectName("exposurelabel_2")
         self.memorylabel = QtWidgets.QLabel(self.frame_3)
-        self.memorylabel.setGeometry(QtCore.QRect(200, 210, 101, 21))
+        self.memorylabel.setGeometry(QtCore.QRect(210, 210, 101, 31))
         self.memorylabel.setObjectName("memorylabel")
         self.memorybox = QtWidgets.QSpinBox(self.frame_3)
-        self.memorybox.setGeometry(QtCore.QRect(220, 230, 71, 35))
+        self.memorybox.setGeometry(QtCore.QRect(220, 250, 71, 21))
         self.memorybox.setMinimum(1)
         self.memorybox.setMaximum(100)
         self.memorybox.setProperty("value", 15)
@@ -744,7 +744,7 @@ class Ui_MainWindow(object):
         self.dockWidgetContents_4 = QtWidgets.QWidget()
         self.dockWidgetContents_4.setObjectName("dockWidgetContents_4")
         self.frame = QtWidgets.QFrame(self.dockWidgetContents_4)
-        self.frame.setGeometry(QtCore.QRect(10, 10, 391, 212))
+        self.frame.setGeometry(QtCore.QRect(0, 0, 391, 212))
         self.frame.setStyleSheet(" color: rgb(0, 0, 0);\n"
 " background-color: rgb(255, 255, 255);\n"
 "font-size: 10pt;")
@@ -752,7 +752,7 @@ class Ui_MainWindow(object):
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
         self.led = QtWidgets.QLabel(self.frame)
-        self.led.setGeometry(QtCore.QRect(350, 170, 21, 21))
+        self.led.setGeometry(QtCore.QRect(360, 170, 21, 21))
         self.led.setStyleSheet("\n"
 "                background-color: rgb(255, 0, 0);\n"
 "                border-style: outset;\n"
@@ -767,7 +767,7 @@ class Ui_MainWindow(object):
         self.swimradio.setGeometry(QtCore.QRect(60, 120, 71, 20))
         self.swimradio.setObjectName("swimradio")
         self.applyacousticbutton = QtWidgets.QPushButton(self.frame)
-        self.applyacousticbutton.setGeometry(QtCore.QRect(190, 170, 71, 21))
+        self.applyacousticbutton.setGeometry(QtCore.QRect(200, 170, 71, 21))
         self.applyacousticbutton.setStyleSheet("QPushButton {\n"
 "                color: rgb(255, 255, 255);\n"
 "                background-color: rgb(0, 0, 0);\n"
@@ -880,17 +880,17 @@ class Ui_MainWindow(object):
         self.orientradio.setGeometry(QtCore.QRect(120, 120, 71, 20))
         self.orientradio.setObjectName("orientradio")
         self.acousticfreq_spinBox = QtWidgets.QSpinBox(self.frame)
-        self.acousticfreq_spinBox.setGeometry(QtCore.QRect(80, 160, 101, 41))
+        self.acousticfreq_spinBox.setGeometry(QtCore.QRect(100, 160, 91, 41))
         self.acousticfreq_spinBox.setMaximum(3000000)
         self.acousticfreq_spinBox.setSingleStep(1000)
         self.acousticfreq_spinBox.setProperty("value", 1000000)
         self.acousticfreq_spinBox.setObjectName("acousticfreq_spinBox")
         self.acousticfreqlabel = QtWidgets.QLabel(self.frame)
-        self.acousticfreqlabel.setGeometry(QtCore.QRect(10, 160, 71, 41))
+        self.acousticfreqlabel.setGeometry(QtCore.QRect(10, 160, 91, 41))
         self.acousticfreqlabel.setStyleSheet("")
         self.acousticfreqlabel.setObjectName("acousticfreqlabel")
         self.autoacousticbutton = QtWidgets.QPushButton(self.frame)
-        self.autoacousticbutton.setGeometry(QtCore.QRect(270, 170, 71, 21))
+        self.autoacousticbutton.setGeometry(QtCore.QRect(280, 170, 71, 21))
         self.autoacousticbutton.setStyleSheet("QPushButton {\n"
 "                color: rgb(255, 255, 255);\n"
 "                background-color: rgb(0, 0, 0);\n"
@@ -999,7 +999,7 @@ class Ui_MainWindow(object):
         self.arduino_portbox.setGeometry(QtCore.QRect(130, 10, 251, 21))
         self.arduino_portbox.setObjectName("arduino_portbox")
         self.controlparamsframe = QtWidgets.QFrame(self.dockWidgetContents_4)
-        self.controlparamsframe.setGeometry(QtCore.QRect(10, 400, 391, 71))
+        self.controlparamsframe.setGeometry(QtCore.QRect(0, 390, 391, 95))
         self.controlparamsframe.setStyleSheet(" color: rgb(0, 0, 0);\n"
 " background-color: rgb(255, 255, 255);\n"
 "font-size: 10pt;")
@@ -1007,66 +1007,65 @@ class Ui_MainWindow(object):
         self.controlparamsframe.setFrameShadow(QtWidgets.QFrame.Raised)
         self.controlparamsframe.setObjectName("controlparamsframe")
         self.ricochet_effect_checkbox = QtWidgets.QCheckBox(self.controlparamsframe)
-        self.ricochet_effect_checkbox.setGeometry(QtCore.QRect(20, 40, 31, 21))
+        self.ricochet_effect_checkbox.setGeometry(QtCore.QRect(120, 70, 31, 21))
         self.ricochet_effect_checkbox.setText("")
         self.ricochet_effect_checkbox.setChecked(False)
         self.ricochet_effect_checkbox.setObjectName("ricochet_effect_checkbox")
         self.ricocheteffectlabel = QtWidgets.QLabel(self.controlparamsframe)
-        self.ricocheteffectlabel.setGeometry(QtCore.QRect(10, 10, 58, 31))
+        self.ricocheteffectlabel.setGeometry(QtCore.QRect(10, 70, 101, 21))
         self.ricocheteffectlabel.setObjectName("ricocheteffectlabel")
         self.arrivalthreshlabel = QtWidgets.QLabel(self.controlparamsframe)
-        self.arrivalthreshlabel.setGeometry(QtCore.QRect(70, 10, 111, 31))
+        self.arrivalthreshlabel.setGeometry(QtCore.QRect(10, 10, 131, 21))
         self.arrivalthreshlabel.setObjectName("arrivalthreshlabel")
         self.arrivalthreshbox = QtWidgets.QSpinBox(self.controlparamsframe)
-        self.arrivalthreshbox.setGeometry(QtCore.QRect(70, 40, 61, 21))
+        self.arrivalthreshbox.setGeometry(QtCore.QRect(130, 10, 51, 21))
         self.arrivalthreshbox.setMinimum(1)
         self.arrivalthreshbox.setMaximum(400)
         self.arrivalthreshbox.setProperty("value", 100)
         self.arrivalthreshbox.setObjectName("arrivalthreshbox")
-        self.RRTtreesizelabel = QtWidgets.QLabel(self.controlparamsframe)
-        self.RRTtreesizelabel.setGeometry(QtCore.QRect(170, 10, 121, 31))
-        self.RRTtreesizelabel.setObjectName("RRTtreesizelabel")
         self.RRTtreesizebox = QtWidgets.QSpinBox(self.controlparamsframe)
-        self.RRTtreesizebox.setGeometry(QtCore.QRect(170, 40, 51, 21))
+        self.RRTtreesizebox.setGeometry(QtCore.QRect(130, 40, 51, 21))
         self.RRTtreesizebox.setMinimum(1)
         self.RRTtreesizebox.setMaximum(100)
         self.RRTtreesizebox.setProperty("value", 25)
         self.RRTtreesizebox.setObjectName("RRTtreesizebox")
-        self.infinity_size = QtWidgets.QSpinBox(self.controlparamsframe)
-        self.infinity_size.setGeometry(QtCore.QRect(300, 40, 61, 21))
-        self.infinity_size.setMinimum(1)
-        self.infinity_size.setMaximum(1000)
-        self.infinity_size.setSingleStep(100)
-        self.infinity_size.setProperty("value", 1000)
-        self.infinity_size.setObjectName("infinity_size")
-        self.make_inf_path = QtWidgets.QPushButton(self.controlparamsframe)
-        self.make_inf_path.setGeometry(QtCore.QRect(270, 10, 121, 21))
-        self.make_inf_path.setStyleSheet("QPushButton {\n"
-"                color: rgb(255, 255, 255);\n"
-"                background-color: rgb(0, 0, 0);\n"
-"                border-style: outset;\n"
-"                border-width: 2px;\n"
-"                border-radius: 10px;\n"
-"                border-color: rgb(0, 0, 0);\n"
-"                min-width: 1em;\n"
-"                padding: 1px;\n"
-"            }\n"
-"            QPushButton:hover {\n"
-"                background-color: rgb(100, 100, 100);\n"
-"                color: rgb(255, 255, 255);\n"
-"                border-style: inset;\n"
-"              border-color: rgb(0, 255, 0);\n"
-"            }")
-        self.make_inf_path.setCheckable(True)
-        self.make_inf_path.setChecked(False)
-        self.make_inf_path.setObjectName("make_inf_path")
+        self.RRTtreesizelabel_2 = QtWidgets.QLabel(self.controlparamsframe)
+        self.RRTtreesizelabel_2.setGeometry(QtCore.QRect(10, 40, 121, 21))
+        self.RRTtreesizelabel_2.setObjectName("RRTtreesizelabel_2")
+        self.corridorwidthbox = QtWidgets.QSpinBox(self.controlparamsframe)
+        self.corridorwidthbox.setGeometry(QtCore.QRect(330, 10, 51, 21))
+        self.corridorwidthbox.setMinimum(2)
+        self.corridorwidthbox.setMaximum(1000)
+        self.corridorwidthbox.setProperty("value", 10)
+        self.corridorwidthbox.setObjectName("corridorwidthbox")
+        self.corriderwidthlabel = QtWidgets.QLabel(self.controlparamsframe)
+        self.corriderwidthlabel.setGeometry(QtCore.QRect(200, 10, 121, 21))
+        self.corriderwidthlabel.setObjectName("corriderwidthlabel")
+        self.approachdistancelabel = QtWidgets.QLabel(self.controlparamsframe)
+        self.approachdistancelabel.setGeometry(QtCore.QRect(200, 40, 121, 21))
+        self.approachdistancelabel.setObjectName("approachdistancelabel")
+        self.approachdistancebox = QtWidgets.QSpinBox(self.controlparamsframe)
+        self.approachdistancebox.setGeometry(QtCore.QRect(330, 40, 51, 21))
+        self.approachdistancebox.setMinimum(1)
+        self.approachdistancebox.setMaximum(400)
+        self.approachdistancebox.setProperty("value", 50)
+        self.approachdistancebox.setObjectName("approachdistancebox")
+        self.approachdistancelabel_2 = QtWidgets.QLabel(self.controlparamsframe)
+        self.approachdistancelabel_2.setGeometry(QtCore.QRect(200, 70, 121, 21))
+        self.approachdistancelabel_2.setObjectName("approachdistancelabel_2")
+        self.spinningfreqbox = QtWidgets.QSpinBox(self.controlparamsframe)
+        self.spinningfreqbox.setGeometry(QtCore.QRect(330, 70, 51, 21))
+        self.spinningfreqbox.setMinimum(1)
+        self.spinningfreqbox.setMaximum(100)
+        self.spinningfreqbox.setProperty("value", 10)
+        self.spinningfreqbox.setObjectName("spinningfreqbox")
         self.magneticfieldsimlabel = QtWidgets.QLabel(self.dockWidgetContents_4)
-        self.magneticfieldsimlabel.setGeometry(QtCore.QRect(40, 620, 310, 310))
+        self.magneticfieldsimlabel.setGeometry(QtCore.QRect(40, 630, 310, 310))
         self.magneticfieldsimlabel.setStyleSheet("background-color: rgb(0,0,0); border:2px solid rgb(255, 0, 0); ")
         self.magneticfieldsimlabel.setText("")
         self.magneticfieldsimlabel.setObjectName("magneticfieldsimlabel")
         self.simulationbutton = QtWidgets.QPushButton(self.dockWidgetContents_4)
-        self.simulationbutton.setGeometry(QtCore.QRect(110, 940, 171, 25))
+        self.simulationbutton.setGeometry(QtCore.QRect(110, 950, 171, 25))
         self.simulationbutton.setStyleSheet("QPushButton {\n"
 "                color: rgb(255, 255, 255);\n"
 "                background-color: rgb(0, 255, 0);\n"
@@ -1100,7 +1099,7 @@ class Ui_MainWindow(object):
         self.simulationbutton.setCheckable(True)
         self.simulationbutton.setObjectName("simulationbutton")
         self.frame_2 = QtWidgets.QFrame(self.dockWidgetContents_4)
-        self.frame_2.setGeometry(QtCore.QRect(10, 230, 391, 161))
+        self.frame_2.setGeometry(QtCore.QRect(0, 220, 391, 161))
         self.frame_2.setStyleSheet(" color: rgb(0, 0, 0);\n"
 " background-color: rgb(255, 255, 255);\n"
 "font-size: 10pt; font: Arial;")
@@ -1185,32 +1184,60 @@ class Ui_MainWindow(object):
         self.manualalphalabel.setGeometry(QtCore.QRect(130, 100, 41, 16))
         self.manualalphalabel.setObjectName("manualalphalabel")
         self.label_5 = QtWidgets.QLabel(self.frame_2)
-        self.label_5.setGeometry(QtCore.QRect(290, 10, 91, 21))
+        self.label_5.setGeometry(QtCore.QRect(290, 0, 91, 21))
         self.label_5.setObjectName("label_5")
         self.label_4 = QtWidgets.QLabel(self.frame_2)
-        self.label_4.setGeometry(QtCore.QRect(350, 100, 31, 21))
+        self.label_4.setGeometry(QtCore.QRect(350, 60, 31, 21))
         self.label_4.setObjectName("label_4")
         self.label_3 = QtWidgets.QLabel(self.frame_2)
-        self.label_3.setGeometry(QtCore.QRect(350, 70, 31, 21))
+        self.label_3.setGeometry(QtCore.QRect(350, 40, 31, 21))
         self.label_3.setObjectName("label_3")
         self.bylabel = QtWidgets.QLabel(self.frame_2)
-        self.bylabel.setGeometry(QtCore.QRect(260, 70, 61, 21))
+        self.bylabel.setGeometry(QtCore.QRect(260, 40, 61, 21))
         self.bylabel.setObjectName("bylabel")
         self.bxlabel = QtWidgets.QLabel(self.frame_2)
-        self.bxlabel.setGeometry(QtCore.QRect(260, 40, 61, 21))
+        self.bxlabel.setGeometry(QtCore.QRect(260, 20, 61, 21))
         self.bxlabel.setObjectName("bxlabel")
         self.label_2 = QtWidgets.QLabel(self.frame_2)
-        self.label_2.setGeometry(QtCore.QRect(350, 40, 31, 21))
+        self.label_2.setGeometry(QtCore.QRect(350, 20, 31, 21))
         self.label_2.setObjectName("label_2")
         self.bzlabel = QtWidgets.QLabel(self.frame_2)
-        self.bzlabel.setGeometry(QtCore.QRect(260, 100, 61, 21))
+        self.bzlabel.setGeometry(QtCore.QRect(260, 60, 61, 21))
         self.bzlabel.setObjectName("bzlabel")
         self.label_13 = QtWidgets.QLabel(self.frame_2)
         self.label_13.setGeometry(QtCore.QRect(250, 0, 2, 161))
         self.label_13.setStyleSheet("background-color: rgb(0,0,0); ")
         self.label_13.setObjectName("label_13")
+        self.make_inf_path = QtWidgets.QPushButton(self.frame_2)
+        self.make_inf_path.setGeometry(QtCore.QRect(260, 90, 121, 21))
+        self.make_inf_path.setStyleSheet("QPushButton {\n"
+"                color: rgb(255, 255, 255);\n"
+"                background-color: rgb(0, 0, 0);\n"
+"                border-style: outset;\n"
+"                border-width: 2px;\n"
+"                border-radius: 10px;\n"
+"                border-color: rgb(0, 0, 0);\n"
+"                min-width: 1em;\n"
+"                padding: 1px;\n"
+"            }\n"
+"            QPushButton:hover {\n"
+"                background-color: rgb(100, 100, 100);\n"
+"                color: rgb(255, 255, 255);\n"
+"                border-style: inset;\n"
+"              border-color: rgb(0, 255, 0);\n"
+"            }")
+        self.make_inf_path.setCheckable(True)
+        self.make_inf_path.setChecked(False)
+        self.make_inf_path.setObjectName("make_inf_path")
+        self.infinity_size = QtWidgets.QSpinBox(self.frame_2)
+        self.infinity_size.setGeometry(QtCore.QRect(290, 120, 61, 21))
+        self.infinity_size.setMinimum(1)
+        self.infinity_size.setMaximum(1000)
+        self.infinity_size.setSingleStep(100)
+        self.infinity_size.setProperty("value", 1000)
+        self.infinity_size.setObjectName("infinity_size")
         self.frame_4 = QtWidgets.QFrame(self.dockWidgetContents_4)
-        self.frame_4.setGeometry(QtCore.QRect(10, 480, 381, 131))
+        self.frame_4.setGeometry(QtCore.QRect(0, 490, 381, 131))
         self.frame_4.setStyleSheet(" color: rgb(0, 0, 0);\n"
 " background-color: rgb(255, 255, 255);\n"
 "font-size: 10pt;")
@@ -1309,12 +1336,13 @@ class Ui_MainWindow(object):
         self.leftbutton.setText(_translate("MainWindow", "..."))
         self.startbutton.setText(_translate("MainWindow", "Start"))
         self.rightbutton.setText(_translate("MainWindow", "..."))
-        self.exposurelabel.setText(_translate("MainWindow", "Exposure"))
-        self.objectivelabel.setText(_translate("MainWindow", "Objective"))
+        self.exposurelabel.setText(_translate("MainWindow", "Exposure (ms)"))
+        self.objectivelabel.setText(_translate("MainWindow", "Objective (x)"))
         self.toggledisplayvisualscheckbox.setText(_translate("MainWindow", "Toggle Image Display Visuals"))
         self.exposurelabel_3.setText(_translate("MainWindow", ".mp4"))
         self.exposurelabel_2.setText(_translate("MainWindow", "Output File Name:"))
-        self.memorylabel.setText(_translate("MainWindow", "Velocity Memory "))
+        self.memorylabel.setText(_translate("MainWindow", "Velocity Memory\n"
+" (frames)"))
         self.maskthreshlabel.setText(_translate("MainWindow", "Lower Thresh"))
         self.maskdilationlabel.setText(_translate("MainWindow", "Dilation"))
         self.croplengthlabel.setText(_translate("MainWindow", "Crop Length(px)"))
@@ -1345,7 +1373,7 @@ class Ui_MainWindow(object):
         self.controlbutton.setText(_translate("MainWindow", "Control"))
         self.orientradio.setText(_translate("MainWindow", "Orient"))
         self.acousticfreqlabel.setText(_translate("MainWindow", "Acoustic \n"
-"Frequency"))
+"Frequency (Hz)"))
         self.autoacousticbutton.setText(_translate("MainWindow", "Auto"))
         self.gradient_status_checkbox.setText(_translate("MainWindow", "Gradient"))
         self.import_excel_actions.setText(_translate("MainWindow", "Import Excel Actions"))
@@ -1353,15 +1381,14 @@ class Ui_MainWindow(object):
         self.equal_field_checkbox.setText(_translate("MainWindow", "Equal Field"))
         self.pushradio.setText(_translate("MainWindow", "Push"))
         self.selectport.setText(_translate("MainWindow", "Select Arduino Port:"))
-        self.ricocheteffectlabel.setText(_translate("MainWindow", "Ricochet \n"
-"Effect:"))
-        self.arrivalthreshlabel.setText(_translate("MainWindow", "Arrive Thresh \n"
-"(px)"))
-        self.RRTtreesizelabel.setText(_translate("MainWindow", "RRT Tree Size \n"
-"(px)"))
-        self.make_inf_path.setText(_translate("MainWindow", "Make Infinity Path"))
+        self.ricocheteffectlabel.setText(_translate("MainWindow", "Ricochet Effect:"))
+        self.arrivalthreshlabel.setText(_translate("MainWindow", "Arrive Thresh (px):"))
+        self.RRTtreesizelabel_2.setText(_translate("MainWindow", "RRT Tree Size (px):"))
+        self.corriderwidthlabel.setText(_translate("MainWindow", "Corridor Width (um):"))
+        self.approachdistancelabel.setText(_translate("MainWindow", "Approach Dist (px):"))
+        self.approachdistancelabel_2.setText(_translate("MainWindow", "Spinning  (Hz):"))
         self.simulationbutton.setText(_translate("MainWindow", "Simulation On"))
-        self.label_6.setText(_translate("MainWindow", "Manual (mT)"))
+        self.label_6.setText(_translate("MainWindow", "Manual (%)"))
         self.manualapplybutton.setText(_translate("MainWindow", "Apply"))
         self.label_7.setText(_translate("MainWindow", "Bx:"))
         self.label_8.setText(_translate("MainWindow", "By:"))
@@ -1375,8 +1402,9 @@ class Ui_MainWindow(object):
         self.label_2.setText(_translate("MainWindow", "mT"))
         self.bzlabel.setText(_translate("MainWindow", "Bz: 0"))
         self.label_13.setText(_translate("MainWindow", "TextLabel"))
+        self.make_inf_path.setText(_translate("MainWindow", "Make Infinity Path"))
         self.gammalabel.setText(_translate("MainWindow", "Gamma: 90"))
         self.rollingfrequencylabel.setText(_translate("MainWindow", "Magnetic Rotating \n"
-"Frequency:"))
+"Frequency (Hz):"))
         self.psilabel.setText(_translate("MainWindow", "Psi: 90"))
         self.actiondock.setText(_translate("MainWindow", "dock"))

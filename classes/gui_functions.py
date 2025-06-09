@@ -337,6 +337,9 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 print("pushing")
 
+
+
+
             
         #if joystick is on use the joystick though
         elif self.joystick_status == True:
@@ -345,11 +348,11 @@ class MainWindow(QtWidgets.QMainWindow):
             
             if type == 1:
                 self.gamma = np.radians(180)
-                self.freq = self.ui.magneticfrequencydial.value()
+                self.freq = self.ui.spinningfreqbox.value()
             
             elif type == 2:
                 self.gamma = np.radians(0)
-                self.freq = self.ui.magneticfrequencydial.value()
+                self.freq = self.ui.spinningfreqbox.value()
             
             else:
                 self.gamma = np.radians(self.ui.gammadial.value())
@@ -360,9 +363,11 @@ class MainWindow(QtWidgets.QMainWindow):
         
         
         elif self.manual_status == True:
+            self.Bx = self.ui.manualfieldBx.value()/100
+            self.By = self.ui.manualfieldBy.value()/100
+            self.Bz = self.ui.manualfieldBz.value()/100
             
-
-            # X coil calibration
+            """# X coil calibration
             if self.ui.manualfieldBx.value() == 0:  #0 mT
                 self.Bx = 0  #0%  
             else:
@@ -378,9 +383,9 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.By = 0  #0%  
             else:
                 if self.ui.manualfieldBy.value() > 0:
-                    self.By = .1863 *  self.ui.manualfieldBy.value()  + .0769
+                    self.By = .1863 *  self.ui.manualfieldBy.value()  + .07
                 elif self.ui.manualfieldBy.value() < 0:
-                    self.By = -(.1863 *  -self.ui.manualfieldBy.value()  + .0769)
+                    self.By = -(.1863 *  -self.ui.manualfieldBy.value()  + .07)
 
 
             # Z coil calibration
@@ -390,7 +395,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 if self.ui.manualfieldBz.value() > 0:
                     self.Bz = 0.0003 * self.ui.manualfieldBz.value() **3    -    .0067   * self.ui.manualfieldBz.value() **2      +    .1027 *  self.ui.manualfieldBz.value()  + .023
                 elif self.ui.manualfieldBz.value() < 0:
-                    self.Bz = -(0.0003 * (-self.ui.manualfieldBz.value()) **3    -    .0067   * (-self.ui.manualfieldBz.value()) **2      +    .1027 *  (-self.ui.manualfieldBz.value())  + .023)
+                    self.Bz = -(0.0003 * (-self.ui.manualfieldBz.value()) **3    -    .0067   * (-self.ui.manualfieldBz.value()) **2      +    .1027 *  (-self.ui.manualfieldBz.value())  + .023)"""
 
             
 

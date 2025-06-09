@@ -131,11 +131,29 @@ class algorithm:
         self.actions = [self.Bx,self.By,self.Bz,self.alpha, self.gamma, self.freq, self.psi, self.acoustic_frequency]
         self.count += 1
 
+      
+
     
         return frame, self.actions, self.stopped
 
-    def push(self, bot, frame):
-        print("pushing")
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
 
 
     def find_optimal_acoustic_freq(self, robot_list):
