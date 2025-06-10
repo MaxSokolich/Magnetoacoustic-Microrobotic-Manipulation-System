@@ -518,6 +518,8 @@ class VideoThread(QThread):
                 self.change_pixmap_signal.emit(displayframe)
                 self.actions_signal.emit(actions, stopped, self.robot_list, self.cell_list)
                 
+
+              
                 
 
                 
