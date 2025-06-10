@@ -244,7 +244,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.excel_actions_status = False
 
 
-        self.ui.makeshapebutton.clicked.connect(self.makeshape_trajectory)
+        self.ui.make_inf_path.clicked.connect(self.makeinf_trajectory)
 
         
 
@@ -261,25 +261,32 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
         
-    def makeshape_trajectory(self):
+    def makeinf_trajectory(self):
         if self.tracker is not None:
             if len(self.tracker.robot_list)>0:
-                node_number = self.ui.shapemaker_nodes.value()
+             
 
+
+                a = self.ui.infinity_size.value()  # Controls the size
                 center_x = self.video_width // 2
                 center_y = self.video_height // 2
-                radius = min(self.video_width, self.video_height) // 6  # Assume circle fits within a quarter of the image
-                
-                coordinates = []
-                for i in range(node_number):
-                    theta = 2 * np.pi * i / node_number
-                    x = center_x + int(radius * np.cos(theta))
-                    y = center_y + int(radius * np.sin(theta))
-                    coordinates.append((x, y))
-                
-                coordinates.append(coordinates[0])
-                
-                self.tracker.robot_list[-1].trajectory = coordinates 
+
+                # Generate points using parametric equations for a lemniscate
+                points = []
+                for t in np.linspace(0, 2 * np.pi, 500):
+                    denom = 1 + np.sin(t)**2
+                    if denom == 0:
+                        continue  # avoid division by zero
+                    x = (a * np.cos(t)) / denom
+                    y = (a * np.cos(t) * np.sin(t)) / denom
+
+                    # Convert to image coordinates
+                    img_x = int(center_x + x)
+                    img_y = int(center_y + y)
+                    points.append((img_x, img_y))
+
+                points.append(points[0])
+                self.tracker.robot_list[-1].trajectory = points 
         
     
 
@@ -330,6 +337,9 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 print("pushing")
 
+
+
+
             
         #if joystick is on use the joystick though
         elif self.joystick_status == True:
@@ -338,11 +348,11 @@ class MainWindow(QtWidgets.QMainWindow):
             
             if type == 1:
                 self.gamma = np.radians(180)
-                self.freq = self.ui.magneticfrequencydial.value()
+                self.freq = self.ui.spinningfreqbox.value()
             
             elif type == 2:
                 self.gamma = np.radians(0)
-                self.freq = self.ui.magneticfrequencydial.value()
+                self.freq = self.ui.spinningfreqbox.value()
             
             else:
                 self.gamma = np.radians(self.ui.gammadial.value())
@@ -356,11 +366,55 @@ class MainWindow(QtWidgets.QMainWindow):
             self.Bx = self.ui.manualfieldBx.value()/100
             self.By = self.ui.manualfieldBy.value()/100
             self.Bz = self.ui.manualfieldBz.value()/100
+            
+            """# X coil calibration
+            if self.ui.manualfieldBx.value() == 0:  #0 mT
+                self.Bx = 0  #0%  
+            else:
+                if self.ui.manualfieldBx.value() > 0:
+                    self.Bx = 0.0511 * self.ui.manualfieldBx.value() **3    -    .2302   * self.ui.manualfieldBx.value() **2      +    .5577 *  self.ui.manualfieldBx.value()  + .0216
+                elif self.ui.manualfieldBx.value() < 0:
+
+                    self.Bx = -(0.0511 * (-self.ui.manualfieldBx.value()) **3    -    .2302   * (-self.ui.manualfieldBx.value()) **2      +    .5577 *  (-self.ui.manualfieldBx.value())  + .0216)
+
+
+            # Y coil calibration
+            if self.ui.manualfieldBy.value() == 0:  #0 mT
+                self.By = 0  #0%  
+            else:
+                if self.ui.manualfieldBy.value() > 0:
+                    self.By = .1863 *  self.ui.manualfieldBy.value()  + .07
+                elif self.ui.manualfieldBy.value() < 0:
+                    self.By = -(.1863 *  -self.ui.manualfieldBy.value()  + .07)
+
+
+            # Z coil calibration
+            if self.ui.manualfieldBz.value() == 0:  #0 mT
+                self.Bz = 0  #0%  
+            else:
+                if self.ui.manualfieldBz.value() > 0:
+                    self.Bz = 0.0003 * self.ui.manualfieldBz.value() **3    -    .0067   * self.ui.manualfieldBz.value() **2      +    .1027 *  self.ui.manualfieldBz.value()  + .023
+                elif self.ui.manualfieldBz.value() < 0:
+                    self.Bz = -(0.0003 * (-self.ui.manualfieldBz.value()) **3    -    .0067   * (-self.ui.manualfieldBz.value()) **2      +    .1027 *  (-self.ui.manualfieldBz.value())  + .023)"""
+
+            
+
+
             self.freq = self.ui.magneticfrequencydial.value()
             self.gamma = np.radians(self.ui.gammadial.value())
             self.psi = np.radians(self.ui.psidial.value())
             self.alpha = np.radians(self.ui.alphadial.value())
+
+
+
+
             
+
+
+
+
+
+
             #ricochet conditions, too close to the x or y borders flip the conditions
             if self.ui.ricochet_effect_checkbox.isChecked():
                 if len(self.tracker.robot_list) > 0:
@@ -667,6 +721,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.controlbutton.setText("Control")
             self.tbprint("Control Off")
             self.apply_actions(False)
+         
             
             
     
@@ -1420,6 +1475,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #self.recorder.stop()
         
         self.simulator.stop()
-        self.apply_actions(False)
+        
         if self.arduino is not None:
             self.arduino.close()
+            self.apply_actions(False)
