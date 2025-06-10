@@ -9,11 +9,8 @@
 // - there is no hard zero option as I got rid of typ
 #include <AD9850.h>
 #include <Wire.h>
-#include "Adafruit_ADS1X15.h"
 #include "SerialTransfer.h"
 
-
-Adafruit_ADS1115 ads;  // Create ADS1115 object
 
 SerialTransfer myTransfer;
 
@@ -21,13 +18,6 @@ SerialTransfer myTransfer;
 float action[10]; //an array to store incoming data from python
 
 
-//Store data from arduino to send to python
-struct send_class {
-  float Bx_sensor;
-  float By_sensor;
-  float Bz_sensor;
-
-} send_data;
 
 
 
@@ -149,8 +139,7 @@ void setup()
   DDS.begin(W_CLK_PIN, FQ_UD_PIN, DATA_PIN, RESET_PIN);
   DDS.calibrate(124999500);
 
-  //start ads1115 module
-  ads.begin();  // Start I2C and ADS1115
+
 
 
    //Coil1 Ouptut

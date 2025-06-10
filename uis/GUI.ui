@@ -2509,10 +2509,10 @@ font-size: 10pt; font: Arial;</string>
        </rect>
       </property>
       <property name="minimum">
-       <number>-3</number>
+       <number>-100</number>
       </property>
       <property name="maximum">
-       <number>3</number>
+       <number>100</number>
       </property>
       <property name="value">
        <number>0</number>
@@ -2528,10 +2528,10 @@ font-size: 10pt; font: Arial;</string>
        </rect>
       </property>
       <property name="minimum">
-       <number>-5</number>
+       <number>-100</number>
       </property>
       <property name="maximum">
-       <number>5</number>
+       <number>100</number>
       </property>
       <property name="value">
        <number>0</number>
@@ -2550,10 +2550,10 @@ font-size: 10pt; font: Arial;</string>
        </rect>
       </property>
       <property name="minimum">
-       <number>-14</number>
+       <number>-100</number>
       </property>
       <property name="maximum">
-       <number>14</number>
+       <number>100</number>
       </property>
       <property name="value">
        <number>0</number>
