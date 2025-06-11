@@ -612,7 +612,7 @@ class MainWindow(QtWidgets.QMainWindow):
             
         #create sheet for magneti field actions
         self.magnetic_field_sheet = self.output_workbook.create_sheet(title="Magnetic Field Actions")#self.output_workbook.active
-        self.magnetic_field_sheet.append(["Frame","Bx", "By", "Bz", "Alpha", "Gamma", "Rolling Frequency", "Psi", "Gradient?","Equal Field?", "Acoustic Frequency","Sensor Bx", "Sensor By", "Sensor Bz"])
+        self.magnetic_field_sheet.append(["Frame","Bx (%)", "By (%)", "Bz (%)", "Alpha (rad)", "Gamma (rad)", "Rolling Frequency (Hz)", "Psi (rad)", "Gradient?","Equal Field?", "Acoustic Frequency (Hz)","Sensor Bx", "Sensor By", "Sensor Bz"])
 
         #create sheet for robot data
         self.robot_params_sheets = []
