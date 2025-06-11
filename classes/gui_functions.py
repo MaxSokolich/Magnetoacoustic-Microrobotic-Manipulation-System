@@ -721,6 +721,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.controlbutton.setText("Control")
             self.tbprint("Control Off")
             self.apply_actions(False)
+          
          
             
             

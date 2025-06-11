@@ -1336,7 +1336,7 @@ class Ui_MainWindow(object):
         self.leftbutton.setText(_translate("MainWindow", "..."))
         self.startbutton.setText(_translate("MainWindow", "Start"))
         self.rightbutton.setText(_translate("MainWindow", "..."))
-        self.exposurelabel.setText(_translate("MainWindow", "Exposure (ms)"))
+        self.exposurelabel.setText(_translate("MainWindow", "Exposure (us)"))
         self.objectivelabel.setText(_translate("MainWindow", "Objective (x)"))
         self.toggledisplayvisualscheckbox.setText(_translate("MainWindow", "Toggle Image Display Visuals"))
         self.exposurelabel_3.setText(_translate("MainWindow", ".mp4"))

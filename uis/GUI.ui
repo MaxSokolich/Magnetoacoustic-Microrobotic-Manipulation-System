@@ -526,7 +526,7 @@ QPushButton {
        </size>
       </property>
       <property name="text">
-       <string>Exposure (ms)</string>
+       <string>Exposure (us)</string>
       </property>
      </widget>
      <widget class="QSpinBox" name="exposurebox">
