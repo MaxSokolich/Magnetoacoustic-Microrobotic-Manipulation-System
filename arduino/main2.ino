@@ -386,10 +386,10 @@ void loop()
        Bz_roll = 0;
       }
    else {
-      //correct equations 7/8/23 //have to flip the sign of omega to maintain right handed chirality
-      Bx_roll = (-sin(alpha) * sin(-omega*t)) + (-cos(alpha) * cos(gamma)  * cos(-omega*t)); 
-      By_roll =  (cos(alpha) * sin(-omega*t)) + (-sin(alpha) * cos(gamma) *  cos(-omega*t)); 
-      Bz_roll = sin(gamma) * cos(-omega*t);
+      //working equations 7/1/25
+      Bx_roll = - (cos(alpha) * cos(gamma)  * cos(omega*t))     +     (sin(alpha) * sin(omega*t)) ; 
+      By_roll = - (sin(alpha) * cos(gamma)  * cos(omega*t))     -     (cos(alpha) * sin(omega*t)); 
+      Bz_roll = sin(gamma) * cos(omega*t);
 
        // condition for perpendicular field (psi cannot be 90)
        // condition for perpendicular field (psi cannot be 90)

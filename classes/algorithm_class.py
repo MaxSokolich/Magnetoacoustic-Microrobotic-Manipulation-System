@@ -75,8 +75,9 @@ class algorithm:
         
                 #record robot list trajectory
                 robot_list[-1].trajectory= trajectory
+            
 
-
+          
             #logic for arrival condition
             if self.node == len(robot_list[-1].trajectory):
                 #weve arrived
