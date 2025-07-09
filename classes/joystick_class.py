@@ -342,12 +342,12 @@ class Linux_Controller:
                     elif rx == 0 and ry < 0:
                         self.alpha = -np.pi/2
                         #self.gamma = np.pi/2
-                        self.freq = int(np.sqrt((rx)**2 + (ry)**2)*20)
+                        self.freq = int(np.sqrt((rx)**2 + (ry)**2)*40)
                     else:
                         angle = np.arctan2(ry,rx) 
                         self.alpha = round(angle,3)
                         #self.gamma = np.pi/2
-                        self.freq = int(np.sqrt((rx)**2 + (ry)**2)*20)
+                        self.freq = int(np.sqrt((rx)**2 + (ry)**2)*40)
 
 
                 if event.axis == 2: #LT
