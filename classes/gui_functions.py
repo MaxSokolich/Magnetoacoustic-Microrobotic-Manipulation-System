@@ -343,9 +343,16 @@ class MainWindow(QtWidgets.QMainWindow):
             
         #if joystick is on use the joystick though
         elif self.joystick_status == True:
-            type, self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, _ = self.controller_actions.run(self.joystick)
+            type, self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, acoust = self.controller_actions.run(self.joystick)
             self.psi = np.radians(self.ui.psidial.value())
             
+            if acoust == 1:
+                self.acoustic_frequency = self.ui.acousticfreq_spinBox.value()
+            else:
+                self.acoustic_frequency = 0
+
+    
+
             if type == 1:
                 self.gamma = np.radians(180)
                 self.freq = self.ui.spinningfreqbox.value()
