@@ -1299,7 +1299,7 @@ font-size: 10pt;</string>
      <property name="styleSheet">
       <string notr="true"> color: rgb(255, 255, 255);
  background-color: rgb(0, 0, 0);
-font-size: 10pt; font: Arial;</string>
+font-size: 8pt; font: Arial;</string>
      </property>
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
@@ -1310,7 +1310,7 @@ font-size: 10pt; font: Arial;</string>
      <widget class="QLabel" name="robotsizelabel">
       <property name="geometry">
        <rect>
-        <x>30</x>
+        <x>20</x>
         <y>0</y>
         <width>51</width>
         <height>20</height>
@@ -1329,7 +1329,7 @@ font-size: 10pt; font: Arial;</string>
      <widget class="QLabel" name="robotvelocitylabel">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>90</x>
         <y>0</y>
         <width>81</width>
         <height>21</height>
@@ -1348,9 +1348,9 @@ font-size: 10pt; font: Arial;</string>
      <widget class="QLabel" name="robotblurlabel">
       <property name="geometry">
        <rect>
-        <x>220</x>
+        <x>260</x>
         <y>0</y>
-        <width>51</width>
+        <width>61</width>
         <height>20</height>
        </rect>
       </property>
@@ -1370,10 +1370,10 @@ font-size: 10pt; font: Arial;</string>
      <widget class="QLCDNumber" name="blurlcdnum">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>240</x>
         <y>20</y>
         <width>61</width>
-        <height>30</height>
+        <height>20</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -1405,8 +1405,8 @@ color: rgb(0,255,0);</string>
      <widget class="QLabel" name="robotvelocityunitslabel">
       <property name="geometry">
        <rect>
-        <x>160</x>
-        <y>30</y>
+        <x>100</x>
+        <y>40</y>
         <width>41</width>
         <height>20</height>
        </rect>
@@ -1421,32 +1421,13 @@ color: rgb(0,255,0);</string>
        <string>um/s</string>
       </property>
      </widget>
-     <widget class="QLabel" name="robotblurunitslabe">
-      <property name="geometry">
-       <rect>
-        <x>260</x>
-        <y>30</y>
-        <width>41</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>300</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>units</string>
-      </property>
-     </widget>
      <widget class="QLCDNumber" name="sizelcdnum">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>20</y>
         <width>61</width>
-        <height>30</height>
+        <height>20</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -1478,10 +1459,10 @@ color: rgb(0,255,0);</string>
      <widget class="QLCDNumber" name="vellcdnum">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>80</x>
         <y>20</y>
-        <width>71</width>
-        <height>30</height>
+        <width>41</width>
+        <height>20</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -1513,8 +1494,8 @@ color: rgb(0,255,0);</string>
      <widget class="QLabel" name="robotsizeunitslabel">
       <property name="geometry">
        <rect>
-        <x>60</x>
-        <y>30</y>
+        <x>30</x>
+        <y>40</y>
         <width>31</width>
         <height>20</height>
        </rect>
@@ -1527,6 +1508,98 @@ color: rgb(0,255,0);</string>
       </property>
       <property name="text">
        <string>um  </string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="robotaccellabel">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>0</y>
+        <width>61</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>300</width>
+        <height>50</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>Accel:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="robotaccelunitslabel">
+      <property name="geometry">
+       <rect>
+        <x>170</x>
+        <y>40</y>
+        <width>41</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>300</width>
+        <height>50</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>um^2/s</string>
+      </property>
+     </widget>
+     <widget class="QLCDNumber" name="accellcdnum">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>20</y>
+        <width>41</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(0,0,0); 
+color: rgb(0,255,0);</string>
+      </property>
+      <property name="lineWidth">
+       <number>0</number>
+      </property>
+      <property name="midLineWidth">
+       <number>0</number>
+      </property>
+      <property name="smallDecimalPoint">
+       <bool>false</bool>
+      </property>
+      <property name="digitCount">
+       <number>3</number>
+      </property>
+      <property name="mode">
+       <enum>QLCDNumber::Dec</enum>
+      </property>
+      <property name="segmentStyle">
+       <enum>QLCDNumber::Outline</enum>
+      </property>
+      <property name="value" stdset="0">
+       <double>17.100000000000001</double>
+      </property>
+     </widget>
+     <widget class="QLabel" name="robotblurunitslabel">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>40</y>
+        <width>41</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>300</width>
+        <height>50</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>units</string>
       </property>
      </widget>
     </widget>
@@ -2270,7 +2343,7 @@ font-size: 10pt;</string>
        <number>400</number>
       </property>
       <property name="value">
-       <number>100</number>
+       <number>25</number>
       </property>
      </widget>
      <widget class="QSpinBox" name="RRTtreesizebox">

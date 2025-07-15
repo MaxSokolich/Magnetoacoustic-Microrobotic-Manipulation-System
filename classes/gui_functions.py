@@ -491,7 +491,6 @@ class MainWindow(QtWidgets.QMainWindow):
         
         #DEFINE CURRENT ROBOT PARAMS TO A LIST
         if len(robot_list) > 0:
-            
             self.robots = []
             for bot in robot_list:
                 currentbot_params = [bot.frame_list[-1],
@@ -501,6 +500,9 @@ class MainWindow(QtWidgets.QMainWindow):
                                      bot.velocity_list[-1][0]* self.tracker.pixel2um, 
                                      bot.velocity_list[-1][1]* self.tracker.pixel2um,
                                      bot.velocity_list[-1][2]* self.tracker.pixel2um,
+                                     bot.acceleration_list[-1][0]* self.tracker.pixel2um,
+                                     bot.acceleration_list[-1][1]* self.tracker.pixel2um,
+                                     bot.acceleration_list[-1][2]* self.tracker.pixel2um,
                                      bot.blur_list[-1],
                                      bot.area_list[-1]* (self.tracker.pixel2um**2),
                                      self.tracker.pixel2um,
@@ -546,6 +548,19 @@ class MainWindow(QtWidgets.QMainWindow):
                 sheet.append(bot[:-1])
             for (sheet, cell) in zip(self.cell_params_sheets,self.cells):
                 sheet.append(cell[:-1])
+        
+        #also update robot info
+       
+        if len(self.robots) > 0:
+            area = self.robots[-1][11]
+            robot_diameter = round(np.sqrt(4*area/np.pi),1)
+            self.ui.vellcdnum.display(int(self.robots[-1][6]))
+            self.ui.blurlcdnum.display(int(self.robots[-1][10]))
+            self.ui.accellcdnum.display(int(self.robots[-1][9]))
+            self.ui.sizelcdnum.display(robot_diameter)
+      
+
+           
 
 
         
@@ -625,7 +640,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.robot_params_sheets = []
         for i in range(len(self.robots)):
             robot_sheet = self.output_workbook.create_sheet(title= "Robot {}".format(i+1))
-            robot_sheet.append(["Frame","Time(s)","Pos X (um)", "Pos Y (um)", "Vel X (um/s)", "Vel Y (um/s)", "Vel Mag (um/s)", "Blur", "Area (um^2)","pixel2um","Path X (um)", "Path Y (um)"])
+            robot_sheet.append(["Frame","Time(s)","Pos X (um)", "Pos Y (um)", "Vel X (um/s)", "Vel Y (um/s)", "Vel Mag (um/s)", "Acc X (um/s2)", "Acc Y (um/s2)", "Acc Mag (um/s2)", "Blur", "Area (um^2)","pixel2um","Path X (um)", "Path Y (um)"])
             self.robot_params_sheets.append(robot_sheet)
         
         #create sheet for robot data
@@ -658,8 +673,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 try:
                     for i in range(len((self.robot_params_sheets))):
                         for idx,(x,y) in enumerate(self.robots[i][-1]):
-                            self.robot_params_sheets[i].cell(row=idx+2, column=11).value = x
-                            self.robot_params_sheets[i].cell(row=idx+2, column=12).value = y
+                            self.robot_params_sheets[i].cell(row=idx+2, column=14).value = x
+                            self.robot_params_sheets[i].cell(row=idx+2, column=15).value = y
                 except Exception:
                     pass
             
@@ -862,6 +877,7 @@ class MainWindow(QtWidgets.QMainWindow):
                             robot.add_time(0)
                             robot.add_position([newx,newy])
                             robot.add_velocity([0,0,0])
+                            robot.add_acceleration([0,0,0])
                             robot.add_crop([x_1, y_1, w, h])
                             robot.add_area(0)
                             robot.add_blur(0)
@@ -990,13 +1006,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.videopath !=0:
             self.ui.frameslider.setValue(self.tracker.framenum)
         
-        #also update robot info
-        if len(self.robots) > 0:
-            area = self.robots[-1][8] 
-            robot_diameter = round(np.sqrt(4*area/np.pi),1)
-            self.ui.vellcdnum.display(int(self.robots[-1][6]))
-            self.ui.blurlcdnum.display(int(self.robots[-1][7]))
-            self.ui.sizelcdnum.display(robot_diameter)
+        
                 
        
         self.ui.VideoFeedLabel.setPixmap(qt_img)

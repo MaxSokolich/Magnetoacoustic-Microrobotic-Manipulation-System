@@ -71,7 +71,7 @@ class VideoThread(QThread):
 
         self.arrivalthresh = 100
         self.RRTtreesize = 25
-        self.memory = 15  #this isnt used as of now
+        self.memory = 1  #this isnt used as of now
      
 
         if video != 0:
@@ -204,19 +204,27 @@ class VideoThread(QThread):
                         h_new = int(bot.crop_length)
                         new_crop = [int(x1_new), int(y1_new), int(w_new), int(h_new)]
 
-
-                        #find velocity:
+                        
+                        #find velocity and acceleration:
+                        velocity = [0,0,0]
+                        acceleration = [0,0,0]
                         if len(bot.position_list) > self.memory:
                             vx = (current_pos[0] - bot.position_list[-self.memory][0]) * (self.fps.get_fps()/self.memory) #* self.pixel2um
                             vy = (current_pos[1] - bot.position_list[-self.memory][1]) * (self.fps.get_fps()/self.memory) #* self.pixel2um
+                            vmagnitude = np.sqrt(vx**2 + vy**2)
+                            velocity = [vx,vy,vmagnitude]
+                       
+                            
+                        if len(bot.velocity_list) > self.memory:
+                            ax = (vx - bot.velocity_list[-self.memory][0]) * (self.fps.get_fps()/self.memory) #* self.pixel2um
+                            ay = (vy - bot.velocity_list[-self.memory][1]) * (self.fps.get_fps()/self.memory) #* self.pixel2um
+                            amagnitude = np.sqrt(ax**2 + ay**2)
+                            acceleration = [ax,ay,amagnitude]
+                       
 
-               
-                            magnitude = np.sqrt(vx**2 + vy**2)
-
-                            velocity = [vx,vy,magnitude]
-
-                        else:
-                            velocity = [0,0,0]
+                
+                           
+                      
 
                 
                         #find blur of original crop
@@ -227,6 +235,7 @@ class VideoThread(QThread):
                         bot.add_time(self.time_stamp) #original in ms
                         bot.add_position([current_pos[0], current_pos[1]])
                         bot.add_velocity(velocity)
+                        bot.add_acceleration(acceleration)
                         bot.add_crop(new_crop)
                         bot.add_area(area)
                         bot.add_blur(blur)
