@@ -102,7 +102,7 @@ class algorithm:
                 self.alpha = np.arctan2(-direction_vec[1], direction_vec[0])
                 
                 if orientstatus == True:
-                    self.Bx, self.By, self.Bz, self.alpha = self.orient(robot_list[-1], direction_vec)
+                    self.Bx, self.By, self.Bz = self.orient(robot_list[-1], direction_vec)
                 else:
                     self.Bx, self.By, self.Bz = 0,0,0
                 
@@ -230,7 +230,7 @@ class algorithm:
         
                 if len(self.theta_maps) > 40:
                     self.theta_maps = self.theta_maps[-40:len(self.theta_maps)]#this makes sure that we only look at the latest 150 frames of data to keep it adaptable. It should be bigger if there's a lot of noise (slow bot) and smaller if its traj is well defined (fast bot) 
-                if self.iter % 40 == 0:
+                if self.iter % 20 == 0:
                     thetaNew = np.mean(self.theta_maps)#take the average, or median, so that the mapped angle is robust to noise                        
                     self.T_R = np.array([[np.cos(thetaNew), -np.sin(thetaNew)], [np.sin(thetaNew), np.cos(thetaNew)]])#only update the mapping every 40 frames
                 
@@ -241,10 +241,17 @@ class algorithm:
         
         Bx = self.B_vec[0] / np.sqrt(self.B_vec[0] ** 2 + self.B_vec[1] ** 2)
         By = -self.B_vec[1] / np.sqrt(self.B_vec[0] ** 2 + self.B_vec[1] ** 2)  #needs to be negative because of coordinate system flip in the y direction
+<<<<<<< HEAD
         Bz = 1
         alpha = np.arctan2(By, Bx)
+=======
+        Bz = .5
+        
+>>>>>>> d663d47a63ead48f2cdd489a7a412346e1b61bc3
 
-        return Bx,By,Bz,alpha
+       
+
+        return Bx,By,Bz
     
     
 

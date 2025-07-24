@@ -10,6 +10,7 @@ class Robot:
 
     def __init__(self):
         self.velocity_list = []  # stores bot velocities per frame
+        self.acceleration_list = [] # stores bot acceleration per frame
         self.position_list = []  # stores bot positions per frame
         self.blur_list = []  # stores calculated blur values per frame (AKA z-value)
         self.frame_list = []  # unused? stores frames
@@ -29,6 +30,9 @@ class Robot:
 
     def add_velocity(self, velocity):
         self.velocity_list.append(velocity)
+
+    def add_acceleration(self, acceleration):
+        self.acceleration_list.append(acceleration)
 
     def add_position(self, position: List[float]):
         self.position_list.append(position)

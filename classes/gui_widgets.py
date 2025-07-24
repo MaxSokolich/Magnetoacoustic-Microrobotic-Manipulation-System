@@ -230,48 +230,6 @@ class Ui_MainWindow(object):
         self.leftbutton.setAutoRepeatInterval(1)
         self.leftbutton.setArrowType(QtCore.Qt.LeftArrow)
         self.leftbutton.setObjectName("leftbutton")
-        self.startbutton = QtWidgets.QPushButton(self.frame_3)
-        self.startbutton.setGeometry(QtCore.QRect(10, 5, 281, 41))
-        font = QtGui.QFont()
-        font.setPointSize(-1)
-        font.setBold(True)
-        font.setItalic(False)
-        font.setWeight(75)
-        self.startbutton.setFont(font)
-        self.startbutton.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
-        self.startbutton.setStyleSheet("\n"
-"QPushButton {\n"
-"                color: rgb(255, 255, 255);\n"
-"                background-color: rgb(0, 0, 255);\n"
-"                border-style: outset;\n"
-"                border-width: 3px;\n"
-"                border-radius: 10px;\n"
-"                border-color: rgb(0, 0, 255);\n"
-"                min-width: 1em;\n"
-"                padding: 6px;\n"
-"              font: bold 25px;\n"
-"            }\n"
-"      \n"
-"            QPushButton:checked {\n"
-"                color: rgb(255, 255, 255);\n"
-"                background-color: rgb(255, 0, 0);\n"
-"                border-style: inset;\n"
-"                border-width: 3px;\n"
-"                border-radius: 10px;\n"
-"                border-color: rgb(255, 0, 0);\n"
-"                font: bold 25px;\n"
-"                min-width: 1em;\n"
-"               \n"
-"            }\n"
-"            QPushButton:hover {\n"
-"                background-color: rgb(100, 100, 100);\n"
-"                color: rgb(255, 255, 255);\n"
-"                border-color: rgb(0, 255, 0);\n"
-"                padding-left: 5px;\n"
-"                padding-top: 5px;\n"
-"            }")
-        self.startbutton.setCheckable(True)
-        self.startbutton.setObjectName("startbutton")
         self.rightbutton = QtWidgets.QToolButton(self.frame_3)
         self.rightbutton.setGeometry(QtCore.QRect(240, 80, 50, 21))
         self.rightbutton.setStyleSheet("QToolButton {\n"
@@ -349,6 +307,48 @@ class Ui_MainWindow(object):
         self.memorybox.setMaximum(100)
         self.memorybox.setProperty("value", 15)
         self.memorybox.setObjectName("memorybox")
+        self.startbutton = QtWidgets.QPushButton(self.frame_3)
+        self.startbutton.setGeometry(QtCore.QRect(10, 0, 281, 41))
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setWeight(75)
+        self.startbutton.setFont(font)
+        self.startbutton.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+        self.startbutton.setStyleSheet("\n"
+"QPushButton {\n"
+"                color: rgb(255, 255, 255);\n"
+"                background-color: rgb(0, 0, 255);\n"
+"                border-style: outset;\n"
+"                border-width: 3px;\n"
+"                border-radius: 10px;\n"
+"                border-color: rgb(0, 0, 255);\n"
+"                min-width: 1em;\n"
+"                padding: 6px;\n"
+"              font: bold 25px;\n"
+"            }\n"
+"      \n"
+"            QPushButton:checked {\n"
+"                color: rgb(255, 255, 255);\n"
+"                background-color: rgb(255, 0, 0);\n"
+"                border-style: inset;\n"
+"                border-width: 3px;\n"
+"                border-radius: 10px;\n"
+"                border-color: rgb(255, 0, 0);\n"
+"                font: bold 25px;\n"
+"                min-width: 1em;\n"
+"               \n"
+"            }\n"
+"            QPushButton:hover {\n"
+"                background-color: rgb(100, 100, 100);\n"
+"                color: rgb(255, 255, 255);\n"
+"                border-color: rgb(0, 255, 0);\n"
+"                padding-left: 5px;\n"
+"                padding-top: 5px;\n"
+"            }")
+        self.startbutton.setCheckable(True)
+        self.startbutton.setObjectName("startbutton")
         self.trackerparamsframe = QtWidgets.QFrame(self.dockWidgetContents)
         self.trackerparamsframe.setGeometry(QtCore.QRect(10, 310, 311, 231))
         self.trackerparamsframe.setStyleSheet(" color: rgb(0, 0, 0);\n"
@@ -571,25 +571,25 @@ class Ui_MainWindow(object):
         self.robotparamsframe.setGeometry(QtCore.QRect(10, 549, 311, 61))
         self.robotparamsframe.setStyleSheet(" color: rgb(255, 255, 255);\n"
 " background-color: rgb(0, 0, 0);\n"
-"font-size: 10pt; font: Arial;")
+"font-size: 8pt; font: Arial;")
         self.robotparamsframe.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.robotparamsframe.setFrameShadow(QtWidgets.QFrame.Raised)
         self.robotparamsframe.setObjectName("robotparamsframe")
         self.robotsizelabel = QtWidgets.QLabel(self.robotparamsframe)
-        self.robotsizelabel.setGeometry(QtCore.QRect(30, 0, 51, 20))
+        self.robotsizelabel.setGeometry(QtCore.QRect(20, 0, 51, 20))
         self.robotsizelabel.setMaximumSize(QtCore.QSize(300, 50))
         self.robotsizelabel.setObjectName("robotsizelabel")
         self.robotvelocitylabel = QtWidgets.QLabel(self.robotparamsframe)
-        self.robotvelocitylabel.setGeometry(QtCore.QRect(110, 0, 81, 21))
+        self.robotvelocitylabel.setGeometry(QtCore.QRect(90, 0, 81, 21))
         self.robotvelocitylabel.setMaximumSize(QtCore.QSize(300, 50))
         self.robotvelocitylabel.setObjectName("robotvelocitylabel")
         self.robotblurlabel = QtWidgets.QLabel(self.robotparamsframe)
-        self.robotblurlabel.setGeometry(QtCore.QRect(220, 0, 51, 20))
+        self.robotblurlabel.setGeometry(QtCore.QRect(260, 0, 61, 20))
         self.robotblurlabel.setMaximumSize(QtCore.QSize(16777215, 50))
         self.robotblurlabel.setStyleSheet("")
         self.robotblurlabel.setObjectName("robotblurlabel")
         self.blurlcdnum = QtWidgets.QLCDNumber(self.robotparamsframe)
-        self.blurlcdnum.setGeometry(QtCore.QRect(200, 20, 61, 30))
+        self.blurlcdnum.setGeometry(QtCore.QRect(240, 20, 61, 20))
         self.blurlcdnum.setStyleSheet("background-color: rgb(0,0,0); \n"
 "color: rgb(0,255,0);")
         self.blurlcdnum.setLineWidth(0)
@@ -601,15 +601,11 @@ class Ui_MainWindow(object):
         self.blurlcdnum.setProperty("value", 137.0)
         self.blurlcdnum.setObjectName("blurlcdnum")
         self.robotvelocityunitslabel = QtWidgets.QLabel(self.robotparamsframe)
-        self.robotvelocityunitslabel.setGeometry(QtCore.QRect(160, 30, 41, 20))
+        self.robotvelocityunitslabel.setGeometry(QtCore.QRect(100, 40, 41, 20))
         self.robotvelocityunitslabel.setMaximumSize(QtCore.QSize(300, 50))
         self.robotvelocityunitslabel.setObjectName("robotvelocityunitslabel")
-        self.robotblurunitslabe = QtWidgets.QLabel(self.robotparamsframe)
-        self.robotblurunitslabe.setGeometry(QtCore.QRect(260, 30, 41, 20))
-        self.robotblurunitslabe.setMaximumSize(QtCore.QSize(300, 50))
-        self.robotblurunitslabe.setObjectName("robotblurunitslabe")
         self.sizelcdnum = QtWidgets.QLCDNumber(self.robotparamsframe)
-        self.sizelcdnum.setGeometry(QtCore.QRect(0, 20, 61, 30))
+        self.sizelcdnum.setGeometry(QtCore.QRect(0, 20, 61, 20))
         self.sizelcdnum.setStyleSheet("background-color: rgb(0,0,0); \n"
 "color: rgb(0,255,0);")
         self.sizelcdnum.setLineWidth(0)
@@ -621,7 +617,7 @@ class Ui_MainWindow(object):
         self.sizelcdnum.setProperty("value", 20.0)
         self.sizelcdnum.setObjectName("sizelcdnum")
         self.vellcdnum = QtWidgets.QLCDNumber(self.robotparamsframe)
-        self.vellcdnum.setGeometry(QtCore.QRect(90, 20, 71, 30))
+        self.vellcdnum.setGeometry(QtCore.QRect(80, 20, 41, 20))
         self.vellcdnum.setStyleSheet("background-color: rgb(0,0,0); \n"
 "color: rgb(0,255,0);")
         self.vellcdnum.setLineWidth(0)
@@ -633,9 +629,33 @@ class Ui_MainWindow(object):
         self.vellcdnum.setProperty("value", 17.1)
         self.vellcdnum.setObjectName("vellcdnum")
         self.robotsizeunitslabel = QtWidgets.QLabel(self.robotparamsframe)
-        self.robotsizeunitslabel.setGeometry(QtCore.QRect(60, 30, 31, 20))
+        self.robotsizeunitslabel.setGeometry(QtCore.QRect(30, 40, 31, 20))
         self.robotsizeunitslabel.setMaximumSize(QtCore.QSize(300, 50))
         self.robotsizeunitslabel.setObjectName("robotsizeunitslabel")
+        self.robotaccellabel = QtWidgets.QLabel(self.robotparamsframe)
+        self.robotaccellabel.setGeometry(QtCore.QRect(180, 0, 61, 21))
+        self.robotaccellabel.setMaximumSize(QtCore.QSize(300, 50))
+        self.robotaccellabel.setObjectName("robotaccellabel")
+        self.robotaccelunitslabel = QtWidgets.QLabel(self.robotparamsframe)
+        self.robotaccelunitslabel.setGeometry(QtCore.QRect(170, 40, 41, 20))
+        self.robotaccelunitslabel.setMaximumSize(QtCore.QSize(300, 50))
+        self.robotaccelunitslabel.setObjectName("robotaccelunitslabel")
+        self.accellcdnum = QtWidgets.QLCDNumber(self.robotparamsframe)
+        self.accellcdnum.setGeometry(QtCore.QRect(160, 20, 41, 20))
+        self.accellcdnum.setStyleSheet("background-color: rgb(0,0,0); \n"
+"color: rgb(0,255,0);")
+        self.accellcdnum.setLineWidth(0)
+        self.accellcdnum.setMidLineWidth(0)
+        self.accellcdnum.setSmallDecimalPoint(False)
+        self.accellcdnum.setDigitCount(3)
+        self.accellcdnum.setMode(QtWidgets.QLCDNumber.Dec)
+        self.accellcdnum.setSegmentStyle(QtWidgets.QLCDNumber.Outline)
+        self.accellcdnum.setProperty("value", 17.1)
+        self.accellcdnum.setObjectName("accellcdnum")
+        self.robotblurunitslabel = QtWidgets.QLabel(self.robotparamsframe)
+        self.robotblurunitslabel.setGeometry(QtCore.QRect(260, 40, 41, 20))
+        self.robotblurunitslabel.setMaximumSize(QtCore.QSize(300, 50))
+        self.robotblurunitslabel.setObjectName("robotblurunitslabel")
         self.CroppedVideoFeedLabel = QtWidgets.QLabel(self.dockWidgetContents)
         self.CroppedVideoFeedLabel.setGeometry(QtCore.QRect(10, 615, 310, 310))
         self.CroppedVideoFeedLabel.setStyleSheet("background-color: rgb(0,0,0); border:2px solid rgb(255, 0, 0); ")
@@ -1021,7 +1041,7 @@ class Ui_MainWindow(object):
         self.arrivalthreshbox.setGeometry(QtCore.QRect(130, 10, 51, 21))
         self.arrivalthreshbox.setMinimum(1)
         self.arrivalthreshbox.setMaximum(400)
-        self.arrivalthreshbox.setProperty("value", 100)
+        self.arrivalthreshbox.setProperty("value", 25)
         self.arrivalthreshbox.setObjectName("arrivalthreshbox")
         self.RRTtreesizebox = QtWidgets.QSpinBox(self.controlparamsframe)
         self.RRTtreesizebox.setGeometry(QtCore.QRect(130, 40, 51, 21))
@@ -1334,7 +1354,6 @@ class Ui_MainWindow(object):
         self.recordbutton.setText(_translate("MainWindow", "Record"))
         self.framelabel.setText(_translate("MainWindow", "Frame: "))
         self.leftbutton.setText(_translate("MainWindow", "..."))
-        self.startbutton.setText(_translate("MainWindow", "Start"))
         self.rightbutton.setText(_translate("MainWindow", "..."))
         self.exposurelabel.setText(_translate("MainWindow", "Exposure (us)"))
         self.objectivelabel.setText(_translate("MainWindow", "Objective (x)"))
@@ -1343,6 +1362,7 @@ class Ui_MainWindow(object):
         self.exposurelabel_2.setText(_translate("MainWindow", "Output File Name:"))
         self.memorylabel.setText(_translate("MainWindow", "Velocity Memory\n"
 " (frames)"))
+        self.startbutton.setText(_translate("MainWindow", "Start"))
         self.maskthreshlabel.setText(_translate("MainWindow", "Lower Thresh"))
         self.maskdilationlabel.setText(_translate("MainWindow", "Dilation"))
         self.croplengthlabel.setText(_translate("MainWindow", "Crop Length(px)"))
@@ -1361,8 +1381,10 @@ class Ui_MainWindow(object):
         self.robotvelocitylabel.setText(_translate("MainWindow", "Velocity: "))
         self.robotblurlabel.setText(_translate("MainWindow", "Blur:"))
         self.robotvelocityunitslabel.setText(_translate("MainWindow", "um/s"))
-        self.robotblurunitslabe.setText(_translate("MainWindow", "units"))
         self.robotsizeunitslabel.setText(_translate("MainWindow", "um  "))
+        self.robotaccellabel.setText(_translate("MainWindow", "Accel:"))
+        self.robotaccelunitslabel.setText(_translate("MainWindow", "um^2/s"))
+        self.robotblurunitslabel.setText(_translate("MainWindow", "units"))
         self.resetdefaultbutton.setText(_translate("MainWindow", "Defaults"))
         self.croppedmasktoggle.setText(_translate("MainWindow", "Original"))
         self.croppedrecordbutton.setText(_translate("MainWindow", "Record"))

@@ -218,7 +218,7 @@ class Windows_Controller:
                 button = event.button
                 
                 if button == 0: #X
-                    pass
+                    self.acoustic_frequency =1
                    
                 
                 
