@@ -41,7 +41,7 @@ fps = count_fps()
 cam = EasyPySpin.VideoCapture(0)
 width = int(cam.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cam.get(cv2.CAP_PROP_FRAME_HEIGHT))
-cam.set(cv2.CAP_PROP_FPS,300)
+cam.set(cv2.CAP_PROP_FPS,30)
 fps_cam = int(cam.get(cv2.CAP_PROP_FPS))
 print(cam.get(cv2.CAP_PROP_FPS))
 
@@ -59,7 +59,7 @@ while True:
     #do contouring based on full res img
 
 
-    resize_scale =50
+    resize_scale =100
     resize_ratio = (
                 width * resize_scale // 100,
                 height * resize_scale // 100,

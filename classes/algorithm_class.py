@@ -241,7 +241,7 @@ class algorithm:
         
         Bx = self.B_vec[0] / np.sqrt(self.B_vec[0] ** 2 + self.B_vec[1] ** 2)
         By = -self.B_vec[1] / np.sqrt(self.B_vec[0] ** 2 + self.B_vec[1] ** 2)  #needs to be negative because of coordinate system flip in the y direction
-        Bz = 0
+        Bz = 1
         alpha = np.arctan2(By, Bx)
 
         return Bx,By,Bz,alpha
