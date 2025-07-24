@@ -80,18 +80,19 @@ float By_final;
 float Bz_final;
 
 
-float zeroFieldVoltagex = 2.44;   // Measured V with no field
-float sensitivityx = 0.0023;      
+float zeroFieldVoltagex = 2.476;   // Measured V with no field
+float sensitivityx = 0.0069;      
 
-float zeroFieldVoltagey = 2.46;   // Measured V with no field
-float sensitivityy = 0.0021;      
+float zeroFieldVoltagey = 2.495;   // Measured V with no field
+float sensitivityy = 0.0059;      
 
-float zeroFieldVoltagez = 2.50;   // Measured V with no field
-float sensitivityz = 0.0017;      
+float zeroFieldVoltagez = 2.525;   // Measured V with no field
+float sensitivityz = 0.002;      
 
 int16_t hall1 = 0;
 int16_t hall2 = 0;
 int16_t hall3 = 0;
+
 
 
 

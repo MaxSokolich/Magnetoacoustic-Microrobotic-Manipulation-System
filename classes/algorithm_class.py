@@ -241,13 +241,8 @@ class algorithm:
         
         Bx = self.B_vec[0] / np.sqrt(self.B_vec[0] ** 2 + self.B_vec[1] ** 2)
         By = -self.B_vec[1] / np.sqrt(self.B_vec[0] ** 2 + self.B_vec[1] ** 2)  #needs to be negative because of coordinate system flip in the y direction
-<<<<<<< HEAD
-        Bz = 1
-        alpha = np.arctan2(By, Bx)
-=======
         Bz = .5
         
->>>>>>> d663d47a63ead48f2cdd489a7a412346e1b61bc3
 
        
 
