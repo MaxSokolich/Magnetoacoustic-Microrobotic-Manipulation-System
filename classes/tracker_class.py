@@ -69,9 +69,9 @@ class VideoThread(QThread):
         self.objective = 10
 
 
-        self.arrivalthresh = 100
+        self.arrivalthresh = 25
         self.RRTtreesize = 25
-        self.memory = 1  #this isnt used as of now
+        self.memory = 15  
      
 
         if video != 0:
@@ -388,24 +388,27 @@ class VideoThread(QThread):
                 color = plt.cm.rainbow(np.linspace(1, 0.2, len(self.robot_list))) * 255
         
                 for (botnum,botcolor) in zip(range(len(self.robot_list)), color):
-                    try:
-                        bot  = self.robot_list[botnum]
-                        x1, y1, w, h = bot.cropped_frame[-1]
+                
+                    bot  = self.robot_list[botnum]
+                    # draw trajectory
+                    targets = bot.trajectory
+                    if len(targets) > 0:
+                        pts = np.array(bot.trajectory, np.int32)
+                        cv2.polylines(display_frame, [pts], False, (0, 0, 255), 5)
+                        tar = targets[-1]
+                        cv2.circle(display_frame,(int(tar[0]), int(tar[1])),10,(0,0,0), -1,)
 
-                        cv2.rectangle(display_frame, (x1, y1), (x1 + w, y1 + h), botcolor, 4)
-                        cv2.putText(display_frame,str(botnum+1),(x1 + w,y1 + h),cv2.FONT_HERSHEY_SIMPLEX, fontScale=1.5, thickness=4,color = (255, 255, 255))
+                    # draw robot stuff
+                    x1, y1, w, h = bot.cropped_frame[-1]
+
+                    cv2.rectangle(display_frame, (x1, y1), (x1 + w, y1 + h), botcolor, 4)
+                    cv2.putText(display_frame,str(botnum+1),(x1 + w,y1 + h),cv2.FONT_HERSHEY_SIMPLEX, fontScale=1.5, thickness=4,color = (255, 255, 255))
+                    
+                    pts = np.array(bot.position_list, np.int32)
+                    cv2.polylines(display_frame, [pts], False, botcolor, 5)
+
                         
-                        pts = np.array(bot.position_list, np.int32)
-                        cv2.polylines(display_frame, [pts], False, botcolor, 5)
-
-                        targets = bot.trajectory
-                        if len(targets) > 0:
-                            pts = np.array(bot.trajectory, np.int32)
-                            cv2.polylines(display_frame, [pts], False, (0, 0, 255), 5)
-                            tar = targets[-1]
-                            cv2.circle(display_frame,(int(tar[0]), int(tar[1])),10,(0,0,0), -1,)
-                    except Exception:
-                        pass
+                
             
             if len(self.cell_list) > 0:
                 color = plt.cm.rainbow(np.linspace(0.5, 0, len(self.cell_list))) *0
