@@ -1,12 +1,4 @@
 
-
-  //This is working without the need to open the serial monitor. However, I am not sure i am able to adjust 
-//the pwm timers.
-// action = [Bx, By, Bz, alpha, gamma, freq]
-//potential issues
-// - if  (myTransfer.available()) may cuz bugs because actions maybe empty or something
-// - may need a better way to toggle the enable pin on all 6 drivers
-// - there is no hard zero option as I got rid of typ
 #include <AD9850.h>
 #include <Wire.h>
 #include "Adafruit_ADS1X15.h"
@@ -165,7 +157,8 @@ void setup()
 
   //Wire.begin();
   //Wire.setClock(400000);               // Fast I2C
-  ads.begin();                         // Start ADS1115
+  ads.begin(); 
+  ads.setGain(GAIN_TWOTHIRDS);// Start ADS1115
   //ads.setDataRate(1600);  // Max speed
 
 
