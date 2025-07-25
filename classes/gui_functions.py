@@ -1153,6 +1153,8 @@ class MainWindow(QtWidgets.QMainWindow):
             for port in ports:
                 self.ui.arduino_portbox.addItem(port.device)
             self.arduino_port = port.device
+         
+
         else:
             self.arduino_port = None
 
@@ -1160,6 +1162,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def handle_port_change(self, selected_port):
         self.arduino_port = selected_port
+        
+
 
 
     def start(self):

@@ -1,34 +1,37 @@
-import cv2
-import numpy as np
-import math
+import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QComboBox, QLabel
 
-# Create a blank image (black background)
-width, height = 800, 600
-image = np.zeros((height, width, 3), dtype=np.uint8)
+class MyWindow(QWidget):
+    def __init__(self):
+        super().__init__()
 
-# Parameters for the lemniscate (infinity symbol)
-a = 200  # Controls the size
-center_x, center_y = width // 2, height // 2  # Center of the symbol
+        self.setWindowTitle("Dropdown Example")
+        self.setGeometry(100, 100, 300, 100)
 
-# Generate points using parametric equations for a lemniscate
-points = []
-for t in np.linspace(0, 2 * math.pi, 1000):
-    denom = 1 + math.sin(t)**2
-    if denom == 0:
-        continue  # avoid division by zero
-    x = (a * math.cos(t)) / denom
-    y = (a * math.cos(t) * math.sin(t)) / denom
+        # Variable to store current selection
+        self.current_value = None
 
-    # Convert to image coordinates
-    img_x = int(center_x + x)
-    img_y = int(center_y + y)
-    points.append((img_x, img_y))
+        # Create layout
+        layout = QVBoxLayout()
 
-# Draw the curve by connecting the points
-for i in range(1, len(points)):
-    cv2.line(image, points[i - 1], points[i], (0, 255, 0), 2)
+        # Create dropdown
+        self.combo = QComboBox()
+        self.combo.addItems(["Option 1", "Option 2", "Option 3"])
+        self.combo.currentTextChanged.connect(self.on_combobox_changed)
 
-# Show and save the image
-cv2.imshow('Infinity Symbol', image)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+        # Label to show current value
+        self.label = QLabel("Current selection: None")
+
+        layout.addWidget(self.combo)
+        layout.addWidget(self.label)
+        self.setLayout(layout)
+
+    def on_combobox_changed(self, text):
+        self.current_value = text  # update the variable
+        print(f"Current selection: {self.current_value}")
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    window = MyWindow()
+    window.show()
+    sys.exit(app.exec_())
