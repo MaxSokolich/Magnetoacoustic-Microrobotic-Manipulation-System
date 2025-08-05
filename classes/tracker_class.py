@@ -204,8 +204,11 @@ class VideoThread(QThread):
                         h_new = int(bot.crop_length)
                         new_crop = [int(x1_new), int(y1_new), int(w_new), int(h_new)]
 
-                        
                         #find velocity and acceleration:
+                        # Calculate velocity using position difference over N aka self.memory frames.
+                        # vx, vy in µm/s = (Δpixels) × (fps / N) × pixel2um
+                        # Note: this is a smoothed estimate of average velocity over N frames. a finite difference approximation.
+                        # If N is too small, it will be noisy. If N is too large, it will be slow to respond to changes.
                         velocity = [0,0,0]
                         acceleration = [0,0,0]
                         if len(bot.position_list) > self.memory:
