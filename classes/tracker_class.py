@@ -6,14 +6,13 @@ import matplotlib.pyplot as plt
 from scipy import ndimage 
 import time
 
-from classes.algorithm_class import algorithm
 from classes.fps_class import FPSCounter
     
 #add unique crop length 
 class VideoThread(QThread):
-    change_pixmap_signal = pyqtSignal(np.ndarray)
+
     cropped_frame_signal = pyqtSignal(np.ndarray,np.ndarray)
-    actions_signal = pyqtSignal(list, bool, list, list)
+    actions_frame_signal = pyqtSignal(np.ndarray, np.ndarray, list, list)
 
 
     def __init__(self, parent):
@@ -21,9 +20,7 @@ class VideoThread(QThread):
         self.parent = parent
         self.cap = self.parent.cap 
         video = self.parent.videopath 
-        #initiate control class
-        self.control_robot = algorithm()
-        
+
     
         self.fps = FPSCounter()
         self.width = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -39,9 +36,7 @@ class VideoThread(QThread):
         self.time_stamp = 0
         self.start_time = time.time()
 
-        self.orientstatus = False
-        self.pushstatus = False
-        self.autoacousticstatus = False
+        
         
         #robot mask attributes
         self.robot_mask_lower = 0
@@ -67,10 +62,6 @@ class VideoThread(QThread):
         
         self.exposure = 5000
         self.objective = 10
-
-
-        self.arrivalthresh = 25
-        self.RRTtreesize = 25
         self.memory = 15  
      
 
@@ -490,12 +481,6 @@ class VideoThread(QThread):
                 robot_mask = self.find_robot_mask(frame)
                 robotcroppedmask, recorded_cropped_frame = self.track_robot(frame, robot_mask) 
                 
-
-                #step 2.5: subtract robots from cell mask. first create an inital mask using cell mask params. then remove the robot from this inital mask. then find the mask again on this first mask and use this for tracking
-                #create inital cell mask
-           
-                #on cell mask initial, replace all
-                
                 #step 2: track cell            
                 cell_mask = self.find_cell_mask(frame)
                 cellcroppedmask = self.track_cell(frame, cell_mask)
@@ -515,23 +500,16 @@ class VideoThread(QThread):
                 
                 
                 displayframe = self.display_hud(frame)
+  
 
-                #step 2 control robot
-                if len(self.robot_list)>0:
-                    displayframe, actions, stopped = self.control_robot.run(displayframe, cell_mask, self.robot_list, self.RRTtreesize, self.arrivalthresh, self.orientstatus, self.autoacousticstatus, self.pixel2um)
-                else:
-                    actions = [0,0,0,0,0,0,0,0]
-                    stopped = True    
-
-                
+          
                 
                 
 
                 
                 #step 3: emit croppedframe, frame from this thread to the main thread
                 self.cropped_frame_signal.emit(croppedmask, recorded_cropped_frame)
-                self.change_pixmap_signal.emit(displayframe)
-                self.actions_signal.emit(actions, stopped, self.robot_list, self.cell_list)
+                self.actions_frame_signal.emit(displayframe, cell_mask, self.robot_list, self.cell_list)
                 
 
               

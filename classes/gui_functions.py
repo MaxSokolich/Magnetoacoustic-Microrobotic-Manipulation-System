@@ -39,6 +39,8 @@ from classes.arduino_class import ArduinoHandler
 from classes.joystick_class import Mac_Controller,Linux_Controller,Windows_Controller
 from classes.simulation_class import HelmholtzSimulator
 from classes.projection_class import AxisProjection
+from classes.control_class import Controller
+from classes.path_planning_class import Path_Planner
 
 
 from classes.record_class import RecordThread
@@ -121,6 +123,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         self.drawing = False
         self.acoustic_frequency = 0
+        self.autoacousticstatus = False
         self.gradient_status = 0
         self.equal_field_status = 0
         self.magnetic_field_list = []
@@ -133,6 +136,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
       
         #control tab functions
+        self.path_planner_status = False
         self.control_status = False
         self.joystick_status = False
         self.manual_status = False
@@ -157,9 +161,13 @@ class MainWindow(QtWidgets.QMainWindow):
         #define, simulator class, pojection class, and acoustic class
         self.simulator = HelmholtzSimulator(self.ui.magneticfieldsimlabel, width=310, height=310, dpi=200)
         self.projection = AxisProjection()
-     
         
+        #make instance of algorithm class both control and path planning
+        self.control_robot = Controller()
+        self.path_planner = Path_Planner()
         
+
+
 
         self.setFile()
         
@@ -221,8 +229,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.alphadial.valueChanged.connect(self.dial_alphachanged)
         self.ui.resetdefaultbutton.clicked.connect(self.resetparams)
         self.ui.simulationbutton.clicked.connect(self.toggle_simulation)
-        self.ui.orientradio.toggled.connect(self.checkorient)
-        self.ui.pushradio.toggled.connect(self.checkpush)
+
         self.ui.objectivebox.valueChanged.connect(self.get_objective)
         self.ui.exposurebox.valueChanged.connect(self.get_exposure)
         self.ui.joystickbutton.clicked.connect(self.toggle_joystick_status)
@@ -298,9 +305,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     
 
-    def update_actions(self, actions, stopped, robot_list, cell_list):
-
-
+    def update_actions_frame(self, displayframe, cell_mask, robot_list, cell_list):
         #read hall effect sensor data from arduino
         sensor = self.arduino.receive()
         self.bx_sensor = -1 * round(sensor[0], 1)   #Bx sensor sign is switched
@@ -308,34 +313,59 @@ class MainWindow(QtWidgets.QMainWindow):
         self.bz_sensor = round(sensor[2], 1)
 
 
-   
-
-
         self.frame_number+=1
-        #toggle between alpha and orient
-        
 
-        #output actions if control status is on
-        if self.ui.autoacousticbutton.isChecked():
-            self.acoustic_frequency = actions[-1]   
-        
-        if self.control_status == True:
 
-            if not self.ui.pushradio.isChecked():
-                self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, _  = actions    
-            
+        #make path planner
+        if self.path_planner_status == True:
+            if len(robot_list) > 0:
+                RRTtreesize = self.ui.RRTtreesizebox.value()
+                self.tracker.robot_list[-1].trajectory = self.path_planner.run(robot_list, cell_mask, RRTtreesize)
                 
-                self.gamma = np.radians(self.ui.gammadial.value())
-                self.psi = np.radians(self.ui.psidial.value())
+                        
+                
+
+
+
+
+        if self.control_status == True:   
+            arrivalthresh = self.ui.arrivalthreshbox.value()  
+            
+            if len(robot_list)>0:
+                #orient algorithm option
                 if self.ui.orientradio.isChecked():
-                    self.freq = 0
-                else:
+                    displayframe, actions = self.control_robot.run_orient(displayframe, robot_list, arrivalthresh)
+                    #this is the auto acoustic opticmal frequency finder algorithm i designed
+                    if self.ui.autoacousticbutton.isChecked():
+                        self.acoustic_frequency = self.control_robot.find_optimal_acoustic_freq(robot_list, self.tracker.pixel2um)
+                
+
+                #roll algorithm option
+                elif self.ui.rollradio.isChecked():
+                    displayframe, actions = self.control_robot.run_roll()
+                    
+                    self.gamma = np.radians(self.ui.gammadial.value())
+                    self.psi = np.radians(self.ui.psidial.value())
                     self.freq = self.ui.magneticfrequencydial.value()
 
+
+                #pushing algorithm option
+                elif self.ui.pushradio.isChecked():
+                    displayframe, actions = self.control_robot.run_push()
+                
+                
+                #zero option
+                else:
+                    actions = [0,0,0,0,0,0,0,0]
+                    stopped = True
+
+                self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, _  = actions    
+                    
                 if stopped == True:
                     self.apply_actions(False)
-            else:
-                print("pushing")
+            
+
+
 
 
 
@@ -532,7 +562,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.cells.append(currentcell_params)
         
         #DEFINE CURRENT MAGNETIC FIELD OUTPUT TO A LIST 
-        
         self.actions = [self.frame_number, self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.gradient_status,self.equal_field_status,
                         self.acoustic_frequency, self.bx_sensor, self.by_sensor, self.bz_sensor] 
        
@@ -549,8 +578,8 @@ class MainWindow(QtWidgets.QMainWindow):
             for (sheet, cell) in zip(self.cell_params_sheets,self.cells):
                 sheet.append(cell[:-1])
         
+
         #also update robot info
-       
         if len(self.robots) > 0:
             area = self.robots[-1][11]
             robot_diameter = round(np.sqrt(4*area/np.pi),1)
@@ -558,6 +587,66 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.blurlcdnum.display(int(self.robots[-1][10]))
             self.ui.accellcdnum.display(int(self.robots[-1][9]))
             self.ui.sizelcdnum.display(robot_diameter)
+
+        
+############################################################################################################################################################
+        """Updates the image_label with a new opencv image"""
+        #display projection
+        if self.ui.toggledisplayvisualscheckbox.isChecked():
+            if self.control_status == True or self.joystick_status == True or self.manual_status == True or self.excel_actions_status == True :
+                self.projection.roll = self.ui.rollradio.isChecked()
+                self.projection.gradient = self.gradient_status
+
+
+                displayframe, self.projection.draw_sideview(displayframe,self.Bx,self.By,self.Bz,self.alpha,self.gamma,self.video_width,self.video_height)
+                displayframe, self.projection.draw_topview(displayframe,self.Bx,self.By,self.Bz,self.alpha,self.gamma,self.video_width,self.video_height)
+                
+
+                rotatingfield = "alpha: {:.0f}, gamma: {:.0f}, psi: {:.0f}, freq: {:.0f}".format(np.degrees(self.alpha), np.degrees(self.gamma), np.degrees(self.psi), self.freq) #adding 90 to alpha for display purposes only
+                
+                cv2.putText(displayframe, rotatingfield,
+                    (int(self.video_width / 1.8),int(self.video_height / 20)),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    fontScale=1.5, 
+                    thickness=5,
+                    color = (0, 0, 0),
+                )
+            
+            acousticfreq = f'{self.acoustic_frequency:,} Hz'
+            cv2.putText(displayframe, acousticfreq,
+                (int(self.video_width / 8),int(self.video_height / 14)),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                fontScale=1.5, 
+                thickness=5,
+                color = (0, 0, 0),
+            )
+
+        
+        displayframe = self.handle_zoom(displayframe)
+    
+
+        rgb_image = cv2.cvtColor(displayframe, cv2.COLOR_BGR2RGB)
+        h, w, ch = rgb_image.shape
+      
+        bytes_per_line = ch * w
+        convert_to_Qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format_RGB888)
+        p = convert_to_Qt_format.scaled(self.display_width, self.display_height, Qt.KeepAspectRatio)
+        qt_img = QPixmap.fromImage(p)
+       
+        #update frame slider too
+        self.ui.framelabel.setText("Frame:"+str(self.frame_number))
+        if self.videopath !=0:
+            self.ui.frameslider.setValue(self.tracker.framenum)
+        
+        self.ui.VideoFeedLabel.setPixmap(qt_img)
+
+
+        #add frame to recording queue if record button is pressed
+        if self.recorder and self.recorder.running:
+            try:
+                self.frame_queue.put_nowait(displayframe)
+            except queue.Full:
+                pass
       
 
            
@@ -766,7 +855,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def toggle_autoacoustic(self):
         if self.tracker is not None:
             if self.ui.autoacousticbutton.isChecked():
-                self.tracker.autoacousticstatus = True
+                self.autoacousticstatus = True
                 self.ui.led.setStyleSheet("\n"
 "                background-color: rgb(0, 255, 0);\n"
 "                border-style: outset;\n"
@@ -776,7 +865,7 @@ class MainWindow(QtWidgets.QMainWindow):
 "         \n"
 "                padding: 6px;")
             else:
-                self.tracker.autoacousticstatus = False
+                self.autoacousticstatus = False
                 self.acoustic_frequency = 0
                 self.ui.led.setStyleSheet("\n"
 "                background-color: rgb(255, 0, 0);\n"
@@ -857,14 +946,14 @@ class MainWindow(QtWidgets.QMainWindow):
         if object is self.ui.VideoFeedLabel: 
             if self.tracker is not None:
                 
-                    
                 if event.type() == QtCore.QEvent.MouseButtonPress:   
+                    # left mouse button clicks on robot
                     if event.buttons() == QtCore.Qt.LeftButton:
                         newx, newy = self.convert_coords(event.pos())
                         #generate original bounding box
                         
                         #reset algorithm nodes
-                        self.tracker.control_robot.reset()
+                        self.control_robot.reset()
 
                         if self.ui.robotmask_radio.isChecked():
                             x_1 = int(newx - self.ui.robotcroplengthbox.value()  / 2)
@@ -906,16 +995,19 @@ class MainWindow(QtWidgets.QMainWindow):
 
                
                     
-                    
+                    # right mouse button begins drawing
                     if event.buttons() == QtCore.Qt.RightButton: 
                         self.drawing = True
+                        
+
                         newx, newy = self.convert_coords(event.pos())
                         if len(self.tracker.robot_list) > 0:
-                            self.tracker.control_robot.reset()
-                            self.tracker.control_robot.arrived = False
+                            self.control_robot.reset()
                             self.tracker.robot_list[-1].add_trajectory([newx, newy])
+                      
+                   
                 
-                
+                    #middle mouse button clears data
                     if event.buttons() == QtCore.Qt.MiddleButton: 
                         del self.tracker.robot_list[:]
                         del self.tracker.cell_list[:]
@@ -924,7 +1016,13 @@ class MainWindow(QtWidgets.QMainWindow):
                         del self.cells[:]
                         self.apply_actions(False)
                        
-                    
+                elif event.type() == QtCore.QEvent.MouseButtonRelease:
+                    if event.button() == QtCore.Qt.RightButton: 
+                        self.drawing = False
+                        
+
+
+
                             
                 elif event.type() == QtCore.QEvent.MouseMove:
                     self.zoom_x, self.zoom_y = self.convert_coords(event.pos())
@@ -937,11 +1035,11 @@ class MainWindow(QtWidgets.QMainWindow):
                                 self.tracker.robot_list[-1].add_trajectory([newx, newy])
                                 
                 
-                elif event.type() == QtCore.QEvent.MouseButtonRelease:
-                    if event.buttons() == QtCore.Qt.RightButton: 
-                        self.drawing = False
+                
+                       
                         
-                if event.type() ==  QtCore.QEvent.Wheel:
+                        
+                elif event.type() ==  QtCore.QEvent.Wheel:
                     steps = event.angleDelta().y() 
                     
                     self.scrollamount += (steps and steps / abs(steps/0.5))
@@ -952,72 +1050,6 @@ class MainWindow(QtWidgets.QMainWindow):
         return super().eventFilter(object, event)
             
             
-
-    def update_image(self, frame):
-        """Updates the image_label with a new opencv image"""
-        #display projection
-        if self.ui.toggledisplayvisualscheckbox.isChecked():
-            if self.control_status == True or self.joystick_status == True or self.manual_status == True or self.excel_actions_status == True :
-                self.projection.roll = self.ui.rollradio.isChecked()
-                self.projection.gradient = self.gradient_status
-
-
-                frame, self.projection.draw_sideview(frame,self.Bx,self.By,self.Bz,self.alpha,self.gamma,self.video_width,self.video_height)
-                frame, self.projection.draw_topview(frame,self.Bx,self.By,self.Bz,self.alpha,self.gamma,self.video_width,self.video_height)
-                
-
-                rotatingfield = "alpha: {:.0f}, gamma: {:.0f}, psi: {:.0f}, freq: {:.0f}".format(np.degrees(self.alpha), np.degrees(self.gamma), np.degrees(self.psi), self.freq) #adding 90 to alpha for display purposes only
-                
-                cv2.putText(frame, rotatingfield,
-                    (int(self.video_width / 1.8),int(self.video_height / 20)),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    fontScale=1.5, 
-                    thickness=5,
-                    color = (0, 0, 0),
-                )
-            
-            acousticfreq = f'{self.acoustic_frequency:,} Hz'
-            cv2.putText(frame, acousticfreq,
-                (int(self.video_width / 8),int(self.video_height / 14)),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                fontScale=1.5, 
-                thickness=5,
-                color = (0, 0, 0),
-            )
-
-            
-        
-
-        
-        
-        frame = self.handle_zoom(frame)
-    
-
-        rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        h, w, ch = rgb_image.shape
-      
-        bytes_per_line = ch * w
-        convert_to_Qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format_RGB888)
-        p = convert_to_Qt_format.scaled(self.display_width, self.display_height, Qt.KeepAspectRatio)
-        qt_img = QPixmap.fromImage(p)
-       
-        #update frame slider too
-        self.ui.framelabel.setText("Frame:"+str(self.frame_number))
-        if self.videopath !=0:
-            self.ui.frameslider.setValue(self.tracker.framenum)
-        
-        
-                
-       
-        self.ui.VideoFeedLabel.setPixmap(qt_img)
-
-
-        #add frame to recording queue if record button is pressed
-        if self.recorder and self.recorder.running:
-            try:
-                self.frame_queue.put_nowait(frame)
-            except queue.Full:
-                pass
         
         
 
@@ -1153,8 +1185,7 @@ class MainWindow(QtWidgets.QMainWindow):
             for port in ports:
                 self.ui.arduino_portbox.addItem(port.device)
             self.arduino_port = port.device
-         
-
+        
         else:
             self.arduino_port = None
 
@@ -1170,8 +1201,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
         if self.ui.startbutton.isChecked():
             #connect to arduino
-            self.arduino = ArduinoHandler(self.tbprint, self.arduino_port)
+            self.arduino = ArduinoHandler(self.tbprint, None)
             self.arduino.connect()
+           
   
 
             if self.videopath is not None:
@@ -1180,9 +1212,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.setFile()
                 
                 self.tracker = VideoThread(self)
-                self.tracker.change_pixmap_signal.connect(self.update_image)
                 self.tracker.cropped_frame_signal.connect(self.update_croppedimage)
-                self.tracker.actions_signal.connect(self.update_actions)
+                self.tracker.actions_frame_signal.connect(self.update_actions_frame)
                 self.tracker.start()
                
                 
@@ -1291,14 +1322,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.tracker is not None:
             self.tracker.exposure = self.ui.exposurebox.value()
     
-    def checkpush(self):
-        if self.tracker is not None:
-            self.tracker.pushstatus = self.ui.pushradio.isChecked()
 
-
-    def checkorient(self):
-        if self.tracker is not None:
-            self.tracker.orientstatus = self.ui.orientradio.isChecked()
 
     def invertmaskcommand(self):
         if self.tracker is not None:
@@ -1343,8 +1367,6 @@ class MainWindow(QtWidgets.QMainWindow):
        
     def get_slider_vals(self):
         memory = self.ui.memorybox.value()
-        RRTtreesize = self.ui.RRTtreesizebox.value()
-        arrivalthresh = self.ui.arrivalthreshbox.value()
         magneticfreq = self.ui.magneticfrequencydial.value()
         gamma = self.ui.gammadial.value()
         psi = self.ui.psidial.value()
@@ -1365,8 +1387,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         if self.tracker is not None: 
             self.tracker.memory = memory
-            self.tracker.RRTtreesize = RRTtreesize
-            self.tracker.arrivalthresh = arrivalthresh
+          
+
           
             self.tracker.robot_mask_lower = robotlower
             self.tracker.robot_mask_upper = robotupper
