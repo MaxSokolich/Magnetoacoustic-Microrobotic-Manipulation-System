@@ -36,7 +36,7 @@ from classes.gui_widgets import Ui_MainWindow
 from classes.robot_class import Robot
 from classes.cell_class import Cell
 from classes.arduino_class import ArduinoHandler
-from classes.joystick_class import Mac_Controller,Linux_Controller,Windows_Controller
+from classes.joystick_class import Mac_Joystick,Linux_Joystick,Windows_Joystick
 from classes.simulation_class import HelmholtzSimulator
 from classes.projection_class import AxisProjection
 from classes.control_class import Controller
@@ -113,7 +113,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #record variables
         self.recorder = None
         self.frame_queue = queue.Queue(maxsize=100)  # make a queue to store frames in for the recording feature
-        self.output_file_name = "output"
+        self.output_file_name = str(datetime.now())
 
         self.save_status = False
         self.output_workbook = None
@@ -145,13 +145,13 @@ class MainWindow(QtWidgets.QMainWindow):
   
         if "mac" in platform.platform():
             self.tbprint("Detected OS: macos")
-            self.controller_actions = Mac_Controller()
+            self.joystick_actions = Mac_Joystick()
         elif "Linux" in platform.platform():
             self.tbprint("Detected OS: Linux")
-            self.controller_actions = Linux_Controller()
+            self.joystick_actions = Linux_Joystick()
         elif "Windows" in platform.platform():
             self.tbprint("Detected OS:  Windows")
-            self.controller_actions = Windows_Controller()
+            self.joystick_actions = Windows_Joystick()
         else:
             self.tbprint("undetected operating system")
         
@@ -334,35 +334,46 @@ class MainWindow(QtWidgets.QMainWindow):
             if len(robot_list)>0:
                 #orient algorithm option
                 if self.ui.orientradio.isChecked():
-                    displayframe, actions = self.control_robot.run_orient(displayframe, robot_list, arrivalthresh)
+                    displayframe, actions, stopped = self.control_robot.run_orient(displayframe, robot_list, arrivalthresh)
+                    self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, _  = actions   
                     #this is the auto acoustic opticmal frequency finder algorithm i designed
                     if self.ui.autoacousticbutton.isChecked():
                         self.acoustic_frequency = self.control_robot.find_optimal_acoustic_freq(robot_list, self.tracker.pixel2um)
-                
+                    # if stopped zero everything
+                    if stopped == True:
+                        self.apply_actions(False)
+            
 
                 #roll algorithm option
                 elif self.ui.rollradio.isChecked():
-                    displayframe, actions = self.control_robot.run_roll()
+                    displayframe, actions, stopped = self.control_robot.run_roll(displayframe, robot_list, arrivalthresh)
+                    self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, _  = actions    
                     
                     self.gamma = np.radians(self.ui.gammadial.value())
                     self.psi = np.radians(self.ui.psidial.value())
                     self.freq = self.ui.magneticfrequencydial.value()
-
-
+                    if stopped == True:
+                        self.apply_actions(False)
+                    
+                    
                 #pushing algorithm option
                 elif self.ui.pushradio.isChecked():
-                    displayframe, actions = self.control_robot.run_push()
-                
-                
-                #zero option
-                else:
-                    actions = [0,0,0,0,0,0,0,0]
-                    stopped = True
+                    corridor_width = self.ui.corridorwidthbox.value()
+                    approach_distance = self.ui.approachdistancebox.value()
+                    spinning_freq = self.ui.spinningfreqbox.value()
+                    pushingfreq = self.ui.magneticfrequencydial.value()
 
-                self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, _  = actions    
+                    displayframe, actions = self.control_robot.run_push(displayframe, robot_list, cell_list, arrivalthresh, corridor_width,approach_distance, spinning_freq, pushingfreq, self.tracker.pixel2um)   
+                    self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, _  = actions  
+                    self.psi = np.radians(self.ui.psidial.value())
+            #zero option
+            else:
+                self.apply_actions(False)
+                   
+
+                 
                     
-                if stopped == True:
-                    self.apply_actions(False)
+        
             
 
 
@@ -373,7 +384,7 @@ class MainWindow(QtWidgets.QMainWindow):
             
         #if joystick is on use the joystick though
         elif self.joystick_status == True:
-            type, self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, acoust = self.controller_actions.run(self.joystick)
+            type, self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, acoust = self.joystick_actions.run(self.joystick)
             self.psi = np.radians(self.ui.psidial.value())
             
             if acoust == 1:
@@ -665,7 +676,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.freq > 0:
             if self.ui.swimradio.isChecked():
                 self.simulator.roll = False
-            elif self.ui.rollradio.isChecked():
+            elif self.ui.rollradio.isChecked() or self.ui.pushradio.isChecked():
                 self.alpha = self.alpha + np.pi/2
                 self.simulator.roll = True
 
@@ -702,7 +713,7 @@ class MainWindow(QtWidgets.QMainWindow):
                  # set filename
                 self.output_file_name = self.ui.videoNameLineEdit.text().strip()
                 if not self.output_file_name:
-                    self.output_file_name = "output"
+                    self.output_file_name = str(datetime.now())
 
                 file_path  = os.path.join(self.new_dir_path, self.output_file_name+".mp4")
                 self.recorder = RecordThread(self.frame_queue, file_path, self.videofps)
@@ -781,7 +792,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.start_data_record()
             self.output_file_name = self.ui.videoNameLineEdit.text().strip()
             if not self.output_file_name:
-                self.output_file_name = "output"
+                self.output_file_name = str(datetime.now())
         else:
             self.ui.savedatabutton.setText("Save Data")
             self.stop_data_record()
@@ -824,6 +835,7 @@ class MainWindow(QtWidgets.QMainWindow):
     
     def toggle_control_status(self): 
         if self.ui.controlbutton.isChecked():
+            self.control_robot.reset()
             self.control_status = True
             self.ui.controlbutton.setText("Stop")
             self.tbprint("Control On: {} Hz".format(self.acoustic_frequency))
@@ -998,11 +1010,11 @@ class MainWindow(QtWidgets.QMainWindow):
                     # right mouse button begins drawing
                     if event.buttons() == QtCore.Qt.RightButton: 
                         self.drawing = True
-                        
+                        if self.ui.RRTradio.isChecked():
+                            self.path_planner_status = True
 
                         newx, newy = self.convert_coords(event.pos())
                         if len(self.tracker.robot_list) > 0:
-                            self.control_robot.reset()
                             self.tracker.robot_list[-1].add_trajectory([newx, newy])
                       
                    
@@ -1019,11 +1031,11 @@ class MainWindow(QtWidgets.QMainWindow):
                 elif event.type() == QtCore.QEvent.MouseButtonRelease:
                     if event.button() == QtCore.Qt.RightButton: 
                         self.drawing = False
+                        if self.ui.RRTradio.isChecked():
+                            self.path_planner_status = False
+                        
                         
 
-
-
-                            
                 elif event.type() == QtCore.QEvent.MouseMove:
                     self.zoom_x, self.zoom_y = self.convert_coords(event.pos())
 
@@ -1078,7 +1090,7 @@ class MainWindow(QtWidgets.QMainWindow):
             if self.ui.croppedrecordbutton.isChecked():
                 self.ui.croppedrecordbutton.setText("Stop")
                 self.tbprint("Start Record")
-                self.date = datetime.now().strftime('%Y.%m.%d-%H.%M.%S')
+                self.date = str(datetime.now())
                 file_path  = os.path.join(self.new_dir_path, self.date+".mp4")
                 self.croppedresult = cv2.VideoWriter(
                     file_path,
@@ -1201,7 +1213,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         if self.ui.startbutton.isChecked():
             #connect to arduino
-            self.arduino = ArduinoHandler(self.tbprint, None)
+            self.arduino = ArduinoHandler(self.tbprint, self.arduino_port)
             self.arduino.connect()
            
   

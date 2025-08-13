@@ -5,7 +5,7 @@ import numpy as np
 from scipy import interpolate
 
 
-class Mac_Controller: #mac
+class Mac_Joystick: #mac
     """
     handles joystick inputs and outputs to main program
     """
@@ -29,7 +29,7 @@ class Mac_Controller: #mac
 
     def run(self, joystick):
         """
-        main controller event loop the listen for commands from the joystick
+        main Joystick event loop the listen for commands from the joystick
         once commands are found there are converted into the proper action format and sent to the queue.
         """       
         for event in pygame.event.get():
@@ -138,7 +138,7 @@ class Mac_Controller: #mac
 
 
 
-class Windows_Controller:
+class Windows_Joystick:
     """
     handles joystick inputs and outputs to main program
     """
@@ -162,7 +162,7 @@ class Windows_Controller:
 
     def run(self, joystick):
         """
-        main controller event loop the listen for commands from the joystick
+        main Joystick event loop the listen for commands from the joystick
         once commands are found there are converted into the proper action format and sent to the queue.
         """
 
@@ -280,7 +280,7 @@ class Windows_Controller:
         
 
         
-class Linux_Controller:
+class Linux_Joystick:
     """
     handles joystick inputs and outputs to main program
     """
@@ -304,7 +304,7 @@ class Linux_Controller:
 
     def run(self, joystick):
         """
-        main controller event loop the listen for commands from the joystick
+        main Joystick event loop the listen for commands from the joystick
         once commands are found there are converted into the proper action format and sent to the queue.
         """
      

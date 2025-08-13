@@ -1,6 +1,7 @@
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt, QThread,QTimer
 import numpy as np
 import cv2
+from classes.pushing_algorithm import pushing_algorithm
 
 
 
@@ -18,13 +19,13 @@ class Controller:
         self.actions = [0,0,0,0,0,0,0,0]
 
 
-        #orient stuff
+        #orient algorithm stuff
         self.B_vec = np.array([0,1])
         self.T_R = 1
         self.theta_maps = np.array([]) #added this so that we store the mapped angles
         self.theta = 0
 
-        #acoustic stuff
+        #acoustic algorithm stuff
         self.min_freq = 800000   #current minimum freq to start at
         self.max_freq = 1600000  #current maximum freq to stop at
         self.current_freq = self.min_freq   #current freq we are applying (start at 0)
@@ -40,6 +41,10 @@ class Controller:
         self.Bx, self.By, self.Bz, self.alpha, self.gamma, self.freq, self.psi, self.acoustic_frequency = 0,0,0,0,0,0,0,0
 
 
+        #initailize pushing algorithm stuff
+        self.pushing_algorithm = pushing_algorithm()
+
+
 
         
     def run_orient(self, frame, robot_list, arrivialthresh):
@@ -47,42 +52,42 @@ class Controller:
         #this whole algorithm is in pixels!!!
         if len(robot_list[-1].trajectory) > 0:
             
-            #define target coordinate
-            targetx = robot_list[-1].trajectory[self.node][0]
-            targety = robot_list[-1].trajectory[self.node][1]
-
-            #define robots current position
-            robotx = robot_list[-1].position_list[-1][0]
-            roboty = robot_list[-1].position_list[-1][1]
-            
-            #calculate error between node and robot
-            direction_vec = [targetx - robotx, targety - roboty]
-            error = np.sqrt(direction_vec[0] ** 2 + direction_vec[1] ** 2)
-            self.alpha = np.arctan2(-direction_vec[1], direction_vec[0])
-
-            self.Bx, self.By, self.Bz = self.orient(robot_list[-1], direction_vec)
-            self.freq = 0
-
-            #step condition
             if self.node == len(robot_list[-1].trajectory):
-                self.node = len(robot_list[-1].trajectory)
+                self.stopped = True
             else:
+                self.stopped = False
+                #define target coordinate
+                targetx = robot_list[-1].trajectory[self.node][0]
+                targety = robot_list[-1].trajectory[self.node][1]
+
+                #define robots current position
+                robotx = robot_list[-1].position_list[-1][0]
+                roboty = robot_list[-1].position_list[-1][1]
+                
+                #calculate error between node and robot
+                direction_vec = [targetx - robotx, targety - roboty]
+                error = np.sqrt(direction_vec[0] ** 2 + direction_vec[1] ** 2)
+                self.alpha = np.arctan2(-direction_vec[1], direction_vec[0])
+
+                self.Bx, self.By, self.Bz = self.orient(robot_list[-1], direction_vec)
+                self.freq = 0
+
+
+                #step condition
                 if error < arrivialthresh:
                     self.node += 1
 
-
-            #draw error arrow
-            cv2.arrowedLine(
-                frame,
-                (int(robotx), int(roboty)),
-                (int(targetx), int(targety)),
-                [0, 0, 0],
-                3,
-            )
-
-        self.actions = [self.Bx,self.By,self.Bz,self.alpha, self.gamma, self.freq, self.psi, self.acoustic_frequency]
+                cv2.arrowedLine(
+                    frame,
+                    (int(robotx), int(roboty)),
+                    (int(targetx), int(targety)),
+                    [0, 0, 0],
+                    3,
+                )
+                
+                self.actions = [self.Bx,self.By,self.Bz,self.alpha, self.gamma, self.freq, self.psi, self.acoustic_frequency]
         
-        return frame, self.actions
+        return frame, self.actions, self.stopped
 
 
 
@@ -92,57 +97,70 @@ class Controller:
         #this whole algorithm is in pixels!!!
         if len(robot_list[-1].trajectory) > 0:
             
-            #define target coordinate
-            targetx = robot_list[-1].trajectory[self.node][0]
-            targety = robot_list[-1].trajectory[self.node][1]
+            if self.node == len(robot_list[-1].trajectory):
+                self.stopped = True
+            else:
+                self.stopped = False
+                #define target coordinate
+                targetx = robot_list[-1].trajectory[self.node][0]
+                targety = robot_list[-1].trajectory[self.node][1]
 
-            #define robots current position
-            robotx = robot_list[-1].position_list[-1][0]
-            roboty = robot_list[-1].position_list[-1][1]
-            
-            #calculate error between node and robot
-            direction_vec = [targetx - robotx, targety - roboty]
-            error = np.sqrt(direction_vec[0] ** 2 + direction_vec[1] ** 2)
-            self.alpha = np.arctan2(-direction_vec[1], direction_vec[0])
+                #define robots current position
+                robotx = robot_list[-1].position_list[-1][0]
+                roboty = robot_list[-1].position_list[-1][1]
+                
+                #calculate error between node and robot
+                direction_vec = [targetx - robotx, targety - roboty]
+                error = np.sqrt(direction_vec[0] ** 2 + direction_vec[1] ** 2)
+                self.alpha = np.arctan2(-direction_vec[1], direction_vec[0])
 
-            #step condition
-            if self.node != len(robot_list[-1].trajectory):
+                #step condition
                 if error < arrivialthresh:
                     self.node += 1
 
+                cv2.arrowedLine(
+                    frame,
+                    (int(robotx), int(roboty)),
+                    (int(targetx), int(targety)),
+                    [0, 0, 0],
+                    3,
+                )
+                
+                self.actions = [self.Bx,self.By,self.Bz,self.alpha, self.gamma, self.freq, self.psi, self.acoustic_frequency]
 
-            #draw error arrow
-            cv2.arrowedLine(
-                frame,
-                (int(robotx), int(roboty)),
-                (int(targetx), int(targety)),
-                [0, 0, 0],
-                3,
-            )
 
+        return frame, self.actions, self.stopped
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def run_push(self, frame, robot_list, cell_list, arrivalthresh, corridor_width,approach_distance, spinning_freq, pushingfreq, pixel2um):
+
+        #run pushing algorithm
+        frame, self.alpha, self.gamma, self.freq = self.pushing_algorithm.run(frame, robot_list, cell_list, arrivalthresh, corridor_width,approach_distance, spinning_freq, pushingfreq, pixel2um)
         self.actions = [self.Bx,self.By,self.Bz,self.alpha, self.gamma, self.freq, self.psi, self.acoustic_frequency]
-        
+
+
         return frame, self.actions
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    def run_push(self, frame, robot_list):
-        pass
 
 
 
