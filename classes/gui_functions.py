@@ -323,9 +323,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.tracker.robot_list[-1].trajectory = self.path_planner.run(robot_list, cell_mask, RRTtreesize)
                 
                         
-                
-
-
 
 
         if self.control_status == True:   
@@ -370,15 +367,6 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 self.apply_actions(False)
                    
-
-                 
-                    
-        
-            
-
-
-
-
 
 
             
