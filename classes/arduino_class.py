@@ -19,7 +19,6 @@ class ArduinoHandler:
         self.conn = None
         self.port = port
         self.printer = printer
-        self.connect()
 
         
 
