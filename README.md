@@ -8,10 +8,9 @@ printed allowing others to build the device at a low cost. The device can be div
 sections (Mechanical, Electrical, and Software) 
 
 # CAD System Overview
+<img width="3547" height="4849" alt="Figure1" src="https://github.com/user-attachments/assets/8640313d-6168-41e3-8363-89c74aded3a5" />
 
-<img width="2160" height="1215" alt="Slide3" src="https://github.com/user-attachments/assets/6a907d4f-e47d-4867-a33b-fdfcddf82bfc" />
 
-<img width="4372" height="2722" alt="crosssection" src="https://github.com/user-attachments/assets/cbda2e2e-d56f-45cc-a393-02800b4db7e3" />
 
 # Electrical Component Flowchart and Wiring Diagram
 
