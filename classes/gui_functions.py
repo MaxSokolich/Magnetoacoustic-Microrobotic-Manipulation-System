@@ -38,7 +38,6 @@ from classes.cell_class import Cell
 from classes.arduino_class import ArduinoHandler
 from classes.joystick_class import Mac_Joystick,Linux_Joystick,Windows_Joystick
 from classes.simulation_class import HelmholtzSimulator
-from classes.projection_class import AxisProjection
 from classes.control_class import Controller
 from classes.path_planning_class import Path_Planner
 
@@ -160,7 +159,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         #define, simulator class, pojection class, and acoustic class
         self.simulator = HelmholtzSimulator(self.ui.magneticfieldsimlabel, width=310, height=310, dpi=200)
-        self.projection = AxisProjection()
+
         
         #make instance of algorithm class both control and path planning
         self.control_robot = Controller()
@@ -440,16 +439,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.gamma = np.radians(self.ui.gammadial.value())
             self.psi = np.radians(self.ui.psidial.value())
             self.alpha = np.radians(self.ui.alphadial.value())
-
-
-
-
-            
-
-
-
-
-
+           
 
             #ricochet conditions, too close to the x or y borders flip the conditions
             if self.ui.ricochet_effect_checkbox.isChecked():
@@ -565,7 +555,7 @@ class MainWindow(QtWidgets.QMainWindow):
                         self.acoustic_frequency, self.bx_sensor, self.by_sensor, self.bz_sensor] 
        
         self.magnetic_field_list.append(self.actions)
-        self.apply_actions(True)
+        
         
         
 
@@ -590,17 +580,9 @@ class MainWindow(QtWidgets.QMainWindow):
         
 ############################################################################################################################################################
         """Updates the image_label with a new opencv image"""
-        #display projection
         if self.ui.toggledisplayvisualscheckbox.isChecked():
             if self.control_status == True or self.joystick_status == True or self.manual_status == True or self.excel_actions_status == True :
-                self.projection.roll = self.ui.rollradio.isChecked()
-                self.projection.gradient = self.gradient_status
-
-
-                displayframe, self.projection.draw_sideview(displayframe,self.Bx,self.By,self.Bz,self.alpha,self.gamma,self.video_width,self.video_height)
-                displayframe, self.projection.draw_topview(displayframe,self.Bx,self.By,self.Bz,self.alpha,self.gamma,self.video_width,self.video_height)
-                
-
+              
                 rotatingfield = "alpha: {:.0f}, gamma: {:.0f}, psi: {:.0f}, freq: {:.0f}".format(np.degrees(self.alpha), np.degrees(self.gamma), np.degrees(self.psi), self.freq) #adding 90 to alpha for display purposes only
                 
                 cv2.putText(displayframe, rotatingfield,
@@ -648,6 +630,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 pass
       
 
+        self.apply_actions(True)
+
            
 
 
@@ -661,12 +645,10 @@ class MainWindow(QtWidgets.QMainWindow):
         #the purpose of this function is to output the actions via arduino, 
         # show the actions via the simulator
         # and record the actions by appending the field_list
+        
         if self.freq > 0:
-            if self.ui.swimradio.isChecked():
-                self.simulator.roll = False
-            elif self.ui.rollradio.isChecked() or self.ui.pushradio.isChecked():
+            if self.ui.rollradio.isChecked() or self.ui.pushradio.isChecked():
                 self.alpha = self.alpha + np.pi/2
-                self.simulator.roll = True
 
         #zero output
         if status == False:
