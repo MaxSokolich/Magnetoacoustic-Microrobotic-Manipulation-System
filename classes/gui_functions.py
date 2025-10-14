@@ -112,7 +112,8 @@ class MainWindow(QtWidgets.QMainWindow):
         #record variables
         self.recorder = None
         self.frame_queue = queue.Queue(maxsize=100)  # make a queue to store frames in for the recording feature
-        self.output_file_name = str(datetime.now())
+        self.output_file_name = datetime.now().strftime("%Y-%m-%d_%H-%M-%S_%f")
+   
 
         self.save_status = False
         self.output_workbook = None
@@ -683,7 +684,7 @@ class MainWindow(QtWidgets.QMainWindow):
                  # set filename
                 self.output_file_name = self.ui.videoNameLineEdit.text().strip()
                 if not self.output_file_name:
-                    self.output_file_name = str(datetime.now())
+                    self.output_file_name = datetime.now().strftime("%Y-%m-%d_%H-%M-%S_%f")
 
                 file_path  = os.path.join(self.new_dir_path, self.output_file_name+".mp4")
                 self.recorder = RecordThread(self.frame_queue, file_path, self.videofps)
@@ -736,6 +737,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         self.save_status = False
         file_path  = os.path.join(self.new_dir_path, self.output_file_name+".xlsx")
+        print(self.output_file_name)
         
         #add trajectory to file after the fact
         if self.output_workbook is not None:
@@ -762,7 +764,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.start_data_record()
             self.output_file_name = self.ui.videoNameLineEdit.text().strip()
             if not self.output_file_name:
-                self.output_file_name = str(datetime.now())
+                self.output_file_name = datetime.now().strftime("%Y-%m-%d_%H-%M-%S_%f")
         else:
             self.ui.savedatabutton.setText("Save Data")
             self.stop_data_record()
@@ -1060,7 +1062,7 @@ class MainWindow(QtWidgets.QMainWindow):
             if self.ui.croppedrecordbutton.isChecked():
                 self.ui.croppedrecordbutton.setText("Stop")
                 self.tbprint("Start Record")
-                self.date = str(datetime.now())
+                self.date = datetime.now().strftime("%Y-%m-%d_%H-%M-%S_%f")
                 file_path  = os.path.join(self.new_dir_path, self.date+".mp4")
                 self.croppedresult = cv2.VideoWriter(
                     file_path,
