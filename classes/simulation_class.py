@@ -28,7 +28,7 @@ class HelmholtzSimulator(FigureCanvas):
         self.psi = 0
         self.freq = 0
         self.omega = 2*np.pi* float(self.freq)  #angular velocity of rotating field defined from input from Rotating Frequency Entry
-        self.roll = False
+
     
         #params for field
         self.milli = 10**(-6)
@@ -163,13 +163,9 @@ class HelmholtzSimulator(FigureCanvas):
 
     def show_axis_rotation(self, ax, length):
         #plot rotation axis
-        if self.roll == True:
-            alpha = self.alpha - np.pi/2
-        else:
-            alpha = self.alpha
  
-        x = 1 * np.sin(self.gamma) * np.cos(alpha)
-        y = 1 * np.sin(self.gamma) * np.sin(alpha)  
+        x = 1 * np.sin(self.gamma) * np.cos(self.alpha)
+        y = 1 * np.sin(self.gamma) * np.sin(self.alpha)  
         z = 1 * np.cos(self.gamma)
         ax.quiver(0,0,0,x,y,z,color='red',length=length)
 
