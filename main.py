@@ -13,6 +13,7 @@ from classes.gui_functions import MainWindow
 # add a track all feature
 
 
+
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     w = MainWindow()

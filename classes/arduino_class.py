@@ -91,10 +91,6 @@ class ArduinoHandler:
                 recSize += txfer.STRUCT_FORMAT_LENGTHS['f']
                 
 
-                
-                
-
-
                 return [Bx_sensor,By_sensor,Bz_sensor]
 
 

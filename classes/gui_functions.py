@@ -56,8 +56,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
 
         
-
-        
         
         #self.showMaximized()
 
@@ -313,6 +311,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.bz_sensor = round(sensor[2], 1)
 
 
+
         self.frame_number+=1
 
 
@@ -370,16 +369,6 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 self.apply_actions(False)
                    
-
-                 
-                    
-        
-            
-
-
-
-
-
 
             
         #if joystick is on use the joystick though
@@ -452,14 +441,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.gamma = np.radians(self.ui.gammadial.value())
             self.psi = np.radians(self.ui.psidial.value())
             self.alpha = np.radians(self.ui.alphadial.value())
-
-
-
-
-            
-
-
-
 
 
 
@@ -658,13 +639,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.frame_queue.put_nowait(displayframe)
             except queue.Full:
                 pass
-      
-
-           
-
-
-        
-
 
 
 
@@ -679,6 +653,7 @@ class MainWindow(QtWidgets.QMainWindow):
             elif self.ui.rollradio.isChecked() or self.ui.pushradio.isChecked():
                 self.alpha = self.alpha + np.pi/2
                 self.simulator.roll = True
+
 
         #zero output
         if status == False:
@@ -1045,11 +1020,6 @@ class MainWindow(QtWidgets.QMainWindow):
                                 newx, newy = self.convert_coords(event.pos())
                                 
                                 self.tracker.robot_list[-1].add_trajectory([newx, newy])
-                                
-                
-                
-                       
-                        
                         
                 elif event.type() ==  QtCore.QEvent.Wheel:
                     steps = event.angleDelta().y() 

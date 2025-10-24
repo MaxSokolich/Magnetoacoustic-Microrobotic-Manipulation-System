@@ -4,13 +4,11 @@ import cv2
 from classes.pushing_algorithm import pushing_algorithm
 
 
-
 class Controller:
    
     def __init__(self):
         self.reset()
      
-        
 
     def reset(self):
         self.node = 0
