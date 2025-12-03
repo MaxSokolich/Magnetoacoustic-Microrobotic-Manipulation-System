@@ -376,9 +376,10 @@ void loop()
    
    omega = 2*PI*rolling_frequency;
    
-
+  
  
    t = micros() / 1e6;
+
    
    if (omega == 0){
        Bx_roll = 0;

@@ -14,7 +14,7 @@
 SerialTransfer myTransfer;
 
 
-float action[10]; //an array to store incoming data from python
+float action[11]; //an array to store incoming data from python
 
 
 
@@ -34,6 +34,19 @@ float gradient_status;
 float equal_field_status;
 float acoustic_frequency;
 float null;
+// coil command signals
+float C1 = 0, C2 = 0, C3 = 0, C4 = 0, C5 = 0, C6 = 0;
+float MaxVal = 0;
+
+// helper: max over a float array
+float findMax(const float *arr, int n) {
+  float maxV = arr[0];
+  for (int i = 1; i < n; i++) {
+    if (arr[i] > maxV) maxV = arr[i];
+  }
+  return maxV;
+}
+
 
 
 
@@ -375,7 +388,7 @@ void loop()
    
    omega = 2*PI*rolling_frequency;
    
-
+   t = micros() / 1e6;
 
    if (omega == 0){
        Bx_roll = 0;
@@ -442,59 +455,156 @@ void loop()
    }
    
 
+//map Bz_final, By_final, and Bx_final to each of the six tweezers. Let's assume that the three top coils correspond to set1-3 and the three bottom are set4-6:
+//if we have a Bx_final we need to map that onto two of the top and two of the bottom coils, let's assume it's set1-2 and set4-5. Let's also assume that set1 
+// tweezer is along the -y axis and set2 and set3 are 30 degrees above the x and -x axes, respectively. We'll assume that the bottom three tweezers have the 
+// exact same arrangement. We'll label the signal going to each of the 6 as C1, C2, C3, C4, C5, C6.
 
-  // if gradient status = 1: output the the corresponding gradient field
-   if (gradient_status != 0){
-      //y gradient
-      if (By_final > 0){
-        set1(By_final);
-        set3(-0.3*By_final);
-        
-      }
-      else if (By_final < 0){
-        set3(By_final);
-        set1(-0.3*By_final);
-      }
-      else{ //if By==0
-        set1(0);
-        set3(0);
-      }
+C1 = 0;
+C2 = 0;
+C3 = 0;
+C4 = 0;
+C5 = 0;
+C6 = 0;
 
-      //x gradient
-      if (Bx_final > 0){
-        set2(Bx_final);
-        set4(-0.3*Bx_final);
-      }
-      else if (Bx_final < 0){
-        set4(Bx_final);
-        set2(-0.3*Bx_final);
-      }
-      else{ //if Bx==0
-        set2(0);
-        set4(0);
+// if gradient status = 1: output the the corresponding gradient field
+  if (gradient_status != 0){
+
+    if (By_final > 0){
+        C3 = C3 + By_final;
+        C2 = C2 + By_final;
+        C6 = C6 + By_final;
+        C5 = C5 + By_final;
       }
 
-      //z gradient
-      if (Bz_final > 0){
-        set5(Bz_final);
+    if (By_final < 0){
+        C1 = C1 + By_final;
+        C4 = C4 + By_final;
       }
-      else if (Bz_final < 0){
-        set6(Bz_final);
+
+    if (Bx_final > 0){
+        C2 = C2 + Bx_final;
+        C1 = C1 + 0.5*Bx_final;
+        C5 = C5 + Bx_final;
+        C4 = C4 + 0.5*Bx_final;
       }
-      else{ //if Bz==0
-        set5(0);
-        set6(0);
+
+    if (Bx_final < 0){
+        C3 = C3 + Bx_final;
+        C1 = C1 + 0.5*Bx_final;
+        C6 = C6 + Bx_final;
+        C4 = C4 + 0.5*Bx_final;
       }
+
+    if (Bz_final > 0){
+        C1 = C1 + Bz_final;
+        C2 = C2 + Bz_final;
+        C3 = C3 + Bz_final;
+      }
+
+    if (Bz_final < 0){
+        C4 = C4 + Bz_final;
+        C5 = C5 + Bz_final;
+        C6 = C6 + Bz_final;
+      }
+
+      //now we need to make sure that if any are greater than 1 we normalize:
+      float vals[6] = { C1, C2, C3, C4, C5, C6 };
+      MaxVal = findMax(vals, 6);
+
+      if (MaxVal>1){
+        C1 = C1/MaxVal;
+        C2 = C2/MaxVal;
+        C3 = C3/MaxVal;
+        C4 = C4/MaxVal;
+        C5 = C5/MaxVal;
+        C6 = C6/MaxVal;
+      }
+
+    set1(C1);
+    set2(C2);
+    set3(C3);
+    set4(C4);
+    set5(C5);
+    set6(C6);
+ 
    }
 
    // if gradient status = 0: output the correspending uniform field
    else {
-      set1(By_final); //Coil 1 : +Y
-      set2(Bx_final); //Coil 2 : +X
-      set3(-By_final); //Coil 3 : -Y
-      set4(-Bx_final); //Coil 4 : -X
-      set5(Bz_final); //Coil 5 : +Z
-      set6(-Bz_final); //Coil 6 : -Z 
+    if (By_final > 0){
+        C3 = C3 - By_final;
+        C2 = C2 - By_final;
+        C6 = C6 - By_final;
+        C5 = C5 - By_final;
+        C1 = C1 + By_final;
+        C4 = C4 + By_final;
+      }
+
+    if (By_final < 0){
+        C3 = C3 + By_final;
+        C2 = C2 + By_final;
+        C6 = C6 + By_final;
+        C5 = C5 + By_final;
+        C1 = C1 - By_final;
+        C4 = C4 - By_final;
+      }
+
+    if (Bx_final > 0){
+        C2 = C2 - Bx_final;
+        C3 = C3 - Bx_final;
+        C1 = C1 + Bx_final;
+        C5 = C5 - Bx_final;
+        C6 = C6 - Bx_final;
+        C4 = C4 + Bx_final;
+      }
+
+    if (Bx_final < 0){
+        C2 = C2 + Bx_final;
+        C3 = C3 + Bx_final;
+        C1 = C1 - Bx_final;
+        C5 = C5 + Bx_final;
+        C6 = C6 + Bx_final;
+        C4 = C4 - Bx_final;
+      }
+
+    if (Bz_final > 0){
+        C1 = C1 - Bz_final;
+        C2 = C2 - Bz_final;
+        C3 = C3 - Bz_final;
+        C4 = C4 + Bz_final;
+        C5 = C5 + Bz_final;
+        C6 = C6 + Bz_final;
+      }
+
+    if (Bz_final < 0){
+        C1 = C1 + Bz_final;
+        C2 = C2 + Bz_final;
+        C3 = C3 + Bz_final;
+        C4 = C4 - Bz_final;
+        C5 = C5 - Bz_final;
+        C6 = C6 - Bz_final;
+      }
+
+    float absVals[6] = { fabsf(C1), fabsf(C2), fabsf(C3), fabsf(C4), fabsf(C5), fabsf(C6) };
+    MaxVal = findMax(absVals, 6);
+
+    if (MaxVal>1){
+        C1 = C1/MaxVal;
+        C2 = C2/MaxVal;
+        C3 = C3/MaxVal;
+        C4 = C4/MaxVal;
+        C5 = C5/MaxVal;
+        C6 = C6/MaxVal;
+      }
+
+      
+    set1(C1);
+    set2(C2);
+    set3(C3);
+    set4(C4);
+    set5(C5);
+    set6(C6);
    }
 
 

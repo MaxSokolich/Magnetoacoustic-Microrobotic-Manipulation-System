@@ -32,7 +32,7 @@ class ArduinoHandler:
                 self.conn = txfer.SerialTransfer(self.port)
                 self.port = self.port
                 self.conn.open()
-                time.sleep(1)
+                time.sleep(2)
                 self.printer(f"Arduino Connection initialized using port {self.port}")
             except InvalidSerialPort:
                 self.printer("Could not connect to arduino, disabling")
@@ -71,37 +71,7 @@ class ArduinoHandler:
 
 
 
-    def receive(self):
-        """
-        receive information from arduino and store it in self.recieve class 
-        return the values in the class self.receive
-        """
-        #recv
-        if self.conn is not None:
-            if self.conn.available():
-            
-                recSize = 0
-                Bx_sensor = self.conn.rx_obj(obj_type='f',start_pos=recSize)
-                recSize += txfer.STRUCT_FORMAT_LENGTHS['f']
 
-                By_sensor = self.conn.rx_obj(obj_type='f',start_pos=recSize)
-                recSize += txfer.STRUCT_FORMAT_LENGTHS['f']
-
-                Bz_sensor = self.conn.rx_obj(obj_type='f',start_pos=recSize)
-                recSize += txfer.STRUCT_FORMAT_LENGTHS['f']
-                
-
-                
-                
-
-
-                return [Bx_sensor,By_sensor,Bz_sensor]
-
-
-            else:
-                return [0,0,0]
-        else:
-            return [0,0,0]
 
 
 
@@ -134,19 +104,19 @@ if __name__ == "__main__":
         print(text)
 
 
-    PORT = "/dev/cu.usbmodem21101"
-    arduino = ArduinoHandler(tbprint)
-    arduino.connect(PORT)
+    PORT = "COM3"
+    arduino = ArduinoHandler(tbprint, PORT)
+    arduino.connect()
     time.sleep(1)
     
     
     #send
-    Bx = 0.0
+    Bx = 0
     By = 0.0
     Bz = 0.0
     alpha = np.pi/2
-    gamma = 0.0
-    rolling_frequency = 0
+    gamma = np.pi/2
+    rolling_frequency = 1
     psi = 0
     gradient_status = 0.0
     equal_field_status = 0.0

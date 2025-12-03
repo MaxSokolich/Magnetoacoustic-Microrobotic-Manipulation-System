@@ -306,11 +306,7 @@ class MainWindow(QtWidgets.QMainWindow):
     
 
     def update_actions_frame(self, displayframe, cell_mask, robot_list, cell_list):
-        #read hall effect sensor data from arduino
-        sensor = self.arduino.receive()
-        self.bx_sensor = -1 * round(sensor[0], 1)   #Bx sensor sign is switched
-        self.by_sensor = round(sensor[1], 1)
-        self.bz_sensor = round(sensor[2], 1)
+
 
 
         self.frame_number+=1
@@ -1172,11 +1168,13 @@ class MainWindow(QtWidgets.QMainWindow):
         
         else:
             self.arduino_port = None
+        print("initial_port", self.arduino_port)
 
         
 
     def handle_port_change(self, selected_port):
         self.arduino_port = selected_port
+        print("changed port", self.arduino_port)
         
 
 
