@@ -425,7 +425,6 @@ class VideoThread(QThread):
                         color = (0, 0, 0))
             
             
-            
             cv2.putText(display_frame,"100 um",
                 (int(self.width / 80),int(self.height / 30)),
                 cv2.FONT_HERSHEY_SIMPLEX,
@@ -505,7 +504,6 @@ class VideoThread(QThread):
           
                 
                 
-
                 
                 #step 3: emit croppedframe, frame from this thread to the main thread
                 self.cropped_frame_signal.emit(croppedmask, recorded_cropped_frame)

@@ -55,8 +55,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
 
         
-
-        
         
         #self.showMaximized()
 
@@ -309,6 +307,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
 
+
         self.frame_number+=1
 
 
@@ -363,7 +362,6 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 self.apply_actions(False)
                    
-
 
             
         #if joystick is on use the joystick though
@@ -436,7 +434,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.gamma = np.radians(self.ui.gammadial.value())
             self.psi = np.radians(self.ui.psidial.value())
             self.alpha = np.radians(self.ui.alphadial.value())
-           
+
+
 
             #ricochet conditions, too close to the x or y borders flip the conditions
             if self.ui.ricochet_effect_checkbox.isChecked():
@@ -625,16 +624,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.frame_queue.put_nowait(displayframe)
             except queue.Full:
                 pass
-      
-
-        self.apply_actions(True)
-
-           
-
-
         
-
-
+        self.apply_actions(True)
 
 
 
@@ -646,6 +637,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.freq > 0:
             if self.ui.rollradio.isChecked() or self.ui.pushradio.isChecked():
                 self.alpha = self.alpha + np.pi/2
+
 
         #zero output
         if status == False:
@@ -1013,11 +1005,6 @@ class MainWindow(QtWidgets.QMainWindow):
                                 newx, newy = self.convert_coords(event.pos())
                                 
                                 self.tracker.robot_list[-1].add_trajectory([newx, newy])
-                                
-                
-                
-                       
-                        
                         
                 elif event.type() ==  QtCore.QEvent.Wheel:
                     steps = event.angleDelta().y() 

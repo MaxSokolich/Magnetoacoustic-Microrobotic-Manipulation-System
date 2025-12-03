@@ -38,7 +38,7 @@ def mouse_points(event,x,y,flags,params):
 b = [0,0]
 fps = count_fps()       
 #cam = cv2.VideoCapture("/home/max/Documents/MagScopeSystem/src/videos/mickyroll1.mp4")
-cam = EasyPySpin.VideoCapture(0)
+cam = cv2.VideoCapture(0)
 width = int(cam.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cam.get(cv2.CAP_PROP_FRAME_HEIGHT))
 cam.set(cv2.CAP_PROP_FPS,30)
