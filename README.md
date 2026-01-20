@@ -1,3 +1,5 @@
+Outdated....See "MicroRoboScopeFinal" repository for the most up to date system developed during my PhD.
+
 # Magnetoacoustic Microrobotic Manipulation System
 This system is a magnetic and acoustic microrobotic manipulation device. Its intention is to be a user friendly, portable, micro-robotic
 experimentation platform. It contains an embedded single board computer, a microscope, power supplies, power
